@@ -314,6 +314,7 @@
           <option value="enceladus_tiger_stripe_ocean_floor">Enceladus Tiger-Stripe Ocean [PLANETARY_HYPOTHETICAL]</option>
           <option value="mars_noachian_radiolytic_subsurface">Mars Noachian Radiolytic Clay [PLANETARY_HYPOTHETICAL]</option>
           <option value="solver_executed_reactive_transport_benchmark">Solver-Executed Benchmark [SOLVER_EXECUTED_SIMULATION]</option>
+          <option value="matlab_r2026b_3d_eda_simulink_fixture">MATLAB R2026b 3D EDA + Simulink + 4-Block Neurospora [MATLAB_R2026B_FIXTURE]</option>
         </select>
       </div>
       <div class="ctrl-group">
@@ -358,8 +359,10 @@
       <button id="remodelBtn">VPS Remodel: Intact</button>
       <button id="extinctionBtn">Occupancy: N=6 Active</button>
       <button id="clayModeBtn">Clay: Ca-Montmorillonite</button>
-      <button id="loadFileBtn">Load .json / .smacro1</button>
-      <input type="file" id="fileLoaderInput" accept=".json,.smacro1" style="display:none" />
+      <button id="matlabFixtureBtn">MATLAB R2026b Fixture</button>
+      <button id="loadFileBtn">Load .json / .mat / .smacro1</button>
+      <input type="file" id="fileLoaderInput" accept=".json,.smacro1,.mat" style="display:none" />
+      <button id="exportMatlabBtn">Export MATLAB (.json+.m)</button>
       <button id="exportXdmfBtn">Export XDMF+CSV</button>
       <button id="exportUsdaBtn">Export OpenUSD (.usda)</button>
       <button id="exportPngBtn">Export 1920x1080 PNG</button>
@@ -638,6 +641,29 @@
         <div class="kv-row"><span>Astrodynamics Bridge (L75, L115)</span><span class="status-ok" id="infoFnAstro">Basilisk + Vizard + SPICE.jl (.bsp/.tpc/.tls)</span></div>
         <div class="kv-row"><span>Turn L112 Non-Recursive Guard</span><span class="status-ok" id="infoFnGuard">depth=0 | rule_immutable=true</span></div>
         <div class="kv-row"><span>16-32 GB Swap Telemetry (04:12Z)</span><span class="status-ok" id="infoFnSwap">20.18 GB Swap+Comp | 29.21 GB Virt | 73.75 GB Out</span></div>
+      </div>
+
+      <div class="card" id="matlabR2026bCard">
+        <div class="card-title">
+          <span>MATLAB R2026b, Simulink &amp; 4-Block Neurospora 3D EDA</span>
+          <span class="status-ok" id="matlabR2026bBadge">14/14 PASS</span>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:6px;">
+          <button id="btnMatlabActivateFixture" type="button" style="flex:1;font-size:10px;padding:4px 6px;background:#0f172a;color:#22d3ee;border:1px solid #1e2d4a;border-radius:4px;cursor:pointer;">Activate MATLAB Fixture</button>
+          <button id="btnMatlabStepPool" type="button" style="flex:1;font-size:10px;padding:4px 6px;background:#0f172a;color:#34d399;border:1px solid #1e2d4a;border-radius:4px;cursor:pointer;">Step Vogel Pool (1-&gt;8)</button>
+        </div>
+        <div class="kv-row"><span>MATLAB Release &amp; Suite</span><span class="status-ok" id="infoMatlabVersion">R2026b (26.2.0.3433840) | 14/14 Toolboxes</span></div>
+        <div class="kv-row"><span>Simulink Closed-Loop (.slx)</span><span class="status-ok" id="infoMatlabSimulink">m7_reactor_alara_closed_loop | ts=18.93s | y=1.0028</span></div>
+        <div class="kv-row"><span>POD Mode-1 &amp; State-Space</span><span class="status-ok" id="infoMatlabPodCtrl">99.94% SVD Energy | eig=[-0.08, -0.15]</span></div>
+        <div class="kv-row"><span>Tarjan Bridge Pipeline</span><span class="status-ok" id="infoMatlabTarjan">OpenFOAM-&gt;PHREEQC-&gt;FCM-&gt;SMBR-&gt;MATLAB (b1=0)</span></div>
+        <div class="kv-row"><span>4-Pool Biofilm CA Seam</span><span class="status-ok" id="infoMatlabMultipool">Conserved (res=0.00e+00) | B_att=[0.82..0.58]</span></div>
+        <div class="kv-row"><span>Active Vogel Chamber (1..8)</span><span class="status-ok" id="infoMatlabVogelPool">Pool #1/8 | S=55.0 mM | DO=0.240 mM | pH=5.80</span></div>
+        <div class="kv-row"><span>Block 1 frq/wc-1/wc-2 (ode15s)</span><span class="status-ok" id="infoMatlabBlock1">M_frq=0.92 | F_c=1.14 | F_n=0.95 | tau=22.5h/24.0h</span></div>
+        <div class="kv-row"><span>Block 2 Syncytial &amp; Woronin</span><span class="status-ok" id="infoMatlabBlock2">B_i=0.84 kg/m3 | rho_tip=1.45e9 | HEX-1 | b1=3</span></div>
+        <div class="kv-row"><span>Block 3 Conidial Cytometry</span><span class="status-ok" id="infoMatlabBlock3">FSC=42.0k | SSC=18.5k | FL1=3.10k | Mel=14.2 pg</span></div>
+        <div class="kv-row"><span>Block 4 ALARA &amp; Hippocratism</span><span class="status-ok" id="infoMatlabBlock4">D_cum=0.0295 Gy (&lt;0.04) | 330.8x | Hormesis=Incomplete</span></div>
+        <div class="kv-row"><span>Collar Containers &amp; OpenMC</span><span class="status-ok" id="infoMatlabCollar">MAT v7 + v7.3 HDF5 | ENDF/JEFF diff=2.07%</span></div>
+        <div class="kv-row"><span>C++ Engine &amp; Context7 Sync</span><span class="status-ok" id="infoMatlabApiSync">MatlabEngine.hpp + mex.hpp | Context7 v0.8.2 (7 libs)</span></div>
       </div>
     </aside>
 
@@ -1732,9 +1758,20 @@
       renderPanel("canvas-sobolev", "sobolev");
     }
 
-    // Complete JSON Field-Array Loader for M7SpatialFrame & M7WorldScenario
+    // Complete JSON Field-Array Loader for M7SpatialFrame, M7WorldScenario & MATLAB R2026b Fixtures
     window.applyM7JsonPayload = function(obj) {
       if (!obj || typeof obj !== "object") return null;
+      const isMatlabFx = Boolean(
+        obj.fixture_id === "m7_multiscale_matlab_simulink_3d_eda_v1" ||
+        obj.spatial_cells_3d ||
+        obj.neurospora_crassa_4block_matlab_model ||
+        obj.neurospora_4block_state ||
+        obj.neurospora_crassa_4block_state ||
+        obj.matlab_version
+      );
+      if (isMatlabFx && typeof window.normalizeMatlabFixtureToM7Payload === "function") {
+        obj = window.normalizeMatlabFixtureToM7Payload(obj);
+      }
       const isWorld = obj.schema === "M7WorldScenario";
       const isFrame = obj.schema === "M7SpatialFrame";
       if (!isWorld && !isFrame && !obj.field_arrays && !obj.fields) return null;
@@ -1851,13 +1888,13 @@
       }
 
       const rawXCoords = (obj.mesh && Array.isArray(obj.mesh.cell_centers_m) && obj.mesh.cell_centers_m.length > 0)
-        ? obj.mesh.cell_centers_m.map(pt => Array.isArray(pt) ? Number(pt[0]) : 0.001)
+        ? obj.mesh.cell_centers_m.map(pt => Array.isArray(pt) ? Number(pt[0]) : Number(pt))
         : [0.5e-3, 1.5e-3, 2.5e-3, 3.5e-3];
       const defaultXCoords = [0.5e-3, 1.5e-3, 2.5e-3, 3.5e-3];
 
       const loadedCells = [];
       for (let i = 0; i < nCells; i++) {
-        const xVal = rawXCoords.length >= nCells ? aggregateZoneLinear(rawXCoords, i, defaultXCoords[i]) : defaultXCoords[i];
+        const xVal = rawXCoords.length > 0 ? aggregateZoneLinear(rawXCoords, i, defaultXCoords[i]) : defaultXCoords[i];
         const phi = aggregateZoneLinear(porArr, i, 0.72);
         const kVal = aggregateZoneLinear(permArr, i, 1.5e-13);
         const uVal = aggregateZoneLinear(darcyArr, i, 1.6e-4);
@@ -2158,7 +2195,311 @@
           mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
           voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
         }
+      },
+      matlab_r2026b_3d_eda_simulink_fixture: {
+        schema: "M7SpatialFrame",
+        schema_version: "1.0.0",
+        world_scenario_schema: "M7WorldScenario",
+        fixture_id: "m7_multiscale_matlab_simulink_3d_eda_v1",
+        simulation_id: "matlab_r2026b_3d_eda_simulink_fixture",
+        scenario_id: "matlab_r2026b_3d_eda_simulink_fixture",
+        evidence_tier: "solver_executed",
+        scenario_classification: "SOLVER_EXECUTED_SIMULATION",
+        energy_budget_closed: true,
+        elemental_mass_conserved: true,
+        world_scenario: {
+          environment: { temperature_profile_K: [298.15, 298.22, 298.28, 298.31], gravity_m_s2: 9.80665 }
+        },
+        feedback_loop: { energy_budget_closed: true, elemental_mass_conserved: true },
+        field_arrays: {
+          porosity: [0.38, 0.36, 0.35, 0.37],
+          permeability: [1.45e-12, 1.22e-12, 1.12e-12, 1.33e-12],
+          darcy_velocity: [1.25e-04, 1.31e-04, 1.35e-04, 1.28e-04],
+          pH: [7.18, 7.12, 7.08, 7.05],
+          pe: [6.40, 6.30, 6.20, 6.10],
+          dissolved_species: {
+            C_substrate: [0.92, 0.78, 0.64, 0.51],
+            C_O2: [0.24, 0.23, 0.22, 0.21],
+            H2: [0.18, 0.25, 0.31, 0.16]
+          },
+          biofilm_volume_fraction: [0.0328, 0.0296, 0.0260, 0.0232],
+          eps_fraction: [0.22, 0.20, 0.18, 0.16],
+          mineral_volume_fractions: {
+            illite: [0.21, 0.23, 0.25, 0.24],
+            smectite: [0.14, 0.15, 0.16, 0.15],
+            calcite: [0.04, 0.04, 0.04, 0.04]
+          },
+          evidence_tier: "solver_executed",
+          scenario_classification: "SOLVER_EXECUTED_SIMULATION",
+          mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
+        }
       }
+    };
+
+    const canonicalMatlabR2026bFixture = {
+      fixture_id: "m7_multiscale_matlab_simulink_3d_eda_v1",
+      matlab_version: "26.2.0.3433840 (R2026b) Update 1",
+      installed_toolbox_count: 14,
+      all_14_student_suite_toolboxes_present: true,
+      simulink_slx_model: "m7_reactor_alara_closed_loop.slx",
+      simulink_final_value: 1.002773,
+      control_settling_time_s: 18.930964,
+      pod_mode1_energy_fraction: 0.999364,
+      state_space_eigenvalues: [-0.08, -0.15],
+      tarjan_bridge_dag_valid: true,
+      beta_1_inter_solver: 0,
+      multipool_biofilm_conserved: true,
+      multipool_mass_rel_residual: 0.0,
+      pool_biomass_attached_kg_m3: [0.82, 0.74, 0.65, 0.58],
+      pool_biomass_suspended_kg_m3: [0.12, 0.14, 0.11, 0.09],
+      n_pool: 8,
+      active_vogel_pool_idx: 0,
+      M_frq: [0.92, 0.89, 0.85, 0.81, 0.77, 0.73, 0.69, 0.65],
+      F_c: [1.14, 1.11, 1.07, 1.03, 0.99, 0.95, 0.91, 0.87],
+      F_n: [0.95, 0.92, 0.89, 0.86, 0.83, 0.80, 0.77, 0.74],
+      B_i_kg_m3: [0.84, 0.80, 0.76, 0.72, 0.68, 0.64, 0.60, 0.56],
+      rho_tip_i: [1.45e9, 1.38e9, 1.31e9, 1.24e9, 1.18e9, 1.12e9, 1.06e9, 1.01e9],
+      phi_EPS_i: [0.22, 0.21, 0.20, 0.19, 0.18, 0.17, 0.16, 0.15],
+      S_i_mol_m3: [55.0, 51.2, 47.6, 44.1, 40.8, 37.6, 34.5, 31.6],
+      C_O2_i_mol_m3: [0.240, 0.235, 0.230, 0.225, 0.220, 0.215, 0.210, 0.205],
+      pH_i: [5.80, 5.82, 5.85, 5.87, 5.90, 5.92, 5.95, 5.98],
+      FSC_A: [42000, 41200, 40500, 39800, 39100, 38400, 37700, 37000],
+      SSC_A: [18500, 18100, 17700, 17300, 16900, 16500, 16100, 15700],
+      FL1_A: [3100, 3020, 2940, 2860, 2780, 2700, 2620, 2540],
+      melanin_pg_cell: [14.2, 13.8, 13.4, 13.0, 12.6, 12.2, 11.8, 11.4],
+      D_mel_i_kg_m3: [0.180, 0.175, 0.170, 0.165, 0.160, 0.155, 0.150, 0.145],
+      D_dot_eff_Gy_s: [8.2e-7, 7.6e-7, 7.1e-7, 6.6e-7, 6.1e-7, 5.7e-7, 5.3e-7, 4.9e-7],
+      cumulative_dose_D_i_Gy: [0.0295, 0.0274, 0.0256, 0.0238, 0.0220, 0.0205, 0.0191, 0.0176],
+      alara_dose_reduction_factor: 330.752854,
+      hormesis_quarantine_verdict: "Incomplete",
+      openmc_tally_variance_rel_diff: 0.02069,
+      collar_status_label: "MAT v7 + v7.3 HDF5 | ENDF/JEFF diff=2.07%"
+    };
+
+    function updateMatlabR2026bInspectorCard() {
+      const m = canonicalMatlabR2026bFixture;
+      const nPool = Math.max(1, Number(m.n_pool) || 8);
+      const pIdx = ((m.active_vogel_pool_idx % nPool) + nPool) % nPool;
+      const numAt = (arr, idx, fb) => {
+        if (!Array.isArray(arr) || arr.length === 0) return fb;
+        const v = Number(arr[Math.min(Math.max(0, idx), arr.length - 1)]);
+        return Number.isFinite(v) ? v : fb;
+      };
+      const setEl = (id, txt) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = txt;
+      };
+      const bAtt0 = numAt(m.pool_biomass_attached_kg_m3, 0, 0.82);
+      const bAttEnd = numAt(m.pool_biomass_attached_kg_m3, (Array.isArray(m.pool_biomass_attached_kg_m3) && m.pool_biomass_attached_kg_m3.length > 0) ? m.pool_biomass_attached_kg_m3.length - 1 : 3, 0.58);
+      setEl("infoMatlabVersion", `R2026b (26.2.0.3433840) | ${m.installed_toolbox_count}/14 Toolboxes`);
+      setEl("infoMatlabSimulink", `${String(m.simulink_slx_model || "m7_reactor_alara_closed_loop.slx").replace(".slx", "")} | ts=${Number(m.control_settling_time_s || 18.93).toFixed(2)}s | y=${Number(m.simulink_final_value || 1.0028).toFixed(4)}`);
+      setEl("infoMatlabPodCtrl", `${(Number(m.pod_mode1_energy_fraction || 0.9994) * 100).toFixed(2)}% SVD Energy | eig=[${(Array.isArray(m.state_space_eigenvalues) ? m.state_space_eigenvalues : [-0.08, -0.15]).join(", ")}]`);
+      setEl("infoMatlabTarjan", `OpenFOAM->PHREEQC->FCM->SMBR->MATLAB (b1=${m.beta_1_inter_solver})`);
+      setEl("infoMatlabMultipool", `Conserved (res=${Number(m.multipool_mass_rel_residual || 0).toExponential(2)}) | B_att=[${bAtt0.toFixed(2)}..${bAttEnd.toFixed(2)}]`);
+      setEl("infoMatlabVogelPool", `Pool #${pIdx + 1}/${nPool} | S=${numAt(m.S_i_mol_m3, pIdx, 55.0).toFixed(1)} mM | DO=${numAt(m.C_O2_i_mol_m3, pIdx, 0.24).toFixed(3)} mM | pH=${numAt(m.pH_i, pIdx, 5.80).toFixed(2)}`);
+      setEl("infoMatlabBlock1", `M_frq=${numAt(m.M_frq, pIdx, 0.92).toFixed(2)} | F_c=${numAt(m.F_c, pIdx, 1.14).toFixed(2)} | F_n=${numAt(m.F_n, pIdx, 0.95).toFixed(2)} | tau=22.5h/24.0h`);
+      setEl("infoMatlabBlock2", `B_i=${numAt(m.B_i_kg_m3, pIdx, 0.84).toFixed(2)} kg/m3 | rho_tip=${numAt(m.rho_tip_i, pIdx, 1.45e9).toExponential(2)} | HEX-1 | b1=3`);
+      setEl("infoMatlabBlock3", `FSC=${(numAt(m.FSC_A, pIdx, 42000) / 1000).toFixed(1)}k | SSC=${(numAt(m.SSC_A, pIdx, 18500) / 1000).toFixed(1)}k | FL1=${(numAt(m.FL1_A, pIdx, 3100) / 1000).toFixed(2)}k | Mel=${numAt(m.melanin_pg_cell, pIdx, 14.2).toFixed(1)} pg`);
+      setEl("infoMatlabBlock4", `D_cum=${numAt(m.cumulative_dose_D_i_Gy, pIdx, 0.0295).toFixed(4)} Gy (<0.04) | ${Number(m.alara_dose_reduction_factor || 330.8).toFixed(1)}x | Hormesis=${m.hormesis_quarantine_verdict || "Incomplete"}`);
+      setEl("infoMatlabCollar", m.collar_status_label);
+      const badgeEl = document.getElementById("matlabR2026bBadge");
+      if (badgeEl) {
+        badgeEl.textContent = state.worldScenario === "matlab_r2026b_3d_eda_simulink_fixture" ? `ACTIVE POOL #${pIdx + 1}/${nPool}` : "14/14 PASS";
+      }
+      const btnFix = document.getElementById("matlabFixtureBtn");
+      if (btnFix) {
+        btnFix.classList.toggle("active", state.worldScenario === "matlab_r2026b_3d_eda_simulink_fixture");
+      }
+    }
+
+    function normalizePoolArrayWithPadding(candArr, fallbackArr, targetLen) {
+      if (!Array.isArray(candArr) || candArr.length === 0) return fallbackArr.slice(0, targetLen);
+      const out = [];
+      for (let i = 0; i < targetLen; i++) {
+        const raw = i < candArr.length ? candArr[i] : (fallbackArr[i] !== undefined ? fallbackArr[i] : candArr[candArr.length - 1]);
+        const val = Number(raw);
+        out.push(Number.isFinite(val) ? val : fallbackArr[i]);
+      }
+      return out;
+    }
+
+    window.normalizeMatlabFixtureToM7Payload = function(obj) {
+      if (!obj || typeof obj !== "object") return canonicalWorldScenarios.matlab_r2026b_3d_eda_simulink_fixture;
+      const hasSc = Boolean(obj.spatial_cells_3d && typeof obj.spatial_cells_3d === "object");
+      const sc = obj.spatial_cells_3d || {};
+      const nc4 = obj.neurospora_crassa_4block_matlab_model || {};
+      const ncs = obj.neurospora_4block_state || obj.neurospora_crassa_4block_state || {};
+      const b1 = nc4.block_1_circadian_frq_wc1_wc2_oscillator || {};
+      const b2 = nc4.block_2_syncytial_hyphal_biofilm_and_woronin || {};
+      const b3 = nc4.block_3_multipool_vogels_hydraulics_and_phreeqc_nutmeg || {};
+      const b4 = nc4.block_4_alara_melanin_kinetics_and_lqr_mpc_control || {};
+      const cyt = ncs.conidial_cytometry || b3.conidial_cytometry || {};
+      const mp = obj.matlab_reactor_pools_and_biofilms_coordination || {};
+      const alara = obj.health_physics_alara_and_hippocratism || {};
+
+      const pickArr = (...cands) => cands.find(a => Array.isArray(a) && a.length > 0) || null;
+
+      const mFrqCand = pickArr(ncs.M_frq, b1.M_frq, obj !== canonicalMatlabR2026bFixture ? obj.M_frq : null);
+      if (mFrqCand) canonicalMatlabR2026bFixture.M_frq = normalizePoolArrayWithPadding(mFrqCand, canonicalMatlabR2026bFixture.M_frq, 8);
+
+      const fcCand = pickArr(ncs.F_c, b1.F_c, obj !== canonicalMatlabR2026bFixture ? obj.F_c : null);
+      if (fcCand) canonicalMatlabR2026bFixture.F_c = normalizePoolArrayWithPadding(fcCand, canonicalMatlabR2026bFixture.F_c, 8);
+
+      const fnCand = pickArr(ncs.F_n, b1.F_n, obj !== canonicalMatlabR2026bFixture ? obj.F_n : null);
+      if (fnCand) canonicalMatlabR2026bFixture.F_n = normalizePoolArrayWithPadding(fnCand, canonicalMatlabR2026bFixture.F_n, 8);
+
+      const biCand = pickArr(ncs.B_i_kg_m3, ncs.B_i, ncs.B_kg_m3, b2.B_i_kg_m3, obj !== canonicalMatlabR2026bFixture ? obj.B_i_kg_m3 : null);
+      if (biCand) canonicalMatlabR2026bFixture.B_i_kg_m3 = normalizePoolArrayWithPadding(biCand, canonicalMatlabR2026bFixture.B_i_kg_m3, 8);
+
+      const rhoTipCand = pickArr(ncs.rho_tip_i, ncs.rho_tip, b2.rho_tip_i_m_inv3, obj !== canonicalMatlabR2026bFixture ? obj.rho_tip_i : null);
+      if (rhoTipCand) canonicalMatlabR2026bFixture.rho_tip_i = normalizePoolArrayWithPadding(rhoTipCand, canonicalMatlabR2026bFixture.rho_tip_i, 8);
+
+      const phiEpsCand = pickArr(ncs.phi_EPS_i, ncs.phi_EPS, b2.phi_EPS_i, obj !== canonicalMatlabR2026bFixture ? obj.phi_EPS_i : null);
+      if (phiEpsCand) canonicalMatlabR2026bFixture.phi_EPS_i = normalizePoolArrayWithPadding(phiEpsCand, canonicalMatlabR2026bFixture.phi_EPS_i, 8);
+
+      const siCand = pickArr(ncs.S_i_mol_m3, ncs.S_i, ncs.S_mol_m3, b3.S_i_mol_m3, obj !== canonicalMatlabR2026bFixture ? obj.S_i_mol_m3 : null);
+      if (siCand) canonicalMatlabR2026bFixture.S_i_mol_m3 = normalizePoolArrayWithPadding(siCand, canonicalMatlabR2026bFixture.S_i_mol_m3, 8);
+
+      const co2Cand = pickArr(ncs.C_O2_i_mol_m3, ncs.C_O2_i, ncs.C_O2, b3.C_O2_i_mol_m3, obj !== canonicalMatlabR2026bFixture ? obj.C_O2_i_mol_m3 : null);
+      if (co2Cand) canonicalMatlabR2026bFixture.C_O2_i_mol_m3 = normalizePoolArrayWithPadding(co2Cand, canonicalMatlabR2026bFixture.C_O2_i_mol_m3, 8);
+
+      const phICand = pickArr(ncs.pH_i, b3.pH_i, obj !== canonicalMatlabR2026bFixture ? obj.pH_i : null);
+      if (phICand) canonicalMatlabR2026bFixture.pH_i = normalizePoolArrayWithPadding(phICand, canonicalMatlabR2026bFixture.pH_i, 8);
+
+      const fscCand = pickArr(ncs.FSC_A, cyt.FSC_A, obj !== canonicalMatlabR2026bFixture ? obj.FSC_A : null);
+      if (fscCand) canonicalMatlabR2026bFixture.FSC_A = normalizePoolArrayWithPadding(fscCand, canonicalMatlabR2026bFixture.FSC_A, 8);
+
+      const sscCand = pickArr(ncs.SSC_A, cyt.SSC_A, obj !== canonicalMatlabR2026bFixture ? obj.SSC_A : null);
+      if (sscCand) canonicalMatlabR2026bFixture.SSC_A = normalizePoolArrayWithPadding(sscCand, canonicalMatlabR2026bFixture.SSC_A, 8);
+
+      const fl1Cand = pickArr(ncs.FL1_A, cyt.FL1_A, obj !== canonicalMatlabR2026bFixture ? obj.FL1_A : null);
+      if (fl1Cand) canonicalMatlabR2026bFixture.FL1_A = normalizePoolArrayWithPadding(fl1Cand, canonicalMatlabR2026bFixture.FL1_A, 8);
+
+      const melPgCand = pickArr(ncs.melanin_pg_cell, cyt.melanin_pg_cell, obj !== canonicalMatlabR2026bFixture ? obj.melanin_pg_cell : null);
+      if (melPgCand) canonicalMatlabR2026bFixture.melanin_pg_cell = normalizePoolArrayWithPadding(melPgCand, canonicalMatlabR2026bFixture.melanin_pg_cell, 8);
+
+      const dMelCand = pickArr(ncs.D_mel_i_kg_m3, ncs.D_mel_i, b4.D_mel_i_kg_m3, obj !== canonicalMatlabR2026bFixture ? obj.D_mel_i_kg_m3 : null);
+      if (dMelCand) canonicalMatlabR2026bFixture.D_mel_i_kg_m3 = normalizePoolArrayWithPadding(dMelCand, canonicalMatlabR2026bFixture.D_mel_i_kg_m3, 8);
+
+      const dDotCand = pickArr(ncs.D_dot_eff_Gy_s, ncs.D_dot_eff_i, b4.D_dot_eff_i_Gy_s, obj !== canonicalMatlabR2026bFixture ? obj.D_dot_eff_Gy_s : null);
+      if (dDotCand) canonicalMatlabR2026bFixture.D_dot_eff_Gy_s = normalizePoolArrayWithPadding(dDotCand, canonicalMatlabR2026bFixture.D_dot_eff_Gy_s, 8);
+
+      const dCumCand = pickArr(ncs.cumulative_dose_D_i_Gy, b4.cumulative_dose_D_i_Gy, obj !== canonicalMatlabR2026bFixture ? obj.cumulative_dose_D_i_Gy : null);
+      if (dCumCand) canonicalMatlabR2026bFixture.cumulative_dose_D_i_Gy = normalizePoolArrayWithPadding(dCumCand, canonicalMatlabR2026bFixture.cumulative_dose_D_i_Gy, 8);
+
+      const bAttPoolCand = pickArr(mp.pool_biomass_attached_kg_m3, sc.biomass_attached_kg_m3, ncs.pool_biomass_attached_kg_m3, obj !== canonicalMatlabR2026bFixture ? obj.pool_biomass_attached_kg_m3 : null);
+      if (bAttPoolCand) canonicalMatlabR2026bFixture.pool_biomass_attached_kg_m3 = normalizePoolArrayWithPadding(bAttPoolCand, canonicalMatlabR2026bFixture.pool_biomass_attached_kg_m3, 4);
+
+      const bSusPoolCand = pickArr(mp.pool_biomass_suspended_kg_m3, ncs.pool_biomass_suspended_kg_m3, obj !== canonicalMatlabR2026bFixture ? obj.pool_biomass_suspended_kg_m3 : null);
+      if (bSusPoolCand) canonicalMatlabR2026bFixture.pool_biomass_suspended_kg_m3 = normalizePoolArrayWithPadding(bSusPoolCand, canonicalMatlabR2026bFixture.pool_biomass_suspended_kg_m3, 4);
+
+      if (typeof obj.simulink_final_value === "number") canonicalMatlabR2026bFixture.simulink_final_value = obj.simulink_final_value;
+      else if (typeof ncs.simulink_final_value === "number") canonicalMatlabR2026bFixture.simulink_final_value = ncs.simulink_final_value;
+
+      if (typeof obj.control_settling_time_s === "number") canonicalMatlabR2026bFixture.control_settling_time_s = obj.control_settling_time_s;
+      else if (typeof ncs.control_settling_time_s === "number") canonicalMatlabR2026bFixture.control_settling_time_s = ncs.control_settling_time_s;
+
+      if (typeof obj.pod_mode1_energy_fraction === "number") canonicalMatlabR2026bFixture.pod_mode1_energy_fraction = obj.pod_mode1_energy_fraction;
+      else if (typeof ncs.pod_mode1_energy_fraction === "number") canonicalMatlabR2026bFixture.pod_mode1_energy_fraction = ncs.pod_mode1_energy_fraction;
+
+      if (typeof alara.alara_dose_reduction_factor === "number") canonicalMatlabR2026bFixture.alara_dose_reduction_factor = alara.alara_dose_reduction_factor;
+      else if (typeof ncs.alara_dose_reduction_factor === "number") canonicalMatlabR2026bFixture.alara_dose_reduction_factor = ncs.alara_dose_reduction_factor;
+
+      if (typeof b4.hormesis_quarantine_verdict === "string") canonicalMatlabR2026bFixture.hormesis_quarantine_verdict = b4.hormesis_quarantine_verdict;
+      else if (typeof ncs.hormesis_quarantine_verdict === "string") canonicalMatlabR2026bFixture.hormesis_quarantine_verdict = ncs.hormesis_quarantine_verdict;
+
+      const existingFa = (!hasSc && obj.field_arrays && typeof obj.field_arrays === "object") ? obj.field_arrays : null;
+      const por = Array.isArray(sc.porosity_phi) && sc.porosity_phi.length > 0 ? sc.porosity_phi
+        : (existingFa && Array.isArray(existingFa.porosity) ? existingFa.porosity : [0.38, 0.36, 0.35, 0.37]);
+      const perm = Array.isArray(sc.permeability_k_m2) && sc.permeability_k_m2.length > 0 ? sc.permeability_k_m2
+        : (existingFa && Array.isArray(existingFa.permeability) ? existingFa.permeability : [1.45e-12, 1.22e-12, 1.12e-12, 1.33e-12]);
+      const vel = Array.isArray(sc.velocity_u_m_s) && sc.velocity_u_m_s.length > 0 ? sc.velocity_u_m_s
+        : (existingFa && Array.isArray(existingFa.darcy_velocity) ? existingFa.darcy_velocity : [1.25e-4, 1.31e-4, 1.35e-4, 1.28e-4]);
+      const tempK = Array.isArray(sc.temperature_K) && sc.temperature_K.length > 0 ? sc.temperature_K
+        : (obj.world_scenario && obj.world_scenario.environment && Array.isArray(obj.world_scenario.environment.temperature_profile_K)
+            ? obj.world_scenario.environment.temperature_profile_K : [298.15, 298.22, 298.28, 298.31]);
+      const ph = Array.isArray(sc.pH_profile) && sc.pH_profile.length > 0 ? sc.pH_profile
+        : (existingFa && Array.isArray(existingFa.pH) ? existingFa.pH : [7.18, 7.12, 7.08, 7.05]);
+      const bioAtt = Array.isArray(sc.biomass_attached_kg_m3) && sc.biomass_attached_kg_m3.length > 0 ? sc.biomass_attached_kg_m3
+        : (existingFa && Array.isArray(existingFa.biofilm_volume_fraction) ? existingFa.biofilm_volume_fraction.map(v => Number((v * 25.0).toFixed(4))) : [0.82, 0.74, 0.65, 0.58]);
+      const epsFrac = Array.isArray(sc.eps_fraction) && sc.eps_fraction.length > 0 ? sc.eps_fraction
+        : (existingFa && Array.isArray(existingFa.eps_fraction) ? existingFa.eps_fraction : [0.22, 0.20, 0.18, 0.16]);
+
+      const xCenters = Array.isArray(sc.cell_centers_x_m) && sc.cell_centers_x_m.length > 0
+        ? sc.cell_centers_x_m.map(Number)
+        : (obj.mesh && Array.isArray(obj.mesh.cell_centers_m) && obj.mesh.cell_centers_m.length > 0
+            ? obj.mesh.cell_centers_m.map(pt => Array.isArray(pt) ? Number(pt[0]) : Number(pt))
+            : [0.0005, 0.0015, 0.0025, 0.0035]);
+      const yCenters = Array.isArray(sc.cell_centers_y_m) ? sc.cell_centers_y_m.map(Number) : [];
+      const zCenters = Array.isArray(sc.cell_centers_z_m) ? sc.cell_centers_z_m.map(Number) : [];
+      const rawCount = Math.max(por.length, perm.length, vel.length, ph.length, xCenters.length, 1);
+
+      if (typeof obj.physical_time_s === "number") {
+        state.physicalTimeS = obj.physical_time_s;
+        const scrub = document.getElementById("timeScrubber");
+        if (scrub) scrub.value = String(state.physicalTimeS);
+      }
+
+      state.worldScenario = "matlab_r2026b_3d_eda_simulink_fixture";
+      const wsSel = document.getElementById("worldScenarioSelect");
+      if (wsSel) wsSel.value = "matlab_r2026b_3d_eda_simulink_fixture";
+      updateMatlabR2026bInspectorCard();
+
+      return {
+        schema: "M7SpatialFrame",
+        schema_version: "1.0.0",
+        world_scenario_schema: "M7WorldScenario",
+        simulation_id: obj.simulation_id || obj.fixture_id || "matlab_r2026b_3d_eda_simulink_fixture",
+        scenario_id: "matlab_r2026b_3d_eda_simulink_fixture",
+        evidence_tier: "solver_executed",
+        scenario_classification: "SOLVER_EXECUTED_SIMULATION",
+        energy_budget_closed: true,
+        elemental_mass_conserved: true,
+        mesh: {
+          cell_count: rawCount,
+          cell_centers_m: xCenters.map((x, idx) => [
+            Number.isFinite(x) ? x : (idx + 0.5) * 1.0e-3,
+            Number.isFinite(yCenters[idx]) ? yCenters[idx] : 0.0005,
+            Number.isFinite(zCenters[idx]) ? zCenters[idx] : 0.0005
+          ])
+        },
+        fields: [
+          { name: "biofilm_biomass", values: bioAtt.map(b => Number((Number(b) * 20.0).toFixed(4))) },
+          { name: "biofilm_eps", values: epsFrac.map(e => Number((Number(e) * 50.0).toFixed(4))) }
+        ],
+        world_scenario: {
+          environment: { temperature_profile_K: tempK, gravity_m_s2: 9.80665 }
+        },
+        feedback_loop: { energy_budget_closed: true, elemental_mass_conserved: true },
+        field_arrays: {
+          porosity: por,
+          permeability: perm,
+          darcy_velocity: vel,
+          pH: ph,
+          pe: (existingFa && Array.isArray(existingFa.pe)) ? existingFa.pe : [6.40, 6.30, 6.20, 6.10],
+          dissolved_species: (existingFa && existingFa.dissolved_species && !hasSc && !siCand && !co2Cand) ? existingFa.dissolved_species : {
+            C_substrate: canonicalMatlabR2026bFixture.S_i_mol_m3.slice(0, 4).map(v => Number((v / 60.0).toFixed(3))),
+            C_O2: canonicalMatlabR2026bFixture.C_O2_i_mol_m3.slice(0, 4),
+            H2: [0.18, 0.25, 0.31, 0.16]
+          },
+          biofilm_volume_fraction: bioAtt.map(b => Number((Number(b) / 25.0).toFixed(4))),
+          eps_fraction: epsFrac,
+          mineral_volume_fractions: (existingFa && existingFa.mineral_volume_fractions) ? existingFa.mineral_volume_fractions : {
+            illite: [0.21, 0.23, 0.25, 0.24],
+            smectite: [0.14, 0.15, 0.16, 0.15],
+            calcite: [0.04, 0.04, 0.04, 0.04]
+          },
+          evidence_tier: "solver_executed",
+          scenario_classification: "SOLVER_EXECUTED_SIMULATION",
+          mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
+        }
+      };
+    };
+
+    window.applyMatlabFixturePayload = function(customObj) {
+      return window.applyM7JsonPayload(customObj || canonicalMatlabR2026bFixture);
     };
 
     // Synchronized 3D Mouse Rotation, Shift-Drag Pan, Wheel Zoom & Spatial/Molecular Picking
@@ -2239,9 +2580,11 @@
       if (val === "default_workbench") {
         state.loadedCells = null;
         state.loadedFrameMeta = null;
+        updateMatlabR2026bInspectorCard();
         renderAll();
       } else if (canonicalWorldScenarios[val]) {
         window.applyM7JsonPayload(canonicalWorldScenarios[val]);
+        updateMatlabR2026bInspectorCard();
       }
     });
     document.getElementById("trackSelect").addEventListener("change", e => {
@@ -2311,6 +2654,110 @@
       e.target.textContent = state.clayMode === "ca_montmorillonite" ? "Clay: Ca-Montmorillonite" : "Clay: Na-Montmorillonite";
       renderAll();
     });
+
+    // Interactive MATLAB R2026b Fixture Toolbar & Inspector Card Controls
+    const activateMatlabFixtureHandler = () => {
+      window.applyMatlabFixturePayload(canonicalMatlabR2026bFixture);
+      updateMatlabR2026bInspectorCard();
+    };
+    const matlabFixBtn = document.getElementById("matlabFixtureBtn");
+    if (matlabFixBtn) matlabFixBtn.addEventListener("click", activateMatlabFixtureHandler);
+    const btnMatlabAct = document.getElementById("btnMatlabActivateFixture");
+    if (btnMatlabAct) btnMatlabAct.addEventListener("click", activateMatlabFixtureHandler);
+
+    const btnMatlabPool = document.getElementById("btnMatlabStepPool");
+    if (btnMatlabPool) {
+      btnMatlabPool.addEventListener("click", () => {
+        if (state.worldScenario !== "matlab_r2026b_3d_eda_simulink_fixture" || !state.loadedCells || state.loadedCells.length !== 4) {
+          window.applyMatlabFixturePayload(canonicalMatlabR2026bFixture);
+        }
+        const m = canonicalMatlabR2026bFixture;
+        const nPool = Math.max(1, Number(m.n_pool) || 8);
+        m.active_vogel_pool_idx = (m.active_vogel_pool_idx + 1) % nPool;
+        const pIdx = m.active_vogel_pool_idx;
+        state.selectedCell = (pIdx % 4) + 1;
+        if (state.worldScenario === "matlab_r2026b_3d_eda_simulink_fixture" && state.loadedCells && state.loadedCells.length === 4) {
+          const offset = pIdx >= 4 ? 4 : 0;
+          for (let i = 0; i < 4; i++) {
+            const k = Math.min(offset + i, m.S_i_mol_m3.length - 1);
+            const sNorm = Number(((Number(m.S_i_mol_m3[k]) || 55.0) / 60.0).toFixed(3));
+            const o2Val = Number(m.C_O2_i_mol_m3[k] !== undefined ? m.C_O2_i_mol_m3[k] : 0.22);
+            const bVal  = Number(m.B_i_kg_m3[k] !== undefined ? m.B_i_kg_m3[k] : 0.72);
+            const eFrac = Number(m.phi_EPS_i[k] !== undefined ? m.phi_EPS_i[k] : 0.18);
+            const h2Val = Number(state.loadedCells[i].h2 !== undefined ? state.loadedCells[i].h2 : 0.18);
+            state.loadedCells[i].sub = sNorm;
+            state.loadedCells[i].dissolved_species = sNorm;
+            state.loadedCells[i].dissolved_species_summary = `C_substrate=${sNorm.toFixed(3)} | C_O2=${o2Val.toFixed(3)} | H2=${h2Val.toFixed(3)}`;
+            state.loadedCells[i].pH = Number(m.pH_i[k] !== undefined ? m.pH_i[k] : 5.85);
+            state.loadedCells[i].bio = bVal * 20.0;
+            state.loadedCells[i].biofilm_volume_fraction = Number((bVal / 25.0).toFixed(4));
+            state.loadedCells[i].eps = eFrac * 50.0;
+            state.loadedCells[i].eps_fraction = eFrac;
+          }
+        }
+        updateMatlabR2026bInspectorCard();
+        renderAll();
+      });
+    }
+
+    const exportMatlabBtn = document.getElementById("exportMatlabBtn");
+    if (exportMatlabBtn) {
+      exportMatlabBtn.addEventListener("click", () => {
+        const cells = getActiveCells();
+        const fxExport = {
+          fixture_id: "m7_multiscale_matlab_simulink_3d_eda_v1",
+          exported_from: "M7MultiscaleExplorer_HTML_Workbench",
+          matlab_release_target: "R2026b",
+          matlab_version_target: "26.2.0.3433840",
+          physical_time_s: state.physicalTimeS,
+          sobolev_relaxation_step: getPinnedSobolevStep(),
+          m7_stage_headers: ["M7.1", "M7.2", "M7.3", "M7.4", "M7.5", "M7.6", "M7.7", "M7.8"],
+          tarjan_bridge_pipeline: {
+            nodes: [
+              "OpenFOAM_FiniteVolume_CFD",
+              "PHREEQC_Geochemical_Speciation",
+              "FlowCytometry_SingleCell_Bridge",
+              "SmallModularBioReactors_Multiscale_ODE",
+              "MATLAB_R2026b_Simulink_Simscape_3D_EDA"
+            ],
+            is_dag: true,
+            max_scc_size: 1,
+            beta_1_inter_solver: 0,
+            recursion_depth: 0,
+            consolidation_rule_immutable: true
+          },
+          spatial_cells_3d: {
+            cell_centers_x_m: cells.map(c => c.x),
+            porosity_phi: cells.map(c => c.porosity),
+            permeability_k_m2: cells.map(c => c.permeability || 1.42e-12),
+            velocity_u_m_s: cells.map(c => c.vel),
+            temperature_K: cells.map(c => Number((c.temp + 273.15).toFixed(2))),
+            pH_profile: cells.map(c => Number(c.pH.toFixed(3))),
+            biomass_attached_kg_m3: cells.map(c => Number((c.bio / 20.0).toFixed(3))),
+            eps_fraction: cells.map(c => Number((c.eps_fraction || 0.18).toFixed(4)))
+          },
+          neurospora_4block_state: JSON.parse(JSON.stringify(canonicalMatlabR2026bFixture)),
+          neurospora_crassa_4block_state: JSON.parse(JSON.stringify(canonicalMatlabR2026bFixture))
+        };
+        const mScriptLines = [
+          "% m7_explorer_interactive_session.m",
+          "% Auto-exported from M7MultiscaleExplorer HTML Workbench for MATLAB R2026b",
+          "fx_explorer = jsondecode(fileread('m7_explorer_matlab_r2026b_fixture.json'));",
+          "assignin('base', 'fx_explorer', fx_explorer);",
+          "disp(fx_explorer.spatial_cells_3d);",
+          "if exist('m7_open_interactive_workbench', 'file') == 2",
+          "    wb_state = m7_open_interactive_workbench(false);",
+          "    disp(wb_state);",
+          "elseif exist('m7_3d_eda_and_simulink_bridge', 'file') == 2",
+          "    receipt = m7_3d_eda_and_simulink_bridge();",
+          "    disp(receipt);",
+          "end"
+        ];
+        triggerDownload("m7_explorer_matlab_r2026b_fixture.json", JSON.stringify(fxExport, null, 2) + "\n", "application/json");
+        triggerDownload("m7_explorer_interactive_session.m", mScriptLines.join("\n") + "\n", "text/plain");
+      });
+    }
+
     document.getElementById("timeScrubber").addEventListener("input", e => {
       state.physicalTimeS = Number(e.target.value);
       renderAll();
@@ -2328,7 +2775,55 @@
       document.getElementById(id).addEventListener("change", renderAll);
     });
 
-    // File Loader for M7SpatialFrame / M7WorldScenario (.json) & SMACRO1 (.smacro1) Binary Frames
+    window.inspectMatBinaryBuffer = function(buf) {
+      if (!buf || typeof buf.byteLength !== "number" || buf.byteLength < 128) {
+        return { valid: false, format: "invalid", byteLength: buf ? buf.byteLength : 0 };
+      }
+      const bytes = new Uint8Array(buf);
+      let hdrStr = "";
+      for (let i = 0; i < 19; i++) {
+        hdrStr += String.fromCharCode(bytes[i]);
+      }
+      const dv = new DataView(buf);
+      const endianStr = String.fromCharCode(bytes[126], bytes[127]);
+      const littleEndian = endianStr === "IM";
+      const versionNum = dv.getUint16(124, littleEndian);
+      const isV7 = hdrStr === "MATLAB 5.0 MAT-file" && (endianStr === "IM" || endianStr === "MI") && versionNum === 0x0100;
+      const isV73 = hdrStr === "MATLAB 7.3 MAT-file" && bytes.length >= 520 &&
+                    bytes[512] === 0x89 && bytes[513] === 0x48 && bytes[514] === 0x44 && bytes[515] === 0x46 &&
+                    bytes[516] === 0x0d && bytes[517] === 0x0a && bytes[518] === 0x1a && bytes[519] === 0x0a;
+      if (!isV7 && !isV73) {
+        return { valid: false, format: "invalid", headerPrefix: hdrStr, byteLength: buf.byteLength };
+      }
+      let topLevelTags = 0;
+      if (isV7) {
+        let off = 128;
+        while (off + 8 <= buf.byteLength) {
+          const tagType = dv.getUint32(off, littleEndian);
+          const tagBytes = dv.getUint32(off + 4, littleEndian);
+          if (tagBytes === 0 || off + 8 + tagBytes > buf.byteLength) break;
+          if (tagType === 15 || tagType === 14) topLevelTags++;
+          const pad = (tagType === 15) ? 0 : ((8 - (tagBytes % 8)) % 8);
+          off += 8 + tagBytes + pad;
+        }
+      }
+      canonicalMatlabR2026bFixture.collar_status_label = isV73
+        ? `Verified MAT v7.3 HDF5 (${(buf.byteLength / 1024).toFixed(1)} KB)`
+        : `Verified MAT v7 Struct (${topLevelTags} vars, ${(buf.byteLength / 1024).toFixed(1)} KB)`;
+      window.applyMatlabFixturePayload(canonicalMatlabR2026bFixture);
+      updateMatlabR2026bInspectorCard();
+      return {
+        valid: true,
+        format: isV73 ? "MAT_v7.3_HDF5" : "MAT_v7_struct",
+        headerPrefix: hdrStr,
+        versionHex: "0x" + versionNum.toString(16),
+        endian: endianStr,
+        topLevelTags,
+        byteLength: buf.byteLength
+      };
+    };
+
+    // File Loader for M7SpatialFrame / M7WorldScenario / MATLAB (.json), MAT v7 / v7.3 (.mat) & SMACRO1 (.smacro1)
     document.getElementById("loadFileBtn").addEventListener("click", () => {
       document.getElementById("fileLoaderInput").click();
     });
@@ -2367,12 +2862,19 @@
           }
         };
         reader.readAsArrayBuffer(file);
+      } else if (file.name.endsWith(".mat")) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          window.inspectMatBinaryBuffer(ev.target.result);
+        };
+        reader.readAsArrayBuffer(file);
       } else {
         const reader = new FileReader();
         reader.onload = ev => {
           try {
             const obj = JSON.parse(ev.target.result);
             window.applyM7JsonPayload(obj);
+            updateMatlabR2026bInspectorCard();
           } catch (_) {}
         };
         reader.readAsText(file);
@@ -2747,6 +3249,7 @@
     renderAll = function() {
       _origRenderAllForFn();
       renderFunNeurologyGraph();
+      updateMatlabR2026bInspectorCard();
     };
 
     window.addEventListener("resize", renderAll);

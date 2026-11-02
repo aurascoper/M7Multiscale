@@ -435,6 +435,7 @@ using .M7Multiscale.M7VisualizationBridge
     @test matlab_alara_aud.receipt_checks_passed
     @test matlab_alara_aud.mat_v7_and_v73_hdf5_present
     @test matlab_alara_aud.simulink_slx_present
+    @test matlab_alara_aud.explorer_html_matlab_fixture_integrated
     @test matlab_alara_aud.png_dimensions_valid
     @test matlab_alara_aud.png_dimensions.width >= 1920
     @test matlab_alara_aud.png_dimensions.height >= 1080
@@ -456,6 +457,14 @@ using .M7Multiscale.M7VisualizationBridge
     @test length(matlab_alara_aud.neurospora_4block_8pool_state.C_O2_i) == 8
     @test length(matlab_alara_aud.neurospora_4block_8pool_state.conidial_cytometry.FSC_A) == 8
     @test matlab_alara_aud.neurospora_4block_8pool_state.hormesis_quarantine_verdict == :Incomplete
+    @test matlab_alara_aud.live_spice_jl_known_body_check.live_spice_jl_runtime_verified
+    @test matlab_alara_aud.live_spice_jl_known_body_check.spice_jl_unit_verdict == :Accepted
+    @test matlab_alara_aud.five_graph_topology_distinction.five_graph_distinction_valid
+    @test length(matlab_alara_aud.five_graph_topology_distinction.graphs) == 5
+    @test matlab_alara_aud.section_6_scientific_and_engineering_flags.all_9_flags_codified
+    @test length(matlab_alara_aud.section_6_scientific_and_engineering_flags.flags) == 9
+    @test matlab_alara_aud.section_6_scientific_and_engineering_flags.fission_power_and_biological_reactor_separated
+    @test matlab_alara_aud.neurospora_four_block_and_metal_calibration.calibration_verified
 end
 
 
