@@ -109,6 +109,9 @@ export M7VisualizationBridge,
        validate_m7_geometry_import_topology,
        SPICE_LOCK,
        evaluate_dual_path_spice_ephemeris_contract,
+       VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC,
+       convert_spice_state_to_basilisk_si,
+       evaluate_verified_basilisk_spice_memo_and_smbr_bridge,
        audit_m7_v2_non_recursive_poller_and_fun_neurology_graph
 
 end # module M7Multiscale
