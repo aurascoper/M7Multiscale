@@ -384,6 +384,8 @@ using .M7Multiscale.M7VisualizationBridge
     @test v2_audit.ground_truth_turns_verified.L114_argument_dance_beta_1_nonzero
     @test v2_audit.ground_truth_turns_verified.L115_vizard_spice_julia_kernels
     @test v2_audit.poller_v2_verified
+    @test v2_audit.master_event_contract_gates_verified
+    @test v2_audit.substrate_swap_L29_to_L32_verified
     @test v2_audit.recursive_rewrite_blocked
     @test v2_audit.doc_valid
     @test v2_audit.html_v2_valid
@@ -431,15 +433,29 @@ using .M7Multiscale.M7VisualizationBridge
     @test matlab_alara_aud.fixtures_present
     @test matlab_alara_aud.zero_dashes_fixtures
     @test matlab_alara_aud.receipt_checks_passed
+    @test matlab_alara_aud.mat_v7_and_v73_hdf5_present
+    @test matlab_alara_aud.simulink_slx_present
     @test matlab_alara_aud.png_dimensions_valid
     @test matlab_alara_aud.png_dimensions.width >= 1920
     @test matlab_alara_aud.png_dimensions.height >= 1080
     @test matlab_alara_aud.plugin_and_workspace_skills_verified
     @test matlab_alara_aud.health_physics_alara.alara_satisfied
     @test matlab_alara_aud.health_physics_alara.primum_non_nocere_enforced
+    @test matlab_alara_aud.payload_controller.alara_satisfied
+    @test matlab_alara_aud.melanin_neurospora_alara.alara_biological_protection_verified
+    @test matlab_alara_aud.epistemic_hippocratism_gate.verdict == :Accepted
     @test matlab_alara_aud.m7_schema_validation.schema_valid
     @test matlab_alara_aud.selfish_gene_comfort_asr.reticulated_asr_verified
     @test matlab_alara_aud.tarjan_bridge_dag.is_acyclic_tarjan_bridge_chain
+    @test matlab_alara_aud.matlab_neuralcompose_multipool_seam.collar_and_multipool_valid
+    @test matlab_alara_aud.matlab_neuralcompose_multipool_seam.unified_substrate_swap_L31_valid
+    @test matlab_alara_aud.matlab_neuralcompose_multipool_seam.multipool_biofilm_seam.biomass_conserved
+    @test matlab_alara_aud.openmc_cross_section_swap_L32.valid
+    @test matlab_alara_aud.neurospora_4block_8pool_state.all_4_blocks_valid
+    @test matlab_alara_aud.neurospora_4block_8pool_state.n_pool === Int64(8)
+    @test length(matlab_alara_aud.neurospora_4block_8pool_state.C_O2_i) == 8
+    @test length(matlab_alara_aud.neurospora_4block_8pool_state.conidial_cytometry.FSC_A) == 8
+    @test matlab_alara_aud.neurospora_4block_8pool_state.hormesis_quarantine_verdict == :Incomplete
 end
 
 
