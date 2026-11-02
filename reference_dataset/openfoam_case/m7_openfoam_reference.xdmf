@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Xdmf Version="3.0">
+  <Domain>
+    <Grid Name="m7-reference-case" GridType="Uniform">
+      <Time Value="1200" />
+      <Topology TopologyType="Polyvertex" NumberOfElements="4" NodesPerElement="1">
+        <DataItem Dimensions="4 1" NumberType="Int" Precision="4" Format="XML">0 1 2 3</DataItem>
+      </Topology>
+      <Geometry GeometryType="XYZ">
+        <DataItem Dimensions="4 3" NumberType="Float" Precision="8" Format="XML">0.00050000000000000001 0 0 0.0015 0 0 0.0025000000000000001 0 0 0.0035000000000000001 0 0</DataItem>
+      </Geometry>
+      <Information Name="m7_schema" Value="M7SpatialFrame" />
+      <Information Name="m7_schema_version" Value="1.0.0" />
+      <Information Name="simulation_id" Value="m7-reference-case" />
+      <Information Name="frame_index" Value="35" />
+      <Information Name="physical_time_s" Value="1200" />
+      <Information Name="biological_time_s" Value="1200" />
+      <Information Name="sobolev_relaxation_step" Value="400" />
+      <Information Name="snapshot_sync_id" Value="sync-00035" />
+      <Information Name="interpolation_valid" Value="true" />
+      <Information Name="parent_snapshot_id" Value="sync-00034" />
+      <Information Name="coordinate_frame_name" Value="cartesian_right_handed" />
+      <Information Name="coordinate_frame_unit" Value="m" />
+      <Information Name="coordinate_origin_m" Value="0,0,0" />
+      <Information Name="mesh_topology" Value="anisotropic_hexahedral" />
+      <Information Name="geometry_asset" Value="mesh_00035_clay_pore" />
+      <Information Name="cell_ordering" Value="explicit_id_ascending" />
+      <Information Name="geometry_sha256" Value="sha256:a35c09c118ea1327dd6ab30a6fb43e4c74d0e5b29f7d85310448890082481e32" />
+      <Information Name="evidence_class" Value="synthetic" />
+      <Information Name="solver_versions_hex" Value="4a756c6961:42696f66696c6d4d756c7469706879736963732d302e342e30;4f70656e464f414d:4f70656e464f414d2d7632343036;50485245455143:504852454551432d332e372e33;536f626f6c6576:536f626f6c65764d6163726f6d6f6c6563756c652d312e302e30" />
+      <Information Name="source_hashes_hex" Value="67656f6d65747279:7368613235363a61333563303963313138656131333237646436616233306136666234336534633734643065356232396637643835333130343438383930303832343831653332" />
+      <Information Name="microscope_disclosures_spec" Value="planetary:426173696e20487964726f746865726d616c20546865726d616c202620466c6f7720426f756e64617279:conceptual_or_synthetic:assumed:OpenFOAM:4d372d53796e7468657469632d426f756e646172792d537065632d7631:5072657363726962656420726567696f6e616c206879647261756c6963206772616469656e7420616e642074656d706572617475726520626f756e646172792e;geological:506f72652d5363616c652056656c6f636974792c2050726573737572652c2070482c20616e64204d696e6572616c205349:direct_numerical_solver:synthetic:OpenFOAM:4f70656e464f414d2d7632343036202b20504852454551432d332e372e33:436f6e73657276617469766520626f756e64696e672d626f78206f7665726c6170206d6170706564206669656c64732e;geological:4d6963726f2d435420506f726f757320436f7265204d617472697820456e76656c6f7065:experimental_imaging_reconstruction:source_reported:OpenFOAM:4d656e6b652d446f737465722d4d6165732d323032362d61725869762d323631302e3139303537:506f726f7573206d656469756d2067656f6d6574727920636f6d70617261746f722e;biofilm:42696f66696c6d2042696f6d6173732c204550532f5047412f4375726c69205377656c6c696e672c2044726f6f702051756f746120512c20616e642048797068616c204772617068:direct_numerical_solver:synthetic:Julia:42696f66696c6d4d756c7469706879736963732d76302e342e30:436f75706c656420636f6e737469747574697665207377656c6c696e6720616e64204241524520616e6173746f6d6f73697320746f706f6c6f67792e;molecular:4163746976652d536974652054656d706c61746520436f6f7264696e61746573:external_structural_database:source_reported:Sobolev:524353422d5044422d49484d202f20536f626f6c65764d6163726f6d6f6c6563756c652d61366534393137:54656d706c61746520686f6d6f6c6f677320706c616365642076696120536f626f6c65762048312072656c61786174696f6e2e;molecular:4661722d4669656c6420436f617273652d477261696e65642043656e74726f6964204265616473:coarse_grained_approximation:calculated:Sobolev:736f626f6c65765f76697375616c697a6174696f6e2e70793a636f617273655f677261696e5f6661725f6669656c64:4661722d6669656c6420626561647320636f6c6c617073656420776974682070726573657276656420736f757263655f696e64696365732070726f76656e616e63652e" />
+      <Information Name="biological_graph_present" Value="true" />
+      <Information Name="biological_graph_meta" Value="1.4199999999999999|wrinkled_buckled_colony|sha256:609001b7cb8e54da7a1b611068d2bcd12e40e791c70d19bf38cf6f7bbb75c1eb" />
+      <Information Name="biological_graph_nodes" Value="1:0.00050000000000000001,0,0:1:apical_tip:4.2000000000000002:12;2:0.0015,0.0001,0:2:branch_point:18.5:24;3:0.0015,-0.0001,0:2:anastomosis_fusion_node:22:26;4:0.0025000000000000001,0,0:3:biofilm_microcolony:31:38;5:0.0035000000000000001,0,0:4:mineral_attachment_site:12.4:19" />
+      <Information Name="biological_graph_edges" Value="1:1:2:3.2000000000000002:verified_active:0;2:1:3:3:verified_active:0;3:2:3:2.7999999999999998:verified_active:1;4:2:4:3.5:verified_active:0;5:3:4:3.3999999999999999:verified_active:1;6:4:5:2.8999999999999999:verified_active:0;7:2:5:1.5:criterial_pruned:0;8:3:5:1.3999999999999999:exploratory_unverified:0" />
+      <Information Name="molecular_anchor_count" Value="1" />
+      <Information Name="anchor_1_id_hex" Value="616e63686f725f63656c6c325f62696f66696c6d5f6d696e6572616c5f696e74657266616365" />
+      <Information Name="anchor_1_nt" Value="2|616e677374726f6d|1,0,0,0,0,1,0,0,0,0,1,0,0.0015,0,0,1|1e-10,0,0,0,0,1e-10,0,0,0,0,1e-10,0,0,0,0,1" />
+      <Information Name="anchor_1_smacro1_hex" Value="534d4143524f31000100010008000000230000000000000000000000000079400000000000000000000000006666be40000000000000000066663e419a99993f0000000000000c42000020410000000000001842000040410000000000002442000030410000000000007042000070c10000a04000007c42000060c10000c0400100000001000000010000000200000002000000020000000300000003000000" />
+      <Information Name="anchor_1_smacro1_sha256" Value="sha256:ea8141ea9bede1b8370156545d430ad5b918bfbbe21ec69096c8985a67834801" />
+      <Information Name="anchor_1_meta" Value="35|400|14.199999999999999|0.92000000000000004|coarse_grained_approximation|synthetic|a6e4917cdba8354421cd8ec2842a8047b698b448" />
+      <Information Name="anchor_1_prototypes" Value="1:524e415f4949495f51756f72756d5f4861697270696e:6173736574732f726e616969695f63312e757364:536f626f6c6576524e41:3;2:4550535f416c67696e6174655f43615f427269646765:6173736574732f6570735f63612e757364:536f626f6c65764d6163726f:3;3:536d6563746974655f496e7465726c617965725f536c6162:6173736574732f736d6563746974652e757364:4d696e6572616c4442:2" />
+      <Information Name="anchor_1_cg" Value="8|5|0,5.94999981,11.8999996,38,61.5,0,0,1.20000005,11,-14.5,0,0,0,0,5.5|1;2;3;4,5,6;7,8|0,0,0,1,1" />
+      <Information Name="frame_sha256" Value="sha256:c0e2e4e1ab9b8ce2374399937586e81c71366719a56b6df8bb1d93295d78dec4" />
+      <Information Name="csv_file" Value="m7_openfoam_reference_cells.csv" />
+      <Information Name="csv_sha256" Value="sha256:8bebd8d2d7b63173d980fb031228d09003c15dd1f84ff49a3ad6db7af94d8652" />
+      <Information Name="integrated_into_existing_openfoam_phreeqc_solvers" Value="false" />
+      <Attribute Name="velocity" AttributeType="Vector" Center="Cell">
+        <Information Name="producer" Value="OpenFOAM" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="3" />
+        <Information Name="unit" Value="m/s" />
+        <Information Name="si_exponents" Value="1,0,-1,0,0,0,0" />
+        <Information Name="file" Value="velocity.bin" />
+        <Information Name="field_sha256" Value="sha256:b7b09ca126fd775e22fe08723316a926e105b8d94be8edc5286362be544d3bab" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="6.7000000000000017e-13,0,0" />
+        <DataItem Dimensions="4 3" NumberType="Float" Precision="8" Format="XML">0.00020000000000000004 0 0 0.00016000000000000001 0 0 0.00012999999999999999 0 0 0.00018000000000000001 0 0</DataItem>
+      </Attribute>
+      <Attribute Name="C_substrate" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="OpenFOAM" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="C_substrate.bin" />
+        <Information Name="field_sha256" Value="sha256:ca48dc8a6c75a3ada5112960cc5b4e1222b020dbdb5be27b11dc710a59bf2723" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.9299999999999993e-09" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.94999999999999973 0.57999999999999985 0.28999999999999992 0.10999999999999999</DataItem>
+      </Attribute>
+      <Attribute Name="temperature" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="OpenFOAM" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="degC" />
+        <Information Name="si_exponents" Value="0,0,0,0,1,0,0" />
+        <Information Name="file" Value="temperature.bin" />
+        <Information Name="field_sha256" Value="sha256:b943cfbebbfd5911eadb72d0afe41d0d6ae2deec1949474efadb17f0f9640539" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.0000000000000002e-07" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">25.000000000000004 25.000000000000004 25.000000000000004 25.000000000000004</DataItem>
+      </Attribute>
+      <Attribute Name="pH" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="dimensionless" />
+        <Information Name="si_exponents" Value="0,0,0,0,0,0,0" />
+        <Information Name="file" Value="ph.bin" />
+        <Information Name="field_sha256" Value="sha256:71403532d8fd4100dede5e96f31383010b181da79b64fdf160db2a40e906311f" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="2.8400000000000003e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">7.3499999999999996 7.3499999999999996 6.8499999999999996 6.8499999999999996</DataItem>
+      </Attribute>
+      <Attribute Name="pe" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="dimensionless" />
+        <Information Name="si_exponents" Value="0,0,0,0,0,0,0" />
+        <Information Name="file" Value="pe.bin" />
+        <Information Name="field_sha256" Value="sha256:5a15d1a05b4ed67c1d0dae6a24746c762d8e7dd638b0f31165f01d18e75e86c8" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.2999999999999999e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">4.0999999999999996 4.0999999999999996 2.3999999999999999 2.3999999999999999</DataItem>
+      </Attribute>
+      <Attribute Name="ionic_strength" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/L" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="ionic_strength.bin" />
+        <Information Name="field_sha256" Value="sha256:a99b2ff32c45934494463bbfd2180d66d84f7ee0db5e4e9f167015acc77254bf" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="3.600000000000001e-10" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.095000000000000015 0.095000000000000015 0.08500000000000002 0.08500000000000002</DataItem>
+      </Attribute>
+      <Attribute Name="biofilm_biomass" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="kg/m3" />
+        <Information Name="si_exponents" Value="-3,1,0,0,0,0,0" />
+        <Information Name="file" Value="biomass.bin" />
+        <Information Name="field_sha256" Value="sha256:a981142a44ab83573b12307e2c5d2e1e8fbb351df40b957eb7065847816f3370" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="6.7500000000000015e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">10.500000000000002 19.199999999999999 24.000000000000004 13.800000000000001</DataItem>
+      </Attribute>
+      <Attribute Name="biofilm_eps" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="kg/m3" />
+        <Information Name="si_exponents" Value="-3,1,0,0,0,0,0" />
+        <Information Name="file" Value="eps.bin" />
+        <Information Name="field_sha256" Value="sha256:b2bf88dbdacec594ca142b073c97ca824e823db9938a065f70fe4fbd3903dce7" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="4.6100000000000003e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">7.0000000000000009 13.4 16.800000000000001 8.9000000000000004</DataItem>
+      </Attribute>
+      <Attribute Name="biofilm_pga" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="kg/m3" />
+        <Information Name="si_exponents" Value="-3,1,0,0,0,0,0" />
+        <Information Name="file" Value="pga.bin" />
+        <Information Name="field_sha256" Value="sha256:b09bc0f3e92ab85d83ef110aa1b5aa45df76222d5a7b70f939b35ccdba9be069" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.8400000000000003e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">2.7999999999999998 5.4000000000000004 6.9000000000000004 3.3000000000000003</DataItem>
+      </Attribute>
+      <Attribute Name="biofilm_curli" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="kg/m3" />
+        <Information Name="si_exponents" Value="-3,1,0,0,0,0,0" />
+        <Information Name="file" Value="curli.bin" />
+        <Information Name="field_sha256" Value="sha256:bbe160d61cfcc8f1cdb2c03230d196880ba29f256018dd0896f14c1b4d9e5bfc" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.2400000000000002e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">1.8000000000000003 3.6000000000000005 4.7999999999999998 2.2000000000000002</DataItem>
+      </Attribute>
+      <Attribute Name="droop_nutrient_quota" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/kg" />
+        <Information Name="si_exponents" Value="0,-1,0,0,0,1,0" />
+        <Information Name="file" Value="droop_quota.bin" />
+        <Information Name="field_sha256" Value="sha256:cd0a922219dd9cf8d76808743e1e73c9883e35989bfd44d014975b9d0edbd195" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.5600000000000002e-09" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.49000000000000005 0.39000000000000007 0.31 0.37</DataItem>
+      </Attribute>
+      <Attribute Name="qs_signal_ahl" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="uM" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="qs_ahl.bin" />
+        <Information Name="field_sha256" Value="sha256:5c590a2be3829cd2434bcd4f1e4bd0feeb165572256f79808f5ceec65981462f" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.3200000000000001e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">1.3999999999999999 3.7999999999999998 5.5999999999999996 2.3999999999999999</DataItem>
+      </Attribute>
+      <Attribute Name="effective_diffusivity" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="Julia" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="m2/s" />
+        <Information Name="si_exponents" Value="2,0,-1,0,0,0,0" />
+        <Information Name="file" Value="deff.bin" />
+        <Information Name="field_sha256" Value="sha256:754b4ae1029ddacf665ff430e7d1ecce04b53c1a65a97be3edd95ffe81a948cf" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.6099999999999999e-18" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">5.4999999999999996e-10 3.4000000000000001e-10 2.5000000000000002e-10 4.7000000000000003e-10</DataItem>
+      </Attribute>
+      <Attribute Name="species_Ca_2" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="species_Ca_2.bin" />
+        <Information Name="field_sha256" Value="sha256:f91f3a2d562d8a60972456b54670d3c646c7a9efb818e29b982a162284d4cee2" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="5.4000000000000007e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">15 15 12.000000000000002 12.000000000000002</DataItem>
+      </Attribute>
+      <Attribute Name="species_HCO3_" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="species_HCO3_.bin" />
+        <Information Name="field_sha256" Value="sha256:b7ea93978e847a02a873707719a2294bbaddc1b46fa62909598db93bda099079" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="8.0000000000000002e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">22 22 18 18</DataItem>
+      </Attribute>
+      <Attribute Name="species_C2O4_2" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="species_C2O4_2.bin" />
+        <Information Name="field_sha256" Value="sha256:d9805efc80b2cf30231dbcacdf4063910c3b5728dd40d549c00c80cde342f3c8" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.6000000000000004e-08" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">2.0000000000000004 2.0000000000000004 6.0000000000000009 6.0000000000000009</DataItem>
+      </Attribute>
+      <Attribute Name="species_Fe_2" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="species_Fe_2.bin" />
+        <Information Name="field_sha256" Value="sha256:cb128e5874e215833bf22d4f12d374f387d9153db4bb7e8a979ce940c1a2eba1" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="6.0000000000000016e-09" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">1.0000000000000002 1.0000000000000002 2.0000000000000004 2.0000000000000004</DataItem>
+      </Attribute>
+      <Attribute Name="mineral_si_Calcite" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="dimensionless" />
+        <Information Name="si_exponents" Value="0,0,0,0,0,0,0" />
+        <Information Name="file" Value="mineral_si_Calcite.bin" />
+        <Information Name="field_sha256" Value="sha256:fc441d01fab7ad83f7b69c09f176d6354e6ebdf35cbee1fd8c703959df827a30" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="9.4000000000000006e-10" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.12 0.12 0.34999999999999998 0.34999999999999998</DataItem>
+      </Attribute>
+      <Attribute Name="mineral_si_Ce_Oxalate_10H2O" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="dimensionless" />
+        <Information Name="si_exponents" Value="0,0,0,0,0,0,0" />
+        <Information Name="file" Value="mineral_si_Ce_Oxalate_10H2O.bin" />
+        <Information Name="field_sha256" Value="sha256:c1f28032e2b75081054cf8a0d071a15e935d1aef7c9f1fecb5a2761124ac7e31" />
+        <Information Name="epistemic_class" Value="synthetic" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="3.2000000000000001e-09" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.45000000000000007 0.45000000000000007 1.1499999999999999 1.1499999999999999</DataItem>
+      </Attribute>
+      <Attribute Name="surface_OCa_plus" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="surface_OCa_plus.bin" />
+        <Information Name="field_sha256" Value="sha256:cc2e1ec332a71f8e1655d04b7f10626e613c80f7733d287e67eea2914beed120" />
+        <Information Name="epistemic_class" Value="calculated" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="1.3838225076608713e-09" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.39274476786763363 0.39274476786763363 0.29916648596280188 0.29916648596280188</DataItem>
+      </Attribute>
+      <Attribute Name="surface_O_minus" AttributeType="Scalar" Center="Cell">
+        <Information Name="producer" Value="PHREEQC" />
+        <Information Name="association" Value="cell" />
+        <Information Name="components" Value="1" />
+        <Information Name="unit" Value="mol/m3" />
+        <Information Name="si_exponents" Value="-3,0,0,0,0,1,0" />
+        <Information Name="file" Value="surface_O_minus.bin" />
+        <Information Name="field_sha256" Value="sha256:4ea43549a9575feadb918957793d7cd17c13f0f10ee84fc7ad0ad9b9cdc4a8da" />
+        <Information Name="epistemic_class" Value="calculated" />
+        <Information Name="disclosure_class" Value="direct_numerical_solver" />
+        <Information Name="volume_integral" Value="4.0890820017127255e-11" />
+        <DataItem Dimensions="4" NumberType="Float" Precision="8" Format="XML">0.010473193809803563 0.010473193809803563 0.0099722161987600613 0.0099722161987600613</DataItem>
+      </Attribute>
+    </Grid>
+  </Domain>
+</Xdmf>

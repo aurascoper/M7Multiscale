@@ -1,0 +1,8 @@
+{
+  "fixture_id": "m7_synthetic_reference_v1",
+  "schema": "M7SpatialFrame",
+  "schema_version": "1.0.0",
+  "track": "trackB_biological_self_organization",
+  "evidence_class": "synthetic",
+  "description": "Synthetic 4-cell porous clay-mineral-biofilm channel coupling OpenFOAM, PHREEQC, Julia BiofilmMultiphysics, and SobolevMacromolecule."
+}

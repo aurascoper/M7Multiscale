@@ -1,0 +1,9 @@
+name: m7-molecular
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - biopython
+  - biotite
+  - mdtraj
+  - pdbfixer

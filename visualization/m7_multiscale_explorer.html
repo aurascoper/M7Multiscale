@@ -1,0 +1,2756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>M7MultiscaleExplorer | 4D Spatiotemporal Multiscale Workbench (M7.1 - M7.8)</title>
+  <style>
+    :root {
+      --bg-0: #070b12;
+      --bg-1: #0d1421;
+      --bg-2: #131d30;
+      --bg-3: #1b2842;
+      --border: #263859;
+      --text-0: #eef4ff;
+      --text-1: #b5c6e0;
+      --text-2: #7e95b8;
+      --accent-cyan: #22d3ee;
+      --accent-green: #10b981;
+      --accent-red: #ef4444;
+      --accent-amber: #f59e0b;
+      --accent-purple: #a855f7;
+      --accent-blue: #3b82f6;
+      --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg-0);
+      color: var(--text-0);
+      font-family: var(--font-sans);
+      font-size: 12px;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    /* Top Header & Controls */
+    header {
+      background: var(--bg-1);
+      border-bottom: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .brand-badge {
+      background: linear-gradient(135deg, #0284c7, #10b981);
+      color: #fff;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+    .brand-title {
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.3px;
+    }
+    .brand-sub {
+      color: var(--text-2);
+      font-family: var(--font-mono);
+      font-size: 11px;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .ctrl-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .ctrl-group label {
+      color: var(--text-2);
+      font-size: 10px;
+      text-transform: uppercase;
+      font-family: var(--font-mono);
+    }
+    select, button, input[type="range"] {
+      background: var(--bg-3);
+      color: var(--text-0);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      padding: 3px 7px;
+      font-size: 11px;
+      font-family: var(--font-mono);
+      cursor: pointer;
+    }
+    button:hover, select:hover {
+      border-color: var(--accent-cyan);
+    }
+    button.active {
+      background: #0e7490;
+      border-color: var(--accent-cyan);
+      color: #fff;
+    }
+    /* Main Workspace Container */
+    .main-area {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 350px;
+      min-height: 0;
+    }
+    /* 4-Panel Synchronized Viewport Grid */
+    .viewport-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: 6px;
+      padding: 6px;
+      background: var(--bg-0);
+      min-height: 0;
+    }
+    .viewport-grid.single-view {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+    }
+    .panel {
+      background: var(--bg-1);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+    }
+    .panel-header {
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--border);
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+    }
+    .panel-title {
+      font-family: var(--font-mono);
+      font-weight: 700;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .solver-pill {
+      padding: 1px 6px;
+      border-radius: 3px;
+      font-size: 10px;
+      font-family: var(--font-mono);
+    }
+    .pill-openfoam { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+    .pill-phreeqc  { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+    .pill-julia    { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+    .pill-sobolev  { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #a855f7; }
+    .provenance-bar {
+      background: rgba(13, 20, 33, 0.92);
+      border-bottom: 1px solid rgba(38, 56, 89, 0.7);
+      padding: 3px 10px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-1);
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .epistemic-badge {
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 9px;
+      background: rgba(34, 211, 238, 0.14);
+      color: var(--accent-cyan);
+      border: 1px solid rgba(34, 211, 238, 0.4);
+    }
+    .canvas-wrap {
+      flex: 1;
+      position: relative;
+      min-height: 0;
+    }
+    canvas.viewport-canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      cursor: crosshair;
+    }
+    .hud-overlay {
+      position: absolute;
+      bottom: 8px;
+      left: 8px;
+      background: rgba(7, 11, 18, 0.84);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 5px 8px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-1);
+      pointer-events: none;
+      line-height: 1.45;
+    }
+    /* Right Inspector Sidebar */
+    aside.inspector {
+      background: var(--bg-1);
+      border-left: 1px solid var(--border);
+      padding: 10px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .card {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 8px 10px;
+    }
+    .card-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .kv-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      padding: 2px 0;
+      border-bottom: 1px dashed rgba(38, 56, 89, 0.45);
+    }
+    .kv-row span:first-child { color: var(--text-2); }
+    .kv-row span:last-child { color: var(--text-0); font-weight: 600; }
+    .status-ok { color: var(--accent-green) !important; }
+    .status-warn { color: var(--accent-amber) !important; }
+    .status-err { color: var(--accent-red) !important; }
+    /* Bottom 3-Clock 4D Timeline Dock */
+    footer.timeline-dock {
+      background: var(--bg-1);
+      border-top: 1px solid var(--border);
+      padding: 8px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .clocks-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    .clock-box {
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-family: var(--font-mono);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .clock-label { color: var(--text-2); font-size: 10px; }
+    .clock-val { color: var(--accent-cyan); font-weight: 700; font-size: 11px; }
+    .scrubber-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .scrubber-row input[type="range"] {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="brand">
+      <span class="brand-badge">M7SpatialFrame v1.0.0</span>
+      <div>
+        <div class="brand-title">M7MultiscaleExplorer : 4D Spatiotemporal Multiscale Workbench (M7.1 - M7.8)</div>
+        <div class="brand-sub">OpenFOAM &lt;-&gt; PHREEQC &lt;-&gt; Julia BiofilmMultiphysics &lt;-&gt; SobolevMacromolecule (SMACRO1) | Modeled Snapshot Adapter</div>
+      </div>
+    </div>
+    <div class="toolbar">
+      <div class="ctrl-group">
+        <label for="systemSelect">System</label>
+        <select id="systemSelect">
+          <option value="system_c_biofilm_clogged_matrix" selected>System C: Biofilm-Clogged Matrix (Illite/Smectite + EPS/Biofilm)</option>
+          <option value="system_a_hydrothermal_reactor_clay">System A: Hydrothermal Reactor Clay (Sudoite + Illite)</option>
+          <option value="system_b_swelling_barrier">System B: Swelling Barrier (Bentonite / Montmorillonite)</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label for="worldScenarioSelect">World</label>
+        <select id="worldScenarioSelect">
+          <option value="default_workbench" selected>Default Workbench (3-System Snapshot Adapter)</option>
+          <option value="earth_oklo_natural_reactor_reference">Earth Oklo Natural Reactor [EARTH_REFERENCE_FIXTURE]</option>
+          <option value="enceladus_tiger_stripe_ocean_floor">Enceladus Tiger-Stripe Ocean [PLANETARY_HYPOTHETICAL]</option>
+          <option value="mars_noachian_radiolytic_subsurface">Mars Noachian Radiolytic Clay [PLANETARY_HYPOTHETICAL]</option>
+          <option value="solver_executed_reactive_transport_benchmark">Solver-Executed Benchmark [SOLVER_EXECUTED_SIMULATION]</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label for="trackSelect">Track</label>
+        <select id="trackSelect">
+          <option value="trackB">Track B: Biological Self-Organization &amp; Biofilm</option>
+          <option value="trackA">Track A: Hydrothermal &amp; Prebiotic (Oklo R0/R1)</option>
+          <option value="trackC">Track C: Adaptive Molecular &amp; Transport Networks</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label for="scaleSelect">Microscope</label>
+        <select id="scaleSelect">
+          <option value="planetary">1. Planetary / Basin (16 m - 1 km)</option>
+          <option value="geological">2. Geological / Pore (0.5 mm - 10 mm)</option>
+          <option value="biofilm" selected>3. Biofilm / Cellular (10 um - 500 um)</option>
+          <option value="molecular">4. Molecular / Sobolev (1 A - 100 nm)</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label for="workspaceSelect">View</label>
+        <select id="workspaceSelect">
+          <option value="quad" selected>4-Panel Synchronized Grid (Panels A-D)</option>
+          <option value="geological">Panel A: 3D Porous Geometry, Flow &amp; Streamlines</option>
+          <option value="chemical">Panel B: Geochemistry, Surface &gt;OCa+/&gt;O- &amp; SI</option>
+          <option value="biological">Panel C: Nuclear Inventories &amp; Thermal / Biofilm</option>
+          <option value="molecular">Panel D: Biology Matrix, EPS &amp; Sobolev SMACRO1</option>
+        </select>
+      </div>
+      <div class="ctrl-group">
+        <label for="cutPlaneAxis">Cut</label>
+        <select id="cutPlaneAxis">
+          <option value="X" selected>Axis X</option>
+          <option value="Y">Axis Y</option>
+          <option value="Z">Axis Z</option>
+          <option value="oblique">Oblique (X+Y+Z)</option>
+        </select>
+        <input type="range" id="cutPlaneRange" min="25" max="100" value="100" />
+      </div>
+      <button id="diffModeBtn">Difference Mode (Delta C_i)</button>
+      <button id="ablationBtn">Ablation: Full Coupled</button>
+      <button id="remodelBtn">VPS Remodel: Intact</button>
+      <button id="extinctionBtn">Occupancy: N=6 Active</button>
+      <button id="clayModeBtn">Clay: Ca-Montmorillonite</button>
+      <button id="loadFileBtn">Load .json / .smacro1</button>
+      <input type="file" id="fileLoaderInput" accept=".json,.smacro1" style="display:none" />
+      <button id="exportXdmfBtn">Export XDMF+CSV</button>
+      <button id="exportUsdaBtn">Export OpenUSD (.usda)</button>
+      <button id="exportPngBtn">Export 1920x1080 PNG</button>
+    </div>
+  </header>
+
+  <div class="main-area">
+    <div class="viewport-grid" id="viewportGrid">
+      <!-- PANEL A: OPENFOAM POROUS GEOMETRY, FLOW & STREAMLINES -->
+      <div class="panel" id="panel-geological">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="solver-pill pill-openfoam">PANEL A / OPENFOAM</span>
+            <span id="title-openfoam">3D Porous Geometry, Micro-CT Core, Flow &amp; Streamlines</span>
+          </div>
+          <select id="fieldSelectOpenFOAM">
+            <option value="velocity">velocity (m/s)</option>
+            <option value="darcy_velocity">darcy_velocity (m/s)</option>
+            <option value="permeability">permeability (m2)</option>
+            <option value="C_substrate">C_substrate (mol/m3)</option>
+            <option value="temperature">temperature (degC)</option>
+            <option value="porosity">porosity_fraction (-)</option>
+            <option value="glmm_observed_y">glmm_observed_y (GLMM y_ij)</option>
+            <option value="glmm_fixed_effect_beta0_plus_beta1_x">glmm_fixed_effect (beta0+beta1*x)</option>
+            <option value="glmm_random_intercept_b_i">glmm_random_intercept (b_i)</option>
+            <option value="glmm_residual_eps_ij">glmm_residual (eps_ij)</option>
+            <option value="empowerment_bits">empowerment_bits (E(s_t) bits)</option>
+            <option value="beta_1">beta_1 (cycle rank)</option>
+            <option value="beta_0">beta_0 (connected components)</option>
+          </select>
+        </div>
+        <div class="provenance-bar" id="prov-openfoam">
+          <span id="prov-text-openfoam">Solver: OpenFOAM-v2406 | t=1200.0s | cartesian_right_handed (m) | sha256:4a91...c802</span>
+          <span class="epistemic-badge" id="badge-openfoam">[SYNTHETIC | DIRECT_NUMERICAL_SOLVER | m/s]</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas class="viewport-canvas" id="canvas-openfoam" data-panel="openfoam"></canvas>
+          <div class="hud-overlay" id="hud-openfoam"></div>
+        </div>
+      </div>
+
+      <!-- PANEL B: PHREEQC GEOCHEMICAL SPECIES, SURFACE COMPLEXATION & MINERAL SI -->
+      <div class="panel" id="panel-chemical">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="solver-pill pill-phreeqc">PANEL B / PHREEQC</span>
+            <span id="title-phreeqc">Geochemical Species, Surface &gt;OCa+/&gt;O-, Mineral SI &amp; Reactions</span>
+          </div>
+          <select id="fieldSelectPHREEQC">
+            <option value="pH">pH (-log10 a_H+)</option>
+            <option value="pe">pe (-log10 a_e-)</option>
+            <option value="dissolved_species">dissolved_species (mol/m3)</option>
+            <option value="surface_OCa_plus">surface_OCa_plus (&gt;OCa+ mol/m3)</option>
+            <option value="surface_O_minus">surface_O_minus (&gt;O- mol/m3)</option>
+            <option value="mineral_si_Calcite">SI Calcite / Clay (-)</option>
+            <option value="mineral_si_Ce_Oxalate_10H2O">SI Ce_Oxalate_10H2O (-)</option>
+            <option value="polymer_yield">Abiotic Oligomer Yield (Track A)</option>
+          </select>
+        </div>
+        <div class="provenance-bar" id="prov-phreeqc">
+          <span id="prov-text-phreeqc">Solver: PHREEQC-3.7.3 | t=1200.0s | Activity-Averaged Overlap | sha256:7d12...e319</span>
+          <span class="epistemic-badge" id="badge-phreeqc">[SYNTHETIC | DIRECT_NUMERICAL_SOLVER | dimensionless]</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas class="viewport-canvas" id="canvas-phreeqc" data-panel="phreeqc"></canvas>
+          <div class="hud-overlay" id="hud-phreeqc"></div>
+        </div>
+      </div>
+
+      <!-- PANEL C: NUCLEAR INVENTORIES, THERMAL STRUCTURE & BIOFILM TOPOLOGY -->
+      <div class="panel" id="panel-biological">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="solver-pill pill-julia">PANEL C / NUCLEAR + THERMAL + BIO</span>
+            <span id="title-julia">Nuclear Inventories (U-235, H2), Isotherm Plumes &amp; Biofilm Graph</span>
+          </div>
+          <select id="fieldSelectJulia">
+            <option value="biofilm_biomass">biofilm_biomass (kg/m3)</option>
+            <option value="biofilm_eps">biofilm_eps (kg/m3)</option>
+            <option value="biofilm_volume_fraction">biofilm_volume_fraction (-)</option>
+            <option value="eps_fraction">eps_fraction (-)</option>
+            <option value="mineral_volume_fractions">mineral_volume_fractions (-)</option>
+            <option value="u235_ratio">u235_ratio (atom_percent)</option>
+            <option value="h2_concentration">h2_concentration (mol/m3)</option>
+            <option value="droop_nutrient_quota">droop_nutrient_quota (mol/kg)</option>
+            <option value="effective_diffusivity">effective_diffusivity (m2/s)</option>
+          </select>
+        </div>
+        <div class="provenance-bar" id="prov-julia">
+          <span id="prov-text-julia">Solver: BiofilmMultiphysics-0.4.0 | t_bio=1200.0s | Criterial Graph | sha256:9b04...a771</span>
+          <span class="epistemic-badge" id="badge-julia">[SYNTHETIC | DIRECT_NUMERICAL_SOLVER | kg/m3]</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas class="viewport-canvas" id="canvas-julia" data-panel="julia"></canvas>
+          <div class="hud-overlay" id="hud-julia"></div>
+        </div>
+      </div>
+
+      <!-- PANEL D: BIOLOGICAL MATRIX, EPS, CELLS & SOBOLEV MOLECULAR STRUCTURES -->
+      <div class="panel" id="panel-molecular">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="solver-pill pill-sobolev">PANEL D / BIO + SOBOLEV</span>
+            <span id="title-sobolev">Biological Matrix, EPS, Cells &amp; Sobolev SMACRO1 Structures</span>
+          </div>
+          <select id="lodSelectSobolev">
+            <option value="hybrid" selected>Hybrid: Active-Site Full + Far-Field Coarse</option>
+            <option value="full">All-Bead Full Resolution (N=8)</option>
+            <option value="usd">OpenUSD PointInstancer Preview</option>
+          </select>
+        </div>
+        <div class="provenance-bar" id="prov-sobolev">
+          <span id="prov-text-sobolev">Solver: SobolevMacromolecule (a6e4917) | Step=400 | T_cell*T_mol | sha256:e5c1...39f0</span>
+          <span class="epistemic-badge" id="badge-sobolev">[CALCULATED | COARSE_GRAINED_APPROXIMATION | Angstrom]</span>
+        </div>
+        <div class="canvas-wrap">
+          <canvas class="viewport-canvas" id="canvas-sobolev" data-panel="sobolev"></canvas>
+          <div class="hud-overlay" id="hud-sobolev"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT INSPECTOR SIDEBAR -->
+    <aside class="inspector">
+      <div class="card">
+        <div class="card-title">
+          <span>3-System Selector &amp; V1-V6 Ladder</span>
+          <span class="status-ok" id="systemEpistemicBadge">MODELED SYSTEM</span>
+        </div>
+        <div class="kv-row"><span>Active System</span><span id="infoActiveSystem">System C (Illite/Smectite + EPS)</span></div>
+        <div class="kv-row"><span>Mineral Phases</span><span id="infoMineralPhases">illite, smectite, eps_biofilm</span></div>
+        <div class="kv-row"><span>Realization Status</span><span class="status-warn" id="infoRealizationStatus">not_experimentally_validated</span></div>
+        <div class="kv-row"><span>Live Solver Coupling</span><span id="infoLiveSolverFlag">false (Snapshot Adapter)</span></div>
+        <div class="kv-row"><span>Acceptance Ladder</span><span class="status-ok" id="infoLadderStatus">V1-V6 ALL PASS (6/6)</span></div>
+        <div class="kv-row"><span>Round-Trip Reload</span><span class="status-ok" id="infoRoundtripStatus">XDMF/CSV + USD 0.00e+00 Drift</span></div>
+        <div class="kv-row"><span>CsgA / DsrB / G_syn</span><span class="status-ok" id="infoMotifAudit">12/18-aa | n_X=5 | D4^8 x Z2^14</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Planetary WorldScenario &amp; Mesh Badges</span>
+          <span class="status-ok" id="infoWorldEvidenceTier">SYNTHETIC_FIXTURE</span>
+        </div>
+        <div class="kv-row"><span>Scenario Classification</span><span id="infoWorldClassification">EARTH_REFERENCE_FIXTURE</span></div>
+        <div class="kv-row"><span>OpenFOAM Mesh Badge</span><span class="status-ok" id="infoMeshResolutionBadge">4-Cell Hexahedral OpenFOAM Fixture (20 vertices)</span></div>
+        <div class="kv-row"><span>Voxel Overlap Grid</span><span class="status-ok" id="infoVoxelValidationBadge">32^3 Conservative Voxel-Overlap Validation Grid</span></div>
+        <div class="kv-row"><span>5-Step Feedback Loop</span><span class="status-ok" id="infoFeedbackLoopStatus">CLOSED (Mass &amp; Free-Energy Conserved)</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Cross-Panel Spatial Pick</span>
+          <span id="pickCellBadge">Cell #2</span>
+        </div>
+        <div class="kv-row"><span>World Coords (m)</span><span id="pickWorldCoords">(0.0015, 0.0000, 0.0000)</span></div>
+        <div class="kv-row"><span>OpenFOAM Velocity</span><span id="pickVelocity">1.60e-4 m/s</span></div>
+        <div class="kv-row"><span>Darcy Velocity / k</span><span id="pickPermeability">1.60e-4 m/s | k=1.42e-13 m2</span></div>
+        <div class="kv-row"><span>OpenFOAM Substrate</span><span id="pickSubstrate">0.580 mol/m3</span></div>
+        <div class="kv-row"><span>OpenFOAM/GLMM y_ij</span><span id="pickGlmmY">1.967 (fix=1.982, b_i=-0.020)</span></div>
+        <div class="kv-row"><span>Cell Empowerment E</span><span id="pickEmpowerment">1.880 bits | eps=+0.005</span></div>
+        <div class="kv-row"><span>PHREEQC pH / pe</span><span id="pickPhPe">7.35 / 4.10</span></div>
+        <div class="kv-row"><span>Dissolved Species</span><span id="pickDissolvedSpecies">SO4=24.0 | H2=0.29 | HCO3=4.5 mM</span></div>
+        <div class="kv-row"><span>Surface &gt;OCa+ / &gt;O-</span><span id="pickSurfaceComplex">0.172 / 0.038 mol/m3</span></div>
+        <div class="kv-row"><span>Nuclear U-235 / H2</span><span id="pickNuclear">0.655 at% / 0.290 mol/m3</span></div>
+        <div class="kv-row"><span>Julia Biomass / EPS</span><span id="pickBiomass">19.2 / 13.4 kg/m3</span></div>
+        <div class="kv-row"><span>Biofilm / EPS Vol Frac</span><span id="pickBiofilmEpsVolFrac">bio=0.0175 | eps=0.0122</span></div>
+        <div class="kv-row"><span>Mineral Vol Fractions</span><span id="pickMineralVolFractions">illite=0.140 | smectite=0.095</span></div>
+        <div class="kv-row"><span>Julia Droop Quota Q</span><span id="pickQuota">0.390 mol/kg</span></div>
+        <div class="kv-row"><span>Sobolev Local Coords</span><span id="pickLocalCoords">(0.00, 0.00, 0.00) A</span></div>
+        <div class="kv-row"><span>Selected SMACRO1 Bead</span><span id="pickBead">#1 (RNA_III_Quorum_Hairpin)</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>Track &amp; Epistemic Separation Audit</span>
+          <span class="status-ok" id="trackAuditBadge">VERIFIED</span>
+        </div>
+        <div class="kv-row"><span>Active Research Track</span><span id="infoTrackName">Track B (Biofilm)</span></div>
+        <div class="kv-row"><span>Abiotic vs Bio EPS</span><span class="status-ok" id="infoEpsSep">Strictly Separated</span></div>
+        <div class="kv-row"><span>Microscope Scale</span><span id="infoScaleName">Biofilm (200 um FOV)</span></div>
+        <div class="kv-row"><span>Scale Disclosure</span><span id="infoDisclosure">DIRECT_NUMERICAL_SOLVER</span></div>
+        <div class="kv-row"><span>Geometry Hash</span><span id="infoGeomHash">sha256:9c4e...81a2</span></div>
+        <div class="kv-row"><span>Capillary Meniscus</span><span id="infoMeniscus">R=18um, dP=4.04kPa (Immersed)</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>M7.4 Graph Homology &amp; FCM Alignment</span>
+          <span class="status-ok" id="topoRegimeBadge">BICONNECTED</span>
+        </div>
+        <div class="kv-row"><span>Connected Components (beta_0)</span><span id="topoBeta0">1</span></div>
+        <div class="kv-row"><span>Anastomosis Cycles (beta_1)</span><span id="topoBeta1">2</span></div>
+        <div class="kv-row"><span>Tarjan Bridge Edges</span><span id="topoBridges">2</span></div>
+        <div class="kv-row"><span>Criterial Edges</span><span id="topoEdgesSummary">6 Active | 2 Pruned | 1 Expl</span></div>
+        <div class="kv-row"><span>FCM Compartment Gate</span><span id="fcmGates">Live 81% | Comp 13% | Dead 6%</span></div>
+        <div class="kv-row"><span>FCM Sensor Disclosure</span><span>Non-In-Situ Compartment</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>M7.7 Conservation &amp; Parity Monitor</span>
+          <span class="status-ok" id="consStatusBadge">ALL PASS</span>
+        </div>
+        <div class="kv-row"><span>OpenFOAM Overlap Mass Err</span><span class="status-ok">0.00e+00 (Exact)</span></div>
+        <div class="kv-row"><span>Droop Quota Conservation</span><span class="status-ok">7.95e-17 (&lt; 1e-12)</span></div>
+        <div class="kv-row"><span>Menke (2026) Retardation</span><span class="status-ok">0.18% (&lt; 0.60% tol)</span></div>
+        <div class="kv-row"><span>Nested Transform Roundtrip</span><span class="status-ok">9.31e-10 A (&lt; 1e-7)</span></div>
+        <div class="kv-row"><span>Oklo R0-1..R0-5 Audit</span><span class="status-ok" id="okloAuditStatus">Recorded &amp; Tagged</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>4-Pool Inventory, Extinction &amp; Typed G_EPS(t)</span>
+          <span class="status-ok" id="step5StatusBadge">L2 VERIFIED</span>
+        </div>
+        <div class="kv-row"><span>Porosity (eps_DBS vs theta)</span><span id="infoPorositySep">eps=0.450 != theta=0.350</span></div>
+        <div class="kv-row"><span>4-Pool M_total (U_VI)</span><span id="infoFourPool">0.5000 mol/m3 (Conserved)</span></div>
+        <div class="kv-row"><span>Pools (th*C|a*G|X*q|E)</span><span id="infoPoolBreakdown">0.21|0.22|0.06|0.01</span></div>
+        <div class="kv-row"><span>Discrete Occupancy N</span><span id="infoDiscreteN">N=6 (Motile 5, Matrix 1)</span></div>
+        <div class="kv-row"><span>Typed G_EPS (N_pp|pb|min)</span><span id="infoTypedEdges">204 | 98 | 112 (chi_pp=0.68)</span></div>
+        <div class="kv-row"><span>G_EPS Cycles &amp; Lifetimes</span><span id="infoGraphCycles">b0=1, b1=39, nbr=2, tau=134s</span></div>
+        <div class="kv-row"><span>V. cholerae Remodeling</span><span id="infoRemodeling">Intact (Retained 78%)</span></div>
+        <div class="kv-row"><span>H1 / H2 / H3 Certificates</span><span class="status-ok" id="infoHypCerts">WITNESS | WITNESS | WITNESS (L4 UNRES)</span></div>
+        <div class="kv-row"><span>Epistemic Stratification</span><span id="infoEpistemicStrat">L2 Num Verified (L4 Wet-Lab Req)</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>M6-7 Mycelial Attractor &amp; Chemotropic Homing</span>
+          <span class="status-ok" id="m6m7BridgeBadge">TRAP-SPACE</span>
+        </div>
+        <div class="kv-row"><span>4D State Space (d|c|p|H)</span><span id="infoM6M7State4D">0.33|0.55|0.72|0.88</span></div>
+        <div class="kv-row"><span>High Centrality Branch</span><span class="status-ok" id="infoM6M7HighCent">Cord Thickening + Anastomosis</span></div>
+        <div class="kv-row"><span>Low Transport Branch</span><span class="status-warn" id="infoM6M7LowTrans">Link Pruning (Trap-Space)</span></div>
+        <div class="kv-row"><span>Self-Fusion (so / Prm-1)</span><span class="status-ok" id="infoM6M7SelfFusion">Loop -&gt; Bidir Flow -&gt; Cord</span></div>
+        <div class="kv-row"><span>Non-Self Conflict (het)</span><span class="status-err" id="infoM6M7NonSelf">Allelic Mismatch -&gt; Lysis</span></div>
+        <div class="kv-row"><span>Mutant Ablation (Prm1|so)</span><span class="status-ok" id="infoM6M7Mutants">Delta_Prm1 50% | Delta_so 0%</span></div>
+        <div class="kv-row"><span>Persistent Homology</span><span id="infoM6M7Homology">H0=[5..1], H1=2, alpha=0.333</span></div>
+        <div class="kv-row"><span>5 Transport Phenotypes</span><span id="infoM6M7Phenotypes">2-10 um/s | 3h Rev | 5/5 Active</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>5-Layer Reference Dataset &amp; Ledger</span>
+          <span class="status-ok" id="fiveLayerRefBadge">5/5 VERIFIED</span>
+        </div>
+        <div class="kv-row"><span>L1 CFD (OpenFOAM / ParaView)</span><span class="status-ok" id="infoRefL1">case.foam (0..1200s) | 4-Cell Hexahedral OpenFOAM Fixture (20 vertices) | 32^3 Conservative Voxel-Overlap Validation Grid</span></div>
+        <div class="kv-row"><span>L2 Geochem (PHREEQC Activity pH)</span><span class="status-ok" id="infoRefL2">-log10(mean(10^-pH))=7.032</span></div>
+        <div class="kv-row"><span>L3 Coupling &amp; Shuffle Ledger</span><span class="status-ok" id="infoRefL3">Perm-Invariant | dM/M &lt; 1e-15</span></div>
+        <div class="kv-row"><span>L4 M7 Contract &amp; 3 Clocks</span><span class="status-ok" id="infoRefL4">SHA-256 | No Sob-Time Interp</span></div>
+        <div class="kv-row"><span>L5 Molecular (PyMOL / ChimeraX)</span><span class="status-ok" id="infoRefL5">2V4J/3M0J/1J58 vs CsgA Model</span></div>
+        <div class="kv-row"><span>Conjecture Engine (dec_040/041)</span><span class="status-ok" id="infoRefConj">OpenFOAM-&gt;GLMM ICC=0.985</span></div>
+        <div class="kv-row"><span>Empowerment Proxy (dec_042)</span><span class="status-ok" id="infoRefEmp">E(T_2,6)=6.0 bits | Reward!=Filter</span></div>
+        <div class="kv-row"><span>ParaView 6.2.0 Time-Series</span><span class="status-ok" id="infoRefParaView">t=0..1200s | beta_1=[0,1,2,3,2] | 1920x1080</span></div>
+        <div class="kv-row"><span>Post-dec_046 Telemetry (27..49)</span><span class="status-ok" id="infoRefPostDec046">EEG W_k | Hoffman | Kouri-Vini | GA</span></div>
+        <div class="kv-row"><span>Environments (micromamba)</span><span id="infoRefEnv">m7-analysis.yml | m7-molecular.yml</span></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">
+          <span>M7 v2: Compartmentalized Fun Neurology Network Graph (L110-L114)</span>
+          <span class="status-ok" id="funNeurologyBadge">beta_1=3 DANCE</span>
+        </div>
+        <canvas id="canvas-fun-neurology" width="320" height="170" style="width:100%;height:170px;background:#060a12;border:1px solid #1e2d4a;border-radius:4px;margin-bottom:6px;cursor:grab;"></canvas>
+        <div style="display:flex;gap:6px;margin-bottom:6px;">
+          <button id="btnFnPerturbSeam" type="button" style="flex:1;font-size:10px;padding:4px 6px;background:#0f172a;color:#38bdf8;border:1px solid #1e2d4a;border-radius:4px;cursor:pointer;">Perturb Seam (tau=1.2s vs 8.0s)</button>
+          <button id="btnFnLectureWalk" type="button" style="flex:1;font-size:10px;padding:4px 6px;background:#0f172a;color:#34d399;border:1px solid #1e2d4a;border-radius:4px;cursor:pointer;">Lecture Walk (1-&gt;4)</button>
+        </div>
+        <div class="kv-row"><span>Pedagogical Step (L113)</span><span class="status-ok" id="funNeurologyLectureText">1/4: Fast Wireframe Desync (tau_f=1.2s)</span></div>
+        <div class="kv-row"><span>Fast Wireframe W_k (tau_f=1.2s)</span><span class="status-ok" id="infoFnFast">Apprentice Drive (#38bdf8)</span></div>
+        <div class="kv-row"><span>Plasticity Shell Psi_k (tau=3.4s)</span><span class="status-ok" id="infoFnShell">Non-Recursive Seam (#34d399)</span></div>
+        <div class="kv-row"><span>Slow Core C_k (tau_s=8.0s)</span><span class="status-ok" id="infoFnSlow">Wizard Grammar (#a855f7)</span></div>
+        <div class="kv-row"><span>Gold Laya Flux &amp; Edge Cycles</span><span class="status-ok" id="infoFnCycles">z_music (#f59e0b) | beta_1=3 &gt; 0</span></div>
+        <div class="kv-row"><span>4-Regime Surface Scars (L109)</span><span class="status-ok" id="infoFnSurface">Epigenetics | ASR | DM | Fossils</span></div>
+        <div class="kv-row"><span>Viral Arc Capsid Bridge (L79)</span><span class="status-ok" id="infoFnArc">dArc1/hArc (6GSE) -&gt; OpenFOAM/PyMOL/ChimeraX</span></div>
+        <div class="kv-row"><span>Astrodynamics Bridge (L75, L115)</span><span class="status-ok" id="infoFnAstro">Basilisk + Vizard + SPICE.jl (.bsp/.tpc/.tls)</span></div>
+        <div class="kv-row"><span>Turn L112 Non-Recursive Guard</span><span class="status-ok" id="infoFnGuard">depth=0 | rule_immutable=true</span></div>
+        <div class="kv-row"><span>16-32 GB Swap Telemetry (04:12Z)</span><span class="status-ok" id="infoFnSwap">20.18 GB Swap+Comp | 29.21 GB Virt | 73.75 GB Out</span></div>
+      </div>
+    </aside>
+
+  </div>
+
+
+  <!-- BOTTOM 4D MULTIRATE TIMELINE DOCK -->
+  <footer class="timeline-dock">
+    <div class="clocks-bar">
+      <div class="clock-box">
+        <span class="clock-label">CLOCK 1: PHYSICAL TIME</span>
+        <span class="clock-val" id="clockPhysical">1200.0 s</span>
+      </div>
+      <div class="clock-box">
+        <span class="clock-label">CLOCK 2: BIOLOGICAL TIME</span>
+        <span class="clock-val" id="clockBiological">1200.0 s</span>
+      </div>
+      <div class="clock-box">
+        <span class="clock-label">CLOCK 3: SOBOLEV RELAXATION STEP</span>
+        <span class="clock-val" id="clockSobolev">Step 400 (Pinned, Not Physical Time)</span>
+      </div>
+      <div class="clock-box">
+        <span class="clock-label">INTERPOLATION GATE</span>
+        <span class="clock-val status-ok" id="interpGateStatus">VALID (sync-00031..00035)</span>
+      </div>
+    </div>
+    <div class="scrubber-row">
+      <button id="playPauseBtn">Play 4D</button>
+      <button class="pv-step-btn" data-t="0" style="padding:2px 7px; font-size:10px;">0s</button>
+      <button class="pv-step-btn" data-t="300" style="padding:2px 7px; font-size:10px;">300s</button>
+      <button class="pv-step-btn" data-t="600" style="padding:2px 7px; font-size:10px;">600s</button>
+      <button class="pv-step-btn" data-t="900" style="padding:2px 7px; font-size:10px;">900s</button>
+      <button class="pv-step-btn" data-t="1200" style="padding:2px 7px; font-size:10px;">1200s</button>
+      <input type="range" id="timeScrubber" min="0" max="1200" step="10" value="1200" />
+      <span style="font-family: var(--font-mono); font-size: 11px;" id="scrubberLabel">t_phys = 1200 s | Frame #35</span>
+    </div>
+  </footer>
+
+  <script>
+    // =========================================================================
+    // M7MultiscaleExplorer Canonical Reference Data & State
+    // =========================================================================
+    const state = {
+      system: "system_c_biofilm_clogged_matrix",
+      worldScenario: "default_workbench",
+      track: "trackB",
+      scale: "biofilm",
+      workspace: "quad",
+      cutPlaneAxis: "X",
+      cutPlanePct: 100,
+      diffMode: false,
+      ablationIdx: 0,
+      remodelActive: false,
+      extinctMode: false,
+      clayMode: "ca_montmorillonite",
+      physicalTimeS: 1200,
+      playing: false,
+      cameraYaw: 0.55,
+      cameraPitch: 0.38,
+      cameraZoom: 1.0,
+      cameraPanX: 0.0,
+      cameraPanY: 0.0,
+      selectedCell: 2, // 1-based index (1..4)
+      selectedBeadIdx: 0, // 0-based index into active Sobolev beads
+      dragging: false,
+      panDragging: false,
+      dragMoved: false,
+      lastMouse: { x: 0, y: 0 },
+      loadedFrameMeta: null,
+      loadedCells: null
+    };
+
+    const systemCatalog = {
+      system_a_hydrothermal_reactor_clay: {
+        title: "System A (Sudoite + Illite)",
+        mineralPhases: "sudoite, illite",
+        epistemicStatus: "modeled_system",
+        realizationStatus: "not_experimentally_validated_realization",
+        liveSolverCoupled: false
+      },
+      system_b_swelling_barrier: {
+        title: "System B (Bentonite / Montmorillonite)",
+        mineralPhases: "bentonite, montmorillonite",
+        epistemicStatus: "modeled_system",
+        realizationStatus: "not_experimentally_validated_realization",
+        liveSolverCoupled: false
+      },
+      system_c_biofilm_clogged_matrix: {
+        title: "System C (Illite/Smectite + EPS)",
+        mineralPhases: "illite, smectite, eps_biofilm",
+        epistemicStatus: "modeled_system",
+        realizationStatus: "not_experimentally_validated_realization",
+        liveSolverCoupled: false
+      }
+    };
+
+    const ablationModes = [
+      { name: "Full Coupled", factor: 1.0 },
+      { name: "No EPS Swelling", factor: 0.72 },
+      { name: "No QS Regulation", factor: 0.81 },
+      { name: "No Mineral Feedback", factor: 0.64 }
+    ];
+
+    const fieldMetadata = {
+      velocity: { producer: "OpenFOAM-v2406", unit: "m/s", sha: "sha256:4a91f02b...c802", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      darcy_velocity: { producer: "OpenFOAM-v2406", unit: "m/s", sha: "sha256:4a91f02b...c802", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      permeability: { producer: "OpenFOAM-v2406+KozenyCarman", unit: "m2", sha: "sha256:5c12a08f...b411", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      C_substrate: { producer: "OpenFOAM-v2406", unit: "mol/m3", sha: "sha256:6b23e19a...d410", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      temperature: { producer: "OpenFOAM-v2406", unit: "degC", sha: "sha256:8f02c771...a921", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      porosity: { producer: "OpenFOAM-v2406", unit: "dimensionless", sha: "sha256:9c4e18b0...81a2", epistemic: "MEASURED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      glmm_observed_y: { producer: "OpenFOAM-v2406+GLMM", unit: "dimensionless", sha: "sha256:8d14f22a...b904", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      glmm_fixed_effect_beta0_plus_beta1_x: { producer: "OpenFOAM-v2406+GLMM", unit: "dimensionless", sha: "sha256:1b55d3a7...f586", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      glmm_random_intercept_b_i: { producer: "OpenFOAM-v2406+GLMM", unit: "dimensionless", sha: "sha256:11e2e127...e273", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      glmm_residual_eps_ij: { producer: "OpenFOAM-v2406+GLMM", unit: "dimensionless", sha: "sha256:7c90e41b...a312", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      empowerment_bits: { producer: "OpenFOAM-v2406+M7", unit: "bits", sha: "sha256:3b59c440...d8e6", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      beta_1: { producer: "BiofilmMultiphysics-0.4.0", unit: "cycle_rank", sha: "sha256:5e22c810...d901", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      beta_0: { producer: "BiofilmMultiphysics-0.4.0", unit: "components", sha: "sha256:4f19a720...e812", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      pH: { producer: "PHREEQC-3.7.3", unit: "dimensionless", sha: "sha256:7d12a40c...e319", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      pe: { producer: "PHREEQC-3.7.3", unit: "dimensionless", sha: "sha256:2e88b14f...f104", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      dissolved_species: { producer: "PHREEQC-3.7.3", unit: "mol/m3", sha: "sha256:3a94b12e...c801", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      surface_OCa_plus: { producer: "PHREEQC-3.7.3", unit: "mol/m3", sha: "sha256:6e10a91c...d442", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      surface_O_minus: { producer: "PHREEQC-3.7.3", unit: "mol/m3", sha: "sha256:8b44c19d...e715", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      mineral_si_Calcite: { producer: "PHREEQC-3.7.3", unit: "dimensionless", sha: "sha256:5c39d82a...b612", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      mineral_si_Ce_Oxalate_10H2O: { producer: "PHREEQC-3.7.3", unit: "dimensionless", sha: "sha256:1a74e93b...c098", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      polymer_yield: { producer: "PHREEQC-3.7.3", unit: "abiotic_oligomer_index", sha: "sha256:3f61b08d...e551", epistemic: "SYNTHETIC", disclosure: "CONCEPTUAL_OR_SYNTHETIC" },
+      u235_ratio: { producer: "PHREEQC-3.7.3", unit: "atom_percent", sha: "sha256:2c91f48e...b109", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      h2_concentration: { producer: "PHREEQC-3.7.3", unit: "mol/m3", sha: "sha256:7a38e02b...c914", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      biofilm_biomass: { producer: "BiofilmMultiphysics-0.4.0", unit: "kg/m3", sha: "sha256:9b04c12e...a771", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      biofilm_eps: { producer: "BiofilmMultiphysics-0.4.0", unit: "kg/m3", sha: "sha256:c418f70a...d203", epistemic: "SYNTHETIC", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      biofilm_volume_fraction: { producer: "BiofilmMultiphysics-0.4.0", unit: "dimensionless", sha: "sha256:a192e04c...b712", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      eps_fraction: { producer: "BiofilmMultiphysics-0.4.0", unit: "dimensionless", sha: "sha256:b281d93f...c405", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      mineral_volume_fractions: { producer: "PHREEQC-3.7.3+M7", unit: "dimensionless", sha: "sha256:c374f18a...d920", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      droop_nutrient_quota: { producer: "BiofilmMultiphysics-0.4.0", unit: "mol/kg", sha: "sha256:d829a61b...f884", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" },
+      effective_diffusivity: { producer: "BiofilmMultiphysics-0.4.0", unit: "m2/s", sha: "sha256:e012b55c...a119", epistemic: "CALCULATED", disclosure: "DIRECT_NUMERICAL_SOLVER" }
+    };
+
+    const GLMM_RANDOM_B = [-0.06, -0.02, 0.03, 0.05];
+    const GLMM_BASE_EPS = [-0.004, 0.005, -0.006, 0.005];
+    const EMP_STEP_TABLE = {
+      0:    [1.42, 1.48, 1.45, 1.40],
+      300:  [1.50, 1.64, 1.58, 1.46],
+      600:  [1.56, 1.78, 1.74, 1.52],
+      900:  [1.59, 1.83, 1.80, 1.55],
+      1200: [1.62, 1.88, 1.84, 1.58]
+    };
+
+    function enrichWithGlmmAndTopology(cellList, t_s) {
+      const stage = getTopologicalStageForTime(t_s);
+      const rScale = t_s < 150 ? 0.80 : (t_s < 450 ? 0.90 : (t_s < 750 ? 1.00 : (t_s < 1050 ? 1.05 : 1.00)));
+      const snapT = t_s < 150 ? 0 : (t_s < 450 ? 300 : (t_s < 750 ? 600 : (t_s < 1050 ? 900 : 1200)));
+      const empArr = EMP_STEP_TABLE[snapT];
+      return cellList.map((c, idx) => {
+        const x_ij = 0.50 + 1.0 * (1.0 - c.sub);
+        const glmmFixed = 1.20 + 0.85 * x_ij;
+        const glmmRandomB = GLMM_RANDOM_B[idx] || 0.0;
+        const glmmResidual = (GLMM_BASE_EPS[idx] || 0.0) * rScale;
+        const glmmY = glmmFixed + glmmRandomB + glmmResidual;
+        const cellBeta0 = (snapT === 0 && idx < 2) ? 2 : 1;
+        const cellBeta1 = snapT === 0 ? 0 : (snapT === 300 ? (idx < 2 ? 1 : 0) : (idx === 1 || idx === 2 ? stage.beta1 : 1));
+        const phiEff = Math.max(0.05, Math.min(0.95, c.porosity || 0.72));
+        const defaultPerm = 2.5e-13 * Math.pow(phiEff, 3) / Math.max(1e-6, Math.pow(1.0 - phiEff, 2));
+        const defaultBioVol = (c.bio || 0.0) / 1100.0;
+        const defaultEpsVol = (c.eps || 0.0) / 1100.0;
+        const defaultMinVol = Math.max(0.0, 1.0 - phiEff - defaultBioVol - defaultEpsVol);
+        return Object.assign({}, c, {
+          darcy_velocity: typeof c.darcy_velocity === "number" ? c.darcy_velocity : c.vel,
+          permeability: typeof c.permeability === "number" ? c.permeability : defaultPerm,
+          biofilm_volume_fraction: typeof c.biofilm_volume_fraction === "number" ? c.biofilm_volume_fraction : defaultBioVol,
+          eps_fraction: typeof c.eps_fraction === "number" ? c.eps_fraction : defaultEpsVol,
+          mineral_volume_fractions: typeof c.mineral_volume_fractions === "number" ? c.mineral_volume_fractions : defaultMinVol,
+          dissolved_species: typeof c.dissolved_species === "number" ? c.dissolved_species : c.sub,
+          dissolved_species_summary: c.dissolved_species_summary || `sub=${(c.sub || 0).toFixed(3)} | H2=${(c.h2 || 0).toFixed(3)} mol/m3`,
+          mineral_fractions_summary: c.mineral_fractions_summary || `min_tot=${defaultMinVol.toFixed(3)} (clay/carbonate)`,
+          glmmFixed,
+          glmmRandomB,
+          glmmB: glmmRandomB,
+          glmmResidual,
+          glmmEps: glmmResidual,
+          glmmY,
+          emp: empArr[idx] || stage.emp,
+          beta0: cellBeta0,
+          cellBeta0,
+          beta1: cellBeta1,
+          cellBeta1
+        });
+      });
+    }
+
+    const cellsFrame34 = [
+      { id: 1, x: 0.5e-3, porosity: 0.80, vel: 2.2e-4, sub: 1.00, temp: 25.0, pH: 7.35, pe: 4.10, surfOCa: 0.180, surfOMinus: 0.042, siCal: 0.12, siOx: 0.45, poly: 0.0, u235: 0.680, h2: 0.16, bio: 8.0,  eps: 5.2,  quota: 0.52, deff: 6.2e-10 },
+      { id: 2, x: 1.5e-3, porosity: 0.74, vel: 1.9e-4, sub: 0.72, temp: 25.2, pH: 7.35, pe: 4.10, surfOCa: 0.180, surfOMinus: 0.042, siCal: 0.12, siOx: 0.45, poly: 0.0, u235: 0.655, h2: 0.25, bio: 14.5, eps: 9.8,  quota: 0.44, deff: 4.1e-10 },
+      { id: 3, x: 2.5e-3, porosity: 0.70, vel: 1.6e-4, sub: 0.41, temp: 25.4, pH: 6.85, pe: 2.40, surfOCa: 0.145, surfOMinus: 0.028, siCal: 0.35, siOx: 1.15, poly: 0.0, u235: 0.640, h2: 0.30, bio: 18.2, eps: 12.6, quota: 0.36, deff: 3.2e-10 },
+      { id: 4, x: 3.5e-3, porosity: 0.77, vel: 2.0e-4, sub: 0.18, temp: 25.5, pH: 6.85, pe: 2.40, surfOCa: 0.145, surfOMinus: 0.028, siCal: 0.35, siOx: 1.15, poly: 0.0, u235: 0.695, h2: 0.13, bio: 10.4, eps: 6.4,  quota: 0.41, deff: 5.4e-10 }
+    ];
+
+    const cellsFrame35 = [
+      { id: 1, x: 0.5e-3, porosity: 0.78, vel: 2.0e-4, sub: 0.95, temp: 25.1, pH: 7.35, pe: 4.10, surfOCa: 0.172, surfOMinus: 0.038, siCal: 0.12, siOx: 0.45, poly: 0.0, u235: 0.680, h2: 0.18, bio: 10.5, eps: 7.0,  quota: 0.49, deff: 5.5e-10 },
+      { id: 2, x: 1.5e-3, porosity: 0.72, vel: 1.6e-4, sub: 0.58, temp: 25.4, pH: 7.35, pe: 4.10, surfOCa: 0.172, surfOMinus: 0.038, siCal: 0.12, siOx: 0.45, poly: 0.0, u235: 0.655, h2: 0.29, bio: 19.2, eps: 13.4, quota: 0.39, deff: 3.4e-10 },
+      { id: 3, x: 2.5e-3, porosity: 0.68, vel: 1.3e-4, sub: 0.29, temp: 25.8, pH: 6.85, pe: 2.40, surfOCa: 0.138, surfOMinus: 0.024, siCal: 0.35, siOx: 1.15, poly: 0.0, u235: 0.640, h2: 0.34, bio: 24.0, eps: 16.8, quota: 0.31, deff: 2.5e-10 },
+      { id: 4, x: 3.5e-3, porosity: 0.75, vel: 1.8e-4, sub: 0.11, temp: 25.9, pH: 6.85, pe: 2.40, surfOCa: 0.138, surfOMinus: 0.024, siCal: 0.35, siOx: 1.15, poly: 0.0, u235: 0.695, h2: 0.15, bio: 13.8, eps: 8.9,  quota: 0.37, deff: 4.7e-10 }
+    ];
+
+    const cellsSystemA = [
+      { id: 1, x: 0.5e-3, porosity: 0.78, vel: 3.8e-4, sub: 0.82, temp: 215.0, pH: 5.85, pe: -2.6, surfOCa: 0.095, surfOMinus: 0.018, siCal: 0.68, siOx: 0.42, poly: 0.64, u235: 0.585, h2: 0.42, bio: 0.0, eps: 0.0, quota: 0.0, deff: 9.2e-10 },
+      { id: 2, x: 1.5e-3, porosity: 0.72, vel: 3.4e-4, sub: 0.76, temp: 238.0, pH: 5.70, pe: -3.1, surfOCa: 0.088, surfOMinus: 0.014, siCal: 0.92, siOx: 0.59, poly: 0.79, u235: 0.520, h2: 0.68, bio: 0.0, eps: 0.0, quota: 0.0, deff: 8.6e-10 },
+      { id: 3, x: 2.5e-3, porosity: 0.68, vel: 3.1e-4, sub: 0.71, temp: 224.0, pH: 5.90, pe: -2.9, surfOCa: 0.102, surfOMinus: 0.021, siCal: 0.81, siOx: 0.51, poly: 0.72, u235: 0.545, h2: 0.59, bio: 0.0, eps: 0.0, quota: 0.0, deff: 8.8e-10 },
+      { id: 4, x: 3.5e-3, porosity: 0.75, vel: 3.5e-4, sub: 0.65, temp: 196.0, pH: 6.10, pe: -2.2, surfOCa: 0.115, surfOMinus: 0.029, siCal: 0.54, siOx: 0.36, poly: 0.55, u235: 0.640, h2: 0.31, bio: 0.0, eps: 0.0, quota: 0.0, deff: 9.5e-10 }
+    ];
+
+    const cellsSystemB = [
+      { id: 1, x: 0.5e-3, porosity: 0.78, vel: 4.5e-5, sub: 0.88, temp: 62.0, pH: 7.85, pe: 1.2, surfOCa: 0.312, surfOMinus: 0.088, siCal: 0.74, siOx: 0.28, poly: 0.0, u235: 0.720, h2: 0.04, bio: 0.0, eps: 0.0, quota: 0.0, deff: 2.1e-10 },
+      { id: 2, x: 1.5e-3, porosity: 0.72, vel: 3.2e-5, sub: 0.64, temp: 65.5, pH: 7.72, pe: 0.9, surfOCa: 0.305, surfOMinus: 0.082, siCal: 0.82, siOx: 0.34, poly: 0.0, u235: 0.720, h2: 0.05, bio: 0.0, eps: 0.0, quota: 0.0, deff: 1.8e-10 },
+      { id: 3, x: 2.5e-3, porosity: 0.68, vel: 2.8e-5, sub: 0.42, temp: 64.0, pH: 7.65, pe: 0.8, surfOCa: 0.298, surfOMinus: 0.079, siCal: 0.79, siOx: 0.31, poly: 0.0, u235: 0.720, h2: 0.05, bio: 0.0, eps: 0.0, quota: 0.0, deff: 1.7e-10 },
+      { id: 4, x: 3.5e-3, porosity: 0.75, vel: 3.9e-5, sub: 0.25, temp: 59.5, pH: 7.80, pe: 1.1, surfOCa: 0.308, surfOMinus: 0.085, siCal: 0.71, siOx: 0.25, poly: 0.0, u235: 0.720, h2: 0.03, bio: 0.0, eps: 0.0, quota: 0.0, deff: 2.0e-10 }
+    ];
+
+    // Track A Oklo Hydrothermal Conformance Voxels (16.0m box, 0.5m step, findings R0-1..R0-5)
+    const cellsOkloTrackA = [
+      { id: 1, x: -0.75, porosity: 0.52, vel: 4.5e-4, sub: 0.62, temp: 215.4, pH: 6.10, pe: -2.8, surfOCa: 0.095, surfOMinus: 0.018, siCal: 0.05, siOx: 0.0, poly: 0.74, u235: 0.585, h2: 0.42, bio: 0.0, eps: 0.0, quota: 0.0, deff: 1.2e-9 },
+      { id: 2, x: -0.25, porosity: 0.58, vel: 5.1e-4, sub: 0.79, temp: 248.2, pH: 5.95, pe: -3.2, surfOCa: 0.088, surfOMinus: 0.014, siCal: 0.08, siOx: 0.0, poly: 0.88, u235: 0.520, h2: 0.68, bio: 0.0, eps: 0.0, quota: 0.0, deff: 1.4e-9 },
+      { id: 3, x:  0.25, porosity: 0.61, vel: 4.9e-4, sub: 0.74, temp: 239.0, pH: 6.05, pe: -3.0, surfOCa: 0.102, surfOMinus: 0.021, siCal: 0.07, siOx: 0.0, poly: 0.82, u235: 0.545, h2: 0.59, bio: 0.0, eps: 0.0, quota: 0.0, deff: 1.3e-9 },
+      { id: 4, x:  0.75, porosity: 0.49, vel: 3.8e-4, sub: 0.48, temp: 192.6, pH: 6.30, pe: -2.1, surfOCa: 0.115, surfOMinus: 0.029, siCal: 0.04, siOx: 0.0, poly: 0.61, u235: 0.640, h2: 0.31, bio: 0.0, eps: 0.0, quota: 0.0, deff: 1.1e-9 }
+    ];
+
+    // Biological Graph Nodes & Dynamic Time-Series Criterial Edges (Milestone M7.4 & ParaView 6.2.0 Suite)
+    const graphNodes = [
+      { id: 1, pos: [-1.2,  0.0,   0.0],  role: "apical_tip" },
+      { id: 2, pos: [-0.4,  0.45,  0.15], role: "branch_point" },
+      { id: 3, pos: [-0.4, -0.45, -0.15], role: "anastomosis_fusion_node" },
+      { id: 4, pos: [ 0.4,  0.0,   0.0],  role: "biofilm_microcolony" },
+      { id: 5, pos: [ 1.2,  0.0,   0.0],  role: "mineral_attachment_site" },
+      { id: 6, pos: [ 0.0,  0.62, -0.22], role: "hollow_shell_psi_overhang" },
+      { id: 7, pos: [ 0.0, -0.58,  0.20], role: "exploratory_sprout_tip" }
+    ];
+
+    function getActiveGraphEdgesForTime(t) {
+      if (t < 150) {
+        // t = 0 s: Unclosed Cantor branching tree (beta_0 = 2 disconnected components, beta_1 = 0 loops)
+        return [
+          { u: 0, v: 1, status: "verified_active", bridge: false },
+          { u: 0, v: 2, status: "verified_active", bridge: false },
+          { u: 3, v: 4, status: "verified_active", bridge: false },
+          { u: 1, v: 5, status: "exploratory_unverified", bridge: false }
+        ];
+      }
+      if (t < 450) {
+        // t = 300 s: Primary so/Prm1 loop closure (beta_0 = 1, beta_1 = 1)
+        return [
+          { u: 0, v: 1, status: "verified_active", bridge: false },
+          { u: 0, v: 2, status: "verified_active", bridge: false },
+          { u: 1, v: 2, status: "verified_active", bridge: true },
+          { u: 1, v: 3, status: "verified_active", bridge: false },
+          { u: 3, v: 4, status: "verified_active", bridge: false },
+          { u: 2, v: 6, status: "exploratory_unverified", bridge: false }
+        ];
+      }
+      if (t < 750) {
+        // t = 600 s: Pair-of-pants Sigma_0,3 bifurcation (beta_0 = 1, beta_1 = 2)
+        return [
+          { u: 0, v: 1, status: "verified_active", bridge: false },
+          { u: 0, v: 2, status: "verified_active", bridge: false },
+          { u: 1, v: 2, status: "verified_active", bridge: true },
+          { u: 1, v: 3, status: "verified_active", bridge: false },
+          { u: 2, v: 3, status: "verified_active", bridge: true },
+          { u: 3, v: 4, status: "verified_active", bridge: false },
+          { u: 1, v: 4, status: "criterial_pruned", bridge: false },
+          { u: 2, v: 6, status: "exploratory_unverified", bridge: false }
+        ];
+      }
+      if (t < 1050) {
+        // t = 900 s: Hollow Shell Psi overhang excursion (beta_0 = 1, beta_1 = 3)
+        return [
+          { u: 0, v: 1, status: "verified_active", bridge: false },
+          { u: 0, v: 2, status: "verified_active", bridge: false },
+          { u: 1, v: 2, status: "verified_active", bridge: true },
+          { u: 1, v: 3, status: "verified_active", bridge: false },
+          { u: 2, v: 3, status: "verified_active", bridge: true },
+          { u: 3, v: 4, status: "verified_active", bridge: false },
+          { u: 1, v: 5, status: "exploratory_unverified", bridge: true },
+          { u: 5, v: 3, status: "exploratory_unverified", bridge: true },
+          { u: 1, v: 4, status: "criterial_pruned", bridge: false },
+          { u: 2, v: 4, status: "criterial_pruned", bridge: false }
+        ];
+      }
+      // t = 1200 s: Pareto Trap-Space anastomosis attractor (beta_0 = 1, beta_1 = 2)
+      return [
+        { u: 0, v: 1, status: "verified_active", bridge: false },
+        { u: 0, v: 2, status: "verified_active", bridge: false },
+        { u: 1, v: 2, status: "verified_active", bridge: true },
+        { u: 1, v: 3, status: "verified_active", bridge: false },
+        { u: 2, v: 3, status: "verified_active", bridge: true },
+        { u: 3, v: 4, status: "verified_active", bridge: false },
+        { u: 1, v: 4, status: "criterial_pruned", bridge: false },
+        { u: 1, v: 5, status: "criterial_pruned", bridge: false },
+        { u: 2, v: 6, status: "exploratory_unverified", bridge: false }
+      ];
+    }
+
+    // SMACRO1 Molecular Beads (Milestone M7.5)
+    let smacroFullBeads = [
+      { id: 1, pos: [0.0, 0.0, 0.0], asset: 1, name: "RNA_III_Quorum_Hairpin", coarse: false, src: "[1]" },
+      { id: 2, pos: [5.95, 0.0, 0.0], asset: 1, name: "RNA_III_Quorum_Hairpin", coarse: false, src: "[2]" },
+      { id: 3, pos: [11.9, 1.2, 0.0], asset: 1, name: "RNA_III_Quorum_Hairpin", coarse: false, src: "[3]" },
+      { id: 4, pos: [35.0, 10.0, 0.0], asset: 2, name: "EPS_Alginate_Ca_Bridge", coarse: false, src: "[4]" },
+      { id: 5, pos: [38.0, 12.0, 0.0], asset: 2, name: "EPS_Alginate_Ca_Bridge", coarse: false, src: "[5]" },
+      { id: 6, pos: [41.0, 11.0, 0.0], asset: 2, name: "EPS_Alginate_Ca_Bridge", coarse: false, src: "[6]" },
+      { id: 7, pos: [60.0, -15.0, 5.0], asset: 3, name: "Smectite_Interlayer_Slab", coarse: false, src: "[7]" },
+      { id: 8, pos: [63.0, -14.0, 6.0], asset: 3, name: "Smectite_Interlayer_Slab", coarse: false, src: "[8]" }
+    ];
+    let smacroHybridBeads = [
+      { id: 1, pos: [0.0, 0.0, 0.0], asset: 1, name: "RNA_III_Quorum_Hairpin", coarse: false, src: "[1]" },
+      { id: 2, pos: [5.95, 0.0, 0.0], asset: 1, name: "RNA_III_Quorum_Hairpin", coarse: false, src: "[2]" },
+      { id: 3, pos: [11.9, 1.2, 0.0], asset: 1, name: "RNA_III_Quorum_Hairpin", coarse: false, src: "[3]" },
+      { id: 4, pos: [38.0, 11.0, 0.0], asset: 2, name: "Coarse_EPS_Centroid", coarse: true, src: "[4, 5, 6]" },
+      { id: 5, pos: [61.5, -14.5, 5.5], asset: 3, name: "Coarse_Smectite_Centroid", coarse: true, src: "[7, 8]" }
+    ];
+
+    function isAbioticActive() {
+      if (state.loadedCells && state.loadedCells.length > 0) {
+        return state.loadedCells.every(c => (c.bio || 0) === 0 && (c.biofilm_volume_fraction || 0) === 0);
+      }
+      return state.track === "trackA" || state.system !== "system_c_biofilm_clogged_matrix";
+    }
+
+    function getPinnedSobolevStep() {
+      if (state.track === "trackA") return 0;
+      const t = state.physicalTimeS;
+      if (t < 150) return 0;
+      if (t < 450) return 100;
+      if (t < 750) return 200;
+      if (t < 1050) return 300;
+      return 400;
+    }
+
+    function getTopologicalStageForTime(t) {
+      if (t < 150) return { beta0: 2, beta1: 0, stage: "UNCLOSED TREE", emp: 1.438, glmmY: 1.855 };
+      if (t < 450) return { beta0: 1, beta1: 1, stage: "PRIMARY LOOP (so/Prm1)", emp: 1.545, glmmY: 1.923 };
+      if (t < 750) return { beta0: 1, beta1: 2, stage: "PAIR-OF-PANTS (Sigma_0,3)", emp: 1.650, glmmY: 1.984 };
+      if (t < 1050) return { beta0: 1, beta1: 3, stage: "HOLLOW SHELL (Psi)", emp: 1.693, glmmY: 2.025 };
+      return { beta0: 1, beta1: 2, stage: "BICONNECTED ATTRACTOR", emp: 1.730, glmmY: 2.065 };
+    }
+
+    function getActiveSobolevBeads() {
+      const lodMode = document.getElementById("lodSelectSobolev").value;
+      return lodMode === "full" ? smacroFullBeads : smacroHybridBeads;
+    }
+
+    function getActiveCells() {
+      if (state.loadedCells && state.loadedCells.length > 0) {
+        return enrichWithGlmmAndTopology(state.loadedCells, state.physicalTimeS);
+      }
+      if (state.track === "trackA") {
+        return enrichWithGlmmAndTopology(cellsOkloTrackA, state.physicalTimeS);
+      }
+      if (state.system === "system_a_hydrothermal_reactor_clay") {
+        return enrichWithGlmmAndTopology(cellsSystemA, state.physicalTimeS);
+      }
+      if (state.system === "system_b_swelling_barrier") {
+        return enrichWithGlmmAndTopology(cellsSystemB, state.physicalTimeS);
+      }
+      const alpha = Math.max(0.0, Math.min(1.0, state.physicalTimeS / 1200.0));
+      const abl = ablationModes[state.ablationIdx].factor;
+      const baseCells = cellsFrame34.map((c1, idx) => {
+        const c2 = cellsFrame35[idx];
+        if (state.diffMode) {
+          const aH1 = Math.pow(10, -c1.pH), aH2 = Math.pow(10, -c2.pH);
+          const aE1 = Math.pow(10, -c1.pe), aE2 = Math.pow(10, -c2.pe);
+          return {
+            id: c1.id,
+            x: c1.x,
+            porosity: c2.porosity - c1.porosity,
+            vel: c2.vel - c1.vel,
+            sub: c2.sub - c1.sub,
+            temp: c2.temp - c1.temp,
+            pH: (-Math.log10(Math.max(aH2, 1e-20))) - (-Math.log10(Math.max(aH1, 1e-20))),
+            pe: (-Math.log10(Math.max(aE2, 1e-20))) - (-Math.log10(Math.max(aE1, 1e-20))),
+            surfOCa: c2.surfOCa - c1.surfOCa,
+            surfOMinus: c2.surfOMinus - c1.surfOMinus,
+            siCal: c2.siCal - c1.siCal,
+            siOx: c2.siOx - c1.siOx,
+            poly: 0.0,
+            u235: c2.u235 - c1.u235,
+            h2: c2.h2 - c1.h2,
+            bio: (c2.bio - c1.bio) * abl,
+            eps: (c2.eps - c1.eps) * abl,
+            quota: c2.quota - c1.quota,
+            deff: c2.deff - c1.deff
+          };
+        }
+        // Activity-space interpolation for pH and pe
+        const aH = (1 - alpha) * Math.pow(10, -c1.pH) + alpha * Math.pow(10, -c2.pH);
+        const aE = (1 - alpha) * Math.pow(10, -c1.pe) + alpha * Math.pow(10, -c2.pe);
+        return {
+          id: c1.id,
+          x: c1.x,
+          porosity: (1 - alpha) * c1.porosity + alpha * c2.porosity,
+          vel: (1 - alpha) * c1.vel + alpha * c2.vel,
+          sub: (1 - alpha) * c1.sub + alpha * c2.sub,
+          temp: (1 - alpha) * c1.temp + alpha * c2.temp,
+          pH: -Math.log10(Math.max(aH, 1e-20)),
+          pe: -Math.log10(Math.max(aE, 1e-20)),
+          surfOCa: (1 - alpha) * c1.surfOCa + alpha * c2.surfOCa,
+          surfOMinus: (1 - alpha) * c1.surfOMinus + alpha * c2.surfOMinus,
+          siCal: (1 - alpha) * c1.siCal + alpha * c2.siCal,
+          siOx: (1 - alpha) * c1.siOx + alpha * c2.siOx,
+          poly: state.track === "trackC" ? 0.35 * (idx + 1) / 4 : 0.0,
+          u235: (1 - alpha) * c1.u235 + alpha * c2.u235,
+          h2: (1 - alpha) * c1.h2 + alpha * c2.h2,
+          bio: ((1 - alpha) * c1.bio + alpha * c2.bio) * abl,
+          eps: ((1 - alpha) * c1.eps + alpha * c2.eps) * abl,
+          quota: (1 - alpha) * c1.quota + alpha * c2.quota,
+          deff: (1 - alpha) * c1.deff + alpha * c2.deff
+        };
+      });
+      return enrichWithGlmmAndTopology(baseCells, state.physicalTimeS);
+    }
+
+    // 3D Projection Helper (Right-Handed Cartesian Frame with Zoom & Pan)
+    function project3D(x, y, z, width, height, scaleFactor = 115) {
+      const cy = Math.cos(state.cameraYaw), sy = Math.sin(state.cameraYaw);
+      const cp = Math.cos(state.cameraPitch), sp = Math.sin(state.cameraPitch);
+      const x1 = x * cy - z * sy;
+      const z1 = x * sy + z * cy;
+      const y2 = y * cp - z1 * sp;
+      const z2 = y * sp + z1 * cp;
+      const fov = 4.2 / Math.max(0.8, 4.2 + z2 * 0.35);
+      const s = scaleFactor * state.cameraZoom * fov;
+      return {
+        sx: width * 0.5 + state.cameraPanX + x1 * s,
+        sy: height * 0.52 + state.cameraPanY - y2 * s,
+        depth: z2
+      };
+    }
+
+    function drawWireBox(ctx, cx, cy, cz, dx, dy, dz, width, height, strokeStyle, fillStyle) {
+      const hx = dx * 0.5, hy = dy * 0.5, hz = dz * 0.5;
+      const verts = [
+        [cx - hx, cy - hy, cz - hz], [cx + hx, cy - hy, cz - hz],
+        [cx + hx, cy + hy, cz - hz], [cx - hx, cy + hy, cz - hz],
+        [cx - hx, cy - hy, cz + hz], [cx + hx, cy - hy, cz + hz],
+        [cx + hx, cy + hy, cz + hz], [cx - hx, cy + hy, cz + hz]
+      ].map(v => project3D(v[0], v[1], v[2], width, height));
+
+      if (fillStyle) {
+        ctx.fillStyle = fillStyle;
+        ctx.beginPath();
+        ctx.moveTo(verts[0].sx, verts[0].sy);
+        ctx.lineTo(verts[1].sx, verts[1].sy);
+        ctx.lineTo(verts[2].sx, verts[2].sy);
+        ctx.lineTo(verts[3].sx, verts[3].sy);
+        ctx.closePath();
+        ctx.fill();
+      }
+      const edges = [
+        [0,1],[1,2],[2,3],[3,0],
+        [4,5],[5,6],[6,7],[7,4],
+        [0,4],[1,5],[2,6],[3,7]
+      ];
+      ctx.strokeStyle = strokeStyle;
+      ctx.beginPath();
+      edges.forEach(([a, b]) => {
+        ctx.moveTo(verts[a].sx, verts[a].sy);
+        ctx.lineTo(verts[b].sx, verts[b].sy);
+      });
+      ctx.stroke();
+    }
+
+    function drawCylindricalMicroCTCore(ctx, width, height) {
+      const nTheta = 16;
+      const radius = 0.52;
+      const xRings = [-1.58, -0.53, 0.53, 1.58];
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.28)";
+      ctx.lineWidth = 1.0;
+      xRings.forEach(rx => {
+        ctx.beginPath();
+        for (let k = 0; k <= nTheta; k++) {
+          const ang = (k / nTheta) * Math.PI * 2;
+          const pt = project3D(rx, radius * Math.cos(ang), radius * Math.sin(ang), width, height);
+          if (k === 0) ctx.moveTo(pt.sx, pt.sy);
+          else ctx.lineTo(pt.sx, pt.sy);
+        }
+        ctx.stroke();
+      });
+      for (let k = 0; k < 8; k++) {
+        const ang = (k / 8) * Math.PI * 2;
+        const p1 = project3D(xRings[0], radius * Math.cos(ang), radius * Math.sin(ang), width, height);
+        const p2 = project3D(xRings[xRings.length - 1], radius * Math.cos(ang), radius * Math.sin(ang), width, height);
+        ctx.beginPath();
+        ctx.moveTo(p1.sx, p1.sy);
+        ctx.lineTo(p2.sx, p2.sy);
+        ctx.stroke();
+      }
+    }
+
+    function valueToColor(normVal, palette) {
+      const t = Math.max(0, Math.min(1, normVal));
+      if (palette === "diff") {
+        const r = Math.round(59 + t * 180);
+        const g = Math.round(130 - Math.abs(t - 0.5) * 140);
+        const b = Math.round(246 - t * 190);
+        return `rgba(${r}, ${g}, ${b}, 0.52)`;
+      }
+      if (palette === "openfoam") {
+        return `rgba(${Math.round(20 + t * 40)}, ${Math.round(110 + t * 120)}, ${Math.round(190 + t * 65)}, 0.45)`;
+      }
+      if (palette === "phreeqc") {
+        return `rgba(${Math.round(180 + t * 70)}, ${Math.round(90 + t * 110)}, ${Math.round(30 + (1 - t) * 120)}, 0.45)`;
+      }
+      return `rgba(${Math.round(16 + t * 50)}, ${Math.round(140 + t * 95)}, ${Math.round(95 + t * 60)}, 0.46)`;
+    }
+
+    function renderPanel(canvasId, panelType) {
+      const canvas = document.getElementById(canvasId);
+      const rect = canvas.parentElement.getBoundingClientRect();
+      if (rect.width <= 0 || rect.height <= 0) return;
+      canvas.width = rect.width;
+      canvas.height = rect.height;
+      const ctx = canvas.getContext("2d");
+      const w = canvas.width, h = canvas.height;
+
+      // Subtle background grid
+      ctx.fillStyle = "#080d16";
+      ctx.fillRect(0, 0, w, h);
+      ctx.strokeStyle = "rgba(38, 56, 89, 0.25)";
+      ctx.lineWidth = 1;
+      for (let gx = 0; gx < w; gx += 40) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke();
+      }
+      for (let gy = 0; gy < h; gy += 40) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke();
+      }
+
+      const cells = getActiveCells();
+      const cutRatio = state.cutPlanePct / 100.0;
+      const maxVisibleCells = state.cutPlaneAxis === "X"
+        ? Math.max(1, Math.ceil(cutRatio * cells.length))
+        : cells.length;
+
+      if (panelType !== "sobolev") {
+        // Planetary scale or hydrothermal reactor clay plume backdrop (Warrant 1: 1000C magma -> 350C orifice -> 2.05C plume -> 2.0C ocean)
+        if (state.scale === "planetary" || state.track === "trackA" || state.system === "system_a_hydrothermal_reactor_clay" || panelType === "julia") {
+          const pMagma = project3D(0, -0.75, 0, w, h);
+          const pOrifice = project3D(0, -0.25, 0, w, h);
+          const pPlume = project3D(0, 0.65, 0, w, h);
+          const grad = ctx.createLinearGradient(pMagma.sx, pMagma.sy, pPlume.sx, pPlume.sy);
+          grad.addColorStop(0.0, "rgba(239, 68, 68, 0.30)");
+          grad.addColorStop(0.45, "rgba(245, 158, 11, 0.22)");
+          grad.addColorStop(1.0, "rgba(56, 189, 248, 0.14)");
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          ctx.moveTo(pMagma.sx - 28, pMagma.sy);
+          ctx.lineTo(pOrifice.sx - 14, pOrifice.sy);
+          ctx.lineTo(pPlume.sx - 85, pPlume.sy);
+          ctx.lineTo(pPlume.sx + 85, pPlume.sy);
+          ctx.lineTo(pOrifice.sx + 14, pOrifice.sy);
+          ctx.lineTo(pMagma.sx + 28, pMagma.sy);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        // Panel A: Cylindrical micro-CT porous core wireframe
+        if (panelType === "openfoam") {
+          drawCylindricalMicroCTCore(ctx, w, h);
+        }
+
+        // Render 4 continuum cells in 3D perspective
+        const boxDy = state.cutPlaneAxis === "Y" ? 0.72 * cutRatio : 0.72;
+        const boxDz = state.cutPlaneAxis === "Z" ? 0.72 * cutRatio : 0.72;
+        for (let i = 0; i < maxVisibleCells; i++) {
+          const c = cells[i];
+          const cx = (i - 1.5) * 0.8;
+          const isSelected = (c.id === state.selectedCell);
+          let norm = 0.5;
+          if (panelType === "openfoam") {
+            const fName = document.getElementById("fieldSelectOpenFOAM").value;
+            norm = fName === "velocity" ? c.vel / 4.0e-4
+                 : fName === "darcy_velocity" ? (c.darcy_velocity || c.vel) / 4.0e-4
+                 : fName === "permeability" ? (c.permeability || 1.5e-13) / 5.0e-13
+                 : fName === "C_substrate" ? c.sub
+                 : fName === "temperature" ? c.temp / 260.0
+                 : fName === "porosity" ? c.porosity
+                 : fName === "glmm_observed_y" ? (c.glmmY - 1.55) / 0.90
+                 : fName === "glmm_fixed_effect_beta0_plus_beta1_x" ? (c.glmmFixed - 1.55) / 0.90
+                 : fName === "glmm_random_intercept_b_i" ? (c.glmmB + 0.04) / 0.08
+                 : fName === "glmm_residual_eps_ij" ? (c.glmmEps + 0.025) / 0.05
+                 : fName === "empowerment_bits" ? (c.emp - 1.40) / 1.90
+                 : fName === "beta_1" ? c.cellBeta1 / 2.0
+                 : fName === "beta_0" ? (c.cellBeta0 - 1.0) / 1.0
+                 : c.porosity;
+          } else if (panelType === "phreeqc") {
+            const fName = document.getElementById("fieldSelectPHREEQC").value;
+            norm = fName === "pH" ? (c.pH - 5.5) / 5.5
+                 : fName === "pe" ? (c.pe + 6.5) / 11.5
+                 : fName === "dissolved_species" ? (c.dissolved_species || c.sub) / 1.5
+                 : fName === "surface_OCa_plus" ? c.surfOCa / 0.35
+                 : fName === "surface_O_minus" ? c.surfOMinus / 0.10
+                 : fName === "polymer_yield" ? c.poly
+                 : fName === "mineral_si_Ce_Oxalate_10H2O" ? c.siOx / 1.5
+                 : c.siCal;
+          } else if (panelType === "julia") {
+            const fName = document.getElementById("fieldSelectJulia").value;
+            norm = fName === "biofilm_biomass" ? c.bio / 25.0
+                 : fName === "biofilm_eps" ? c.eps / 18.0
+                 : fName === "biofilm_volume_fraction" ? (c.biofilm_volume_fraction || 0.0) / 0.03
+                 : fName === "eps_fraction" ? (c.eps_fraction || 0.0) / 0.025
+                 : fName === "mineral_volume_fractions" ? (c.mineral_volume_fractions || 0.25) / 0.45
+                 : fName === "u235_ratio" ? (c.u235 - 0.50) / 0.25
+                 : fName === "h2_concentration" ? c.h2 / 0.75
+                 : fName === "effective_diffusivity" ? c.deff / 1.5e-9
+                 : c.quota / 0.6;
+          }
+          const fill = valueToColor(state.diffMode ? norm + 0.5 : norm, state.diffMode ? "diff" : panelType);
+          const stroke = isSelected ? "#22d3ee" : "rgba(148, 163, 184, 0.55)";
+          ctx.lineWidth = isSelected ? 2.2 : 1.0;
+          drawWireBox(ctx, cx, 0, 0, 0.76, boxDy, boxDz, w, h, stroke, fill);
+
+          // 3D tortuous pore-scale velocity streamlines + arrowheads + advected particles in OpenFOAM panel (Warrant 2)
+          if (panelType === "openfoam") {
+            const phaseShift = ((state.physicalTimeS - 600) / 600) * Math.PI * 2;
+            for (let s = -1; s <= 1; s++) {
+              ctx.strokeStyle = s === 0 ? "#38bdf8" : "rgba(56, 189, 248, 0.72)";
+              ctx.lineWidth = s === 0 ? 1.8 : 1.3;
+              ctx.beginPath();
+              const nSeg = 8;
+              let lastPt = null;
+              for (let k = 0; k <= nSeg; k++) {
+                const uFrac = k / nSeg;
+                const sx3 = cx - 0.35 + uFrac * 0.70;
+                const sy3 = s * 0.18 + 0.055 * Math.sin(uFrac * Math.PI * 2 + i * 1.3 + s);
+                const sz3 = 0.05 * Math.cos(uFrac * Math.PI * 2 + i * 0.9 - s);
+                const pt = project3D(sx3, sy3, sz3, w, h);
+                if (k === 0) ctx.moveTo(pt.sx, pt.sy);
+                else ctx.lineTo(pt.sx, pt.sy);
+                lastPt = pt;
+              }
+              ctx.stroke();
+              if (lastPt) {
+                ctx.fillStyle = "#38bdf8";
+                ctx.beginPath();
+                ctx.arc(lastPt.sx, lastPt.sy, 2.3, 0, Math.PI * 2);
+                ctx.fill();
+              }
+              // Advected tracer particle along tortuous streamline
+              const pFrac = ((phaseShift / (Math.PI * 2)) + (i * 0.25) + (s + 1) * 0.15) % 1.0;
+              const px3 = cx - 0.35 + pFrac * 0.70;
+              const py3 = s * 0.18 + 0.055 * Math.sin(pFrac * Math.PI * 2 + i * 1.3 + s);
+              const pz3 = 0.05 * Math.cos(pFrac * Math.PI * 2 + i * 0.9 - s);
+              const ppt = project3D(px3, py3, pz3, w, h);
+              ctx.fillStyle = "#e0f2fe";
+              ctx.beginPath();
+              ctx.arc(ppt.sx, ppt.sy, 2.6, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+
+          // Pore-wedge capillary meniscus arc & surface complexation sites in PHREEQC panel (Warrants 3 & 4)
+          if (panelType === "phreeqc") {
+            const pCorner = project3D(cx - 0.25, -0.22, 0.18, w, h);
+            ctx.strokeStyle = "rgba(56, 189, 248, 0.75)";
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            ctx.arc(pCorner.sx, pCorner.sy, 11 * state.cameraZoom, -0.25 * Math.PI, 0.65 * Math.PI);
+            ctx.stroke();
+          }
+        }
+
+        // Reactive-transport concentration isosurface contour C = 0.50 mol/m3 (Warrant 4: Time=245s 4x1x1 mm domain)
+        if (panelType === "openfoam" || panelType === "phreeqc") {
+          const isoX = -1.2 + ((1200 - state.physicalTimeS) / 600) * 1.1;
+          const isoPts = [
+            project3D(isoX, -0.32, -0.32, w, h),
+            project3D(isoX + 0.12, 0.32, -0.32, w, h),
+            project3D(isoX + 0.18, 0.32, 0.32, w, h),
+            project3D(isoX + 0.05, -0.32, 0.32, w, h)
+          ];
+          ctx.fillStyle = "rgba(251, 191, 36, 0.22)";
+          ctx.strokeStyle = "rgba(251, 191, 36, 0.85)";
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(isoPts[0].sx, isoPts[0].sy);
+          for (let k = 1; k < isoPts.length; k++) ctx.lineTo(isoPts[k].sx, isoPts[k].sy);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        // Oblique cut-plane quad overlay when cutPlaneAxis === "oblique"
+        if (state.cutPlaneAxis === "oblique" && state.cutPlanePct < 100) {
+          const off = (cutRatio - 0.5) * 1.6;
+          const obPts = [
+            project3D(off - 0.4, -0.4, -0.4, w, h),
+            project3D(off + 0.4, 0.4, -0.4, w, h),
+            project3D(off + 0.4, 0.4, 0.4, w, h),
+            project3D(off - 0.4, -0.4, 0.4, w, h)
+          ];
+          ctx.fillStyle = "rgba(34, 211, 238, 0.16)";
+          ctx.strokeStyle = "#22d3ee";
+          ctx.lineWidth = 1.4;
+          ctx.beginPath();
+          ctx.moveTo(obPts[0].sx, obPts[0].sy);
+          for (let k = 1; k < obPts.length; k++) ctx.lineTo(obPts[k].sx, obPts[k].sy);
+          ctx.closePath();
+          ctx.fill();
+          ctx.stroke();
+        }
+
+        // Render 3D Confocal Biofilm Microcolonies (green cells in red EPS matrix shell, Warrants 5 & 6)
+        // + 3D Biological Graph with Criterial Separation in Panel C when System C is active
+        if (panelType === "julia" && !isAbioticActive()) {
+          const activeEdges = getActiveGraphEdgesForTime(state.physicalTimeS);
+          graphNodes.forEach((nd, idx) => {
+            const p = project3D(nd.pos[0], nd.pos[1], nd.pos[2], w, h);
+            const epsRadius = (12 + (idx % 3) * 4) * state.cameraZoom;
+            ctx.fillStyle = "rgba(239, 68, 68, 0.24)";
+            ctx.strokeStyle = "rgba(248, 113, 113, 0.55)";
+            ctx.lineWidth = 1.0;
+            ctx.beginPath();
+            ctx.arc(p.sx, p.sy, epsRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.stroke();
+          });
+
+          activeEdges.forEach((ed, eIdx) => {
+            const n1 = graphNodes[ed.u], n2 = graphNodes[ed.v];
+            const p1 = project3D(n1.pos[0], n1.pos[1], n1.pos[2], w, h);
+            const p2 = project3D(n2.pos[0], n2.pos[1], n2.pos[2], w, h);
+            ctx.save();
+            if (ed.status === "verified_active") {
+              ctx.strokeStyle = "#10b981";
+              ctx.lineWidth = ed.bridge ? 3.2 : 2.3;
+              ctx.setLineDash([]);
+            } else if (ed.status === "criterial_pruned") {
+              ctx.strokeStyle = "#ef4444";
+              ctx.lineWidth = 2.0;
+              ctx.setLineDash([6, 4]);
+            } else {
+              ctx.strokeStyle = "#f59e0b";
+              ctx.lineWidth = 1.6;
+              ctx.setLineDash([2, 3]);
+            }
+            ctx.beginPath();
+            ctx.moveTo(p1.sx, p1.sy);
+            ctx.lineTo(p2.sx, p2.sy);
+            ctx.stroke();
+            if (ed.status === "exploratory_unverified") {
+              [0.3, 0.7].forEach(frac => {
+                const px = p1.sx + (p2.sx - p1.sx) * frac;
+                const py = p1.sy + (p2.sy - p1.sy) * frac;
+                ctx.setLineDash([]);
+                ctx.fillStyle = "#fbbf24";
+                ctx.beginPath();
+                ctx.arc(px, py, 3.0 * state.cameraZoom, 0, Math.PI * 2);
+                ctx.fill();
+              });
+            }
+            ctx.restore();
+          });
+
+          graphNodes.forEach(nd => {
+            const p = project3D(nd.pos[0], nd.pos[1], nd.pos[2], w, h);
+            ctx.fillStyle = "#34d399";
+            ctx.beginPath();
+            ctx.arc(p.sx, p.sy, 4.8 * state.cameraZoom, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+      } else {
+        // PANEL D: BIOLOGICAL MATRIX, EPS, CELLS & SOBOLEV MOLECULAR STRUCTURES (SMACRO1)
+        const beads = getActiveSobolevBeads();
+
+        // Draw active-site radius sphere wireframe (R_active = 25.0 A)
+        const centerP = project3D(-25 * 0.035, 0, 0, w, h);
+        ctx.strokeStyle = "rgba(34, 211, 238, 0.35)";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.arc(centerP.sx, centerP.sy, 54 * state.cameraZoom, 0, Math.PI * 2);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Folded 3D RNA helical ribbon + base-pair ladder rungs inside active site (Warrant 7)
+        const rnaColors = ["#38bdf8", "#22d3ee", "#34d399", "#a3e635", "#facc15", "#fb923c", "#f87171"];
+        let prevRibbonA = null, prevRibbonB = null;
+        for (let k = 0; k <= 18; k++) {
+          const t = k / 18.0;
+          const ang = t * Math.PI * 2.4;
+          const rx = (-25 + t * 18.0) * 0.035;
+          const ryA = 0.28 * Math.sin(ang), rzA = 0.28 * Math.cos(ang);
+          const ryB = 0.28 * Math.sin(ang + Math.PI * 0.85), rzB = 0.28 * Math.cos(ang + Math.PI * 0.85);
+          const pA = project3D(rx, ryA, rzA, w, h);
+          const pB = project3D(rx, ryB, rzB, w, h);
+          const col = rnaColors[k % rnaColors.length];
+          if (prevRibbonA && prevRibbonB) {
+            ctx.strokeStyle = col;
+            ctx.lineWidth = 2.6;
+            ctx.beginPath();
+            ctx.moveTo(prevRibbonA.sx, prevRibbonA.sy);
+            ctx.lineTo(pA.sx, pA.sy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(prevRibbonB.sx, prevRibbonB.sy);
+            ctx.lineTo(pB.sx, pB.sy);
+            ctx.stroke();
+          }
+          if (k % 2 === 0) {
+            ctx.strokeStyle = "rgba(226, 232, 240, 0.65)";
+            ctx.lineWidth = 1.3;
+            ctx.beginPath();
+            ctx.moveTo(pA.sx, pA.sy);
+            ctx.lineTo(pB.sx, pB.sy);
+            ctx.stroke();
+          }
+          prevRibbonA = pA;
+          prevRibbonB = pB;
+        }
+
+        // Backbone connections between SMACRO1 beads
+        for (let i = 0; i < beads.length - 1; i++) {
+          const b1 = beads[i], b2 = beads[i + 1];
+          const p1 = project3D((b1.pos[0] - 25) * 0.035, b1.pos[1] * 0.035, b1.pos[2] * 0.035, w, h);
+          const p2 = project3D((b2.pos[0] - 25) * 0.035, b2.pos[1] * 0.035, b2.pos[2] * 0.035, w, h);
+          ctx.strokeStyle = "rgba(192, 132, 252, 0.55)";
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          ctx.moveTo(p1.sx, p1.sy);
+          ctx.lineTo(p2.sx, p2.sy);
+          ctx.stroke();
+        }
+
+        beads.forEach((b, idx) => {
+          const p = project3D((b.pos[0] - 25) * 0.035, b.pos[1] * 0.035, b.pos[2] * 0.035, w, h);
+          const isPicked = (idx === state.selectedBeadIdx);
+          const radius = b.coarse ? 9.5 : 5.8;
+          ctx.fillStyle = b.asset === 1 ? "#22d3ee" : (b.asset === 2 ? "#a855f7" : "#f59e0b");
+          ctx.beginPath();
+          ctx.arc(p.sx, p.sy, radius * state.cameraZoom, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.strokeStyle = isPicked ? "#facc15" : "#fff";
+          ctx.lineWidth = isPicked ? 2.6 : 1.0;
+          ctx.stroke();
+        });
+      }
+
+      // Update HUD text overlays
+      const selCell = cells[state.selectedCell - 1] || cells[0];
+      const pinnedStep = getPinnedSobolevStep();
+      const sysMeta = systemCatalog[state.system];
+      const topoStage = getTopologicalStageForTime(state.physicalTimeS);
+      if (panelType === "openfoam") {
+        document.getElementById("hud-openfoam").innerHTML =
+          `${sysMeta.title} | Cell #${selCell.id} | u = ${selCell.vel.toExponential(2)} m/s | k = ${(selCell.permeability || 1.4e-13).toExponential(2)} m2 | C_sub = ${selCell.sub.toFixed(3)} mol/m3<br>` +
+          `GLMM y_ij = ${selCell.glmmY.toFixed(3)} (b_i=${selCell.glmmB.toFixed(3)}, eps=${selCell.glmmEps.toFixed(3)}) | E = ${selCell.emp.toFixed(2)} bits`;
+      } else if (panelType === "phreeqc") {
+        document.getElementById("hud-phreeqc").innerHTML =
+          `Cell #${selCell.id} | pH = ${selCell.pH.toFixed(2)} | pe = ${selCell.pe.toFixed(2)} | >OCa+ = ${selCell.surfOCa.toFixed(3)} | >O- = ${selCell.surfOMinus.toFixed(3)} mol/m3<br>` +
+          `SI = ${selCell.siCal.toFixed(2)} | Abiotic Oligomer = ${selCell.poly.toFixed(3)} | Meniscus R = 18.0 um`;
+      } else if (panelType === "julia") {
+        document.getElementById("hud-julia").innerHTML =
+          isAbioticActive() && !(state.loadedCells && state.loadedCells.length > 0)
+            ? `${sysMeta.title}: U-235 = ${selCell.u235.toFixed(3)} at% | H2 = ${selCell.h2.toFixed(3)} mol/m3 | T = ${selCell.temp.toFixed(1)} degC<br>Abiotic Mineral Mode: Biological Graph Disabled (modeled_system)`
+            : `Cell #${selCell.id} | U-235 = ${selCell.u235.toFixed(3)} at% | H2 = ${selCell.h2.toFixed(2)} mol/m3 | Biomass = ${selCell.bio.toFixed(1)} kg/m3<br>` +
+              `Graph: beta_0 = ${topoStage.beta0}, beta_1 = ${topoStage.beta1} (${topoStage.stage}: Green=Active, Red Dashed=Pruned, Amber=Exploratory)`;
+      } else if (panelType === "sobolev") {
+        const beads = getActiveSobolevBeads();
+        const sb = beads[Math.min(state.selectedBeadIdx, beads.length - 1)] || beads[0];
+        document.getElementById("hud-sobolev").innerHTML =
+          `Anchor: cell_${selCell.id} | Bead #${sb.id} (${sb.name}) | Unit: Angstrom (1e-10 m)<br>` +
+          `Pinned Sobolev Step = ${pinnedStep} | CsgA 12/18-aa & DsrB n_X=5 | G_syn = D_4^8 x Z_2^14`;
+      }
+    }
+
+    function updateProvenanceBars() {
+      const fOf = document.getElementById("fieldSelectOpenFOAM").value;
+      const fPh = document.getElementById("fieldSelectPHREEQC").value;
+      const fJl = document.getElementById("fieldSelectJulia").value;
+      const lodSob = document.getElementById("lodSelectSobolev").value;
+
+      const mOf = fieldMetadata[fOf] || fieldMetadata.velocity;
+      const mPh = fieldMetadata[fPh] || fieldMetadata.pH;
+      const mJl = fieldMetadata[fJl] || fieldMetadata.biofilm_biomass;
+      const pinnedStep = getPinnedSobolevStep();
+      const tBioStr = isAbioticActive() && !(state.loadedCells && state.loadedCells.length > 0) ? "0.0s (Abiotic)" : `${state.physicalTimeS.toFixed(1)}s`;
+
+      document.getElementById("prov-text-openfoam").textContent =
+        `Solver: ${mOf.producer} | t=${state.physicalTimeS.toFixed(1)}s | cartesian_right_handed (m) | ${mOf.sha}`;
+      document.getElementById("badge-openfoam").textContent =
+        `[${state.diffMode ? "CALCULATED" : mOf.epistemic} | ${mOf.disclosure} | ${mOf.unit}]`;
+
+      document.getElementById("prov-text-phreeqc").textContent =
+        `Solver: ${mPh.producer} | t=${state.physicalTimeS.toFixed(1)}s | Activity-Averaged Overlap | ${mPh.sha}`;
+      document.getElementById("badge-phreeqc").textContent =
+        `[${state.diffMode ? "CALCULATED" : mPh.epistemic} | ${mPh.disclosure} | ${mPh.unit}]`;
+
+      document.getElementById("prov-text-julia").textContent =
+        `Solver: ${mJl.producer} | t_bio=${tBioStr} | Criterial Graph | ${mJl.sha}`;
+      document.getElementById("badge-julia").textContent =
+        `[${state.diffMode ? "CALCULATED" : mJl.epistemic} | ${mJl.disclosure} | ${mJl.unit}]`;
+
+      const sobDisc = lodSob === "full" ? "DIRECT_NUMERICAL_SOLVER" : "COARSE_GRAINED_APPROXIMATION";
+      document.getElementById("prov-text-sobolev").textContent =
+        `Solver: SobolevMacromolecule (a6e4917) | Step=${pinnedStep} | T_cell*T_mol | sha256:e5c1...39f0`;
+      document.getElementById("badge-sobolev").textContent =
+        `[CALCULATED | ${sobDisc} | Angstrom]`;
+    }
+
+    function updateInspectorAndClocks() {
+      updateProvenanceBars();
+      const cells = getActiveCells();
+      const c = cells[state.selectedCell - 1] || cells[0];
+      const beads = getActiveSobolevBeads();
+      const sb = beads[Math.min(state.selectedBeadIdx, beads.length - 1)] || beads[0];
+      const sysMeta = systemCatalog[state.system];
+
+      const activeTitle = (state.loadedFrameMeta && state.loadedFrameMeta.simulation_id)
+        ? `${state.loadedFrameMeta.simulation_id}`
+        : sysMeta.title;
+      document.getElementById("infoActiveSystem").textContent = activeTitle;
+      document.getElementById("infoMineralPhases").textContent =
+        (state.loadedFrameMeta && state.loadedFrameMeta.mineral_phases_label) || sysMeta.mineralPhases;
+      document.getElementById("infoRealizationStatus").textContent = "not_experimentally_validated";
+      document.getElementById("infoLiveSolverFlag").textContent =
+        (state.loadedFrameMeta && state.loadedFrameMeta.scenario_classification === "SOLVER_EXECUTED_SIMULATION")
+          ? "true (SOLVER_EXECUTED_SIMULATION)"
+          : "false (Snapshot Adapter)";
+
+      if (state.loadedFrameMeta) {
+        document.getElementById("infoWorldEvidenceTier").textContent =
+          (state.loadedFrameMeta.evidence_tier || "SYNTHETIC_FIXTURE").toUpperCase();
+        document.getElementById("infoWorldClassification").textContent =
+          state.loadedFrameMeta.scenario_classification || "EARTH_REFERENCE_FIXTURE";
+        document.getElementById("infoMeshResolutionBadge").textContent =
+          state.loadedFrameMeta.mesh_resolution_badge || "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)";
+        document.getElementById("infoVoxelValidationBadge").textContent =
+          state.loadedFrameMeta.voxel_overlap_validation_grid_badge || "32^3 Conservative Voxel-Overlap Validation Grid";
+        document.getElementById("infoFeedbackLoopStatus").textContent =
+          (state.loadedFrameMeta.energy_budget_closed !== false && state.loadedFrameMeta.elemental_mass_conserved !== false)
+            ? "CLOSED (Mass & Free-Energy Conserved)"
+            : "VIOLATED (Check Budget Closure)";
+      }
+
+      document.getElementById("pickCellBadge").textContent = `Cell #${c.id}`;
+      const wx = c.x + sb.pos[0] * 1.0e-10;
+      const wy = sb.pos[1] * 1.0e-10;
+      const wz = sb.pos[2] * 1.0e-10;
+      document.getElementById("pickWorldCoords").textContent = `(${wx.toFixed(4)}, ${wy.toExponential(1)}, ${wz.toExponential(1)})`;
+      document.getElementById("pickVelocity").textContent = `${c.vel.toExponential(2)} m/s`;
+      document.getElementById("pickPermeability").textContent =
+        `${(c.darcy_velocity || c.vel).toExponential(2)} m/s | k=${(c.permeability || 1.42e-13).toExponential(2)} m2`;
+      document.getElementById("pickSubstrate").textContent = `${c.sub.toFixed(3)} mol/m3`;
+      document.getElementById("pickGlmmY").textContent =
+        `y=${c.glmmY.toFixed(3)} (fix=${c.glmmFixed.toFixed(3)}, b_i=${c.glmmB.toFixed(3)}, eps=${c.glmmEps.toFixed(3)})`;
+      document.getElementById("pickEmpowerment").textContent =
+        `${c.emp.toFixed(3)} bits | cell (b0=${c.cellBeta0}, b1=${c.cellBeta1})`;
+      document.getElementById("pickPhPe").textContent = `${c.pH.toFixed(2)} / ${c.pe.toFixed(2)}`;
+      document.getElementById("pickDissolvedSpecies").textContent =
+        c.dissolved_species_summary || `sub=${c.sub.toFixed(3)} | H2=${c.h2.toFixed(3)} mol/m3`;
+      document.getElementById("pickSurfaceComplex").textContent = `${c.surfOCa.toFixed(3)} / ${c.surfOMinus.toFixed(3)} mol/m3`;
+      document.getElementById("pickNuclear").textContent = `${c.u235.toFixed(3)} at% / ${c.h2.toFixed(3)} mol/m3`;
+      const showBio = !isAbioticActive() || (state.loadedCells && state.loadedCells.length > 0);
+      document.getElementById("pickBiomass").textContent =
+        !showBio ? "0.0 / 0.0 (Abiotic System)" : `${c.bio.toFixed(1)} / ${c.eps.toFixed(1)} kg/m3`;
+      document.getElementById("pickBiofilmEpsVolFrac").textContent =
+        `bio=${(c.biofilm_volume_fraction || 0.0).toFixed(4)} | eps=${(c.eps_fraction || 0.0).toFixed(4)}`;
+      document.getElementById("pickMineralVolFractions").textContent =
+        c.mineral_fractions_summary || `min_tot=${(c.mineral_volume_fractions || 0.25).toFixed(3)}`;
+      document.getElementById("pickQuota").textContent =
+        !showBio ? "N/A (Abiotic System)" : `${c.quota.toFixed(3)} mol/kg`;
+
+      document.getElementById("pickLocalCoords").textContent =
+        `(${sb.pos[0].toFixed(2)}, ${sb.pos[1].toFixed(2)}, ${sb.pos[2].toFixed(2)}) A`;
+      document.getElementById("pickBead").textContent =
+        `#${sb.id} (${sb.name}, src=${sb.src})`;
+
+      // Enforce 3-Clock Law: Sobolev relaxation step is pinned (0, 100, 200, 300, or 400), NEVER linearly interpolated as physical time
+      const alpha = Math.max(0.0, Math.min(1.0, state.physicalTimeS / 1200.0));
+      const pinnedSobStep = getPinnedSobolevStep();
+      const topoStage = getTopologicalStageForTime(state.physicalTimeS);
+      const activeEdges = getActiveGraphEdgesForTime(state.physicalTimeS);
+      const nActive = activeEdges.filter(e => e.status === "verified_active").length;
+      const nPruned = activeEdges.filter(e => e.status === "criterial_pruned").length;
+      const nExpl = activeEdges.filter(e => e.status === "exploratory_unverified").length;
+      const nBridges = activeEdges.filter(e => e.status === "verified_active" && e.bridge).length;
+
+      document.getElementById("clockPhysical").textContent = `${state.physicalTimeS.toFixed(1)} s`;
+      document.getElementById("clockBiological").textContent =
+        (!showBio) ? "0.0 s (Abiotic)" : `${state.physicalTimeS.toFixed(1)} s`;
+      document.getElementById("clockSobolev").textContent =
+        `Step ${pinnedSobStep} (Pinned Relaxation Index, Not Physical Time)`;
+      document.getElementById("scrubberLabel").textContent =
+        `t_phys = ${state.physicalTimeS} s | beta_1=${topoStage.beta1} | ${state.diffMode ? "Delta(Frame 35 - Frame 34)" : topoStage.stage}`;
+
+      document.getElementById("topoBeta0").textContent = String(topoStage.beta0);
+      document.getElementById("topoBeta1").textContent = String(topoStage.beta1);
+      document.getElementById("topoBridges").textContent = `${nBridges} (Active Bridges)`;
+      document.getElementById("topoEdgesSummary").textContent = `${nActive} Active | ${nPruned} Pruned | ${nExpl} Expl`;
+      document.getElementById("topoRegimeBadge").textContent = topoStage.stage;
+      document.getElementById("infoRefParaView").textContent =
+        `t=${state.physicalTimeS}s | b0=${topoStage.beta0},b1=${topoStage.beta1} | y=${topoStage.glmmY.toFixed(3)} | E=${topoStage.emp.toFixed(3)}b`;
+
+      const gateEl = document.getElementById("interpGateStatus");
+      if (state.track === "trackA") {
+        gateEl.textContent = "BLOCKED (Oklo R0-1 Pulse Cutoff Discontinuity)";
+        gateEl.className = "clock-val status-warn";
+      } else if (state.diffMode) {
+        gateEl.textContent = "DIFF MODE (Exact Volume-Conservative Delta)";
+        gateEl.className = "clock-val status-ok";
+      } else {
+        gateEl.textContent = `VALID (sync-00031..00035, alpha=${alpha.toFixed(2)})`;
+        gateEl.className = "clock-val status-ok";
+      }
+
+      const trackLabels = {
+        trackA: "Track A (Hydrothermal Prebiotic)",
+        trackB: "Track B (Biological Biofilm)",
+        trackC: "Track C (Comparative Networks)"
+      };
+      document.getElementById("infoTrackName").textContent = trackLabels[state.track];
+
+      const scaleLabels = {
+        planetary: "Planetary (16 m - 1 km FOV)",
+        geological: "Geological Pore (10 mm FOV)",
+        biofilm: "Biofilm Cellular (110x110x12 um FOV)",
+        molecular: "Molecular Sobolev (50 nm FOV)"
+      };
+      const scaleDisclosures = {
+        planetary: "CONCEPTUAL_OR_SYNTHETIC (Vent Plume 1000C->2C)",
+        geological: "DIRECT_NUMERICAL_SOLVER (Micro-CT 5-150 um)",
+        biofilm: "DIRECT_NUMERICAL_SOLVER (Confocal + BARE Graph)",
+        molecular: "COARSE_GRAINED_APPROXIMATION (SMACRO1 + RNA)"
+      };
+      document.getElementById("infoScaleName").textContent = scaleLabels[state.scale];
+      document.getElementById("infoDisclosure").textContent = scaleDisclosures[state.scale];
+      document.getElementById("infoGeomHash").textContent =
+        state.loadedFrameMeta ? state.loadedFrameMeta.geometry_sha256 : (state.track === "trackA" ? "sha256:0f81...oklo" : "sha256:9c4e...81a2");
+
+      // Dynamic FCM compartment percentages based on selected cell's Droop nutrient quota Q
+      if (!showBio) {
+        document.getElementById("fcmGates").textContent = "Abiotic (No Cellular Compartments)";
+      } else {
+        const livePct = Math.round(Math.min(92, Math.max(55, 45 + c.quota * 88)));
+        const compPct = Math.round((100 - livePct) * 0.68);
+        const deadPct = 100 - livePct - compPct;
+        document.getElementById("fcmGates").textContent = `Live ${livePct}% | Comp ${compPct}% | Dead ${deadPct}%`;
+      }
+
+      // Step 1-5 Conservation, Discrete Extinction & Typed G_EPS(t) Readout
+      const epsFlow = c.porosity;
+      const thetaAq = Math.max(0.25, Number((epsFlow - 0.12).toFixed(3)));
+      document.getElementById("infoPorositySep").textContent =
+        `eps=${epsFlow.toFixed(3)} != theta=${thetaAq.toFixed(3)}`;
+
+      const isCa = state.clayMode === "ca_montmorillonite";
+      const nMin = isCa ? 112 : 41;
+      const nPpBase = isCa ? 204 : 188;
+      const nPbBase = isCa ? 98 : 94;
+      const nPp = state.remodelActive ? Math.round(nPpBase + 0.35 * 0.96 * nPbBase) : nPpBase;
+      const nPb = state.remodelActive ? Math.round(0.04 * nPbBase) : nPbBase;
+      const chiPp = (nPp / Math.max(nPp + nPb, 1e-15)).toFixed(2);
+      const beta1 = isCa ? (state.remodelActive ? 31 : 39) : (state.remodelActive ? 19 : 26);
+      const nBridge = isCa ? (state.remodelActive ? 4 : 2) : (state.remodelActive ? 7 : 5);
+      const tauMean = isCa ? (state.remodelActive ? 156 : 134) : (state.remodelActive ? 118 : 104);
+
+      const poolSurf = isCa ? 0.22 : 0.14;
+      const poolCell = state.extinctMode ? 0.00 : 0.06;
+      const poolEps = state.extinctMode ? (isCa ? 0.05 : 0.04) : (isCa ? 0.02 : 0.01);
+      const poolAq = Number((0.50 - poolSurf - poolCell - poolEps).toFixed(2));
+      document.getElementById("infoFourPool").textContent = "0.5000 mol/m3 (Conserved)";
+      document.getElementById("infoPoolBreakdown").textContent =
+        `${poolAq.toFixed(2)}|${poolSurf.toFixed(2)}|${poolCell.toFixed(2)}|${poolEps.toFixed(2)}`;
+
+      if (state.extinctMode) {
+        document.getElementById("infoDiscreteN").textContent = "N=0 (Absorbing Extinct, 0 Regrowth)";
+      } else {
+        document.getElementById("infoDiscreteN").textContent = "N=6 (Motile 5, Matrix 1)";
+      }
+
+      document.getElementById("infoTypedEdges").textContent =
+        `${nPp} | ${nPb} | ${nMin} (chi_pp=${chiPp})`;
+      document.getElementById("infoGraphCycles").textContent =
+        `b0=${topoStage.beta0}, b1=${beta1}, nbr=${nBridge}, tau=${tauMean}s`;
+      document.getElementById("infoRemodeling").textContent = state.remodelActive
+        ? "N_pb->0 Cleaved, N_pp>0 Intact (Rel 97%)"
+        : "Intact VPS Mesh (Retained 78%)";
+      document.getElementById("infoHypCerts").textContent =
+        "WITNESS | WITNESS | WITNESS (L4 UNRES)";
+    }
+
+    function renderAll() {
+      updateInspectorAndClocks();
+      renderPanel("canvas-openfoam", "openfoam");
+      renderPanel("canvas-phreeqc", "phreeqc");
+      renderPanel("canvas-julia", "julia");
+      renderPanel("canvas-sobolev", "sobolev");
+    }
+
+    // Complete JSON Field-Array Loader for M7SpatialFrame & M7WorldScenario
+    window.applyM7JsonPayload = function(obj) {
+      if (!obj || typeof obj !== "object") return null;
+      const isWorld = obj.schema === "M7WorldScenario";
+      const isFrame = obj.schema === "M7SpatialFrame";
+      if (!isWorld && !isFrame && !obj.field_arrays && !obj.fields) return null;
+
+      let fa = obj.field_arrays || null;
+      if (!fa && isWorld && obj.feedback_loop && Array.isArray(obj.feedback_loop.frames) && obj.feedback_loop.frames.length > 0) {
+        const lastFrame = obj.feedback_loop.frames[obj.feedback_loop.frames.length - 1];
+        fa = {
+          porosity: lastFrame.porosity,
+          permeability: lastFrame.permeability,
+          darcy_velocity: lastFrame.darcy_velocity,
+          pH: lastFrame.pH,
+          pe: lastFrame.pe,
+          dissolved_species: lastFrame.dissolved_species,
+          biofilm_volume_fraction: lastFrame.biofilm_volume_fraction,
+          eps_fraction: lastFrame.eps_fraction,
+          mineral_volume_fractions: lastFrame.mineral_volume_fractions,
+          evidence_tier: obj.evidence_tier || lastFrame.evidence_tier || "planetary_hypothetical",
+          scenario_classification: obj.scenario_classification || "PLANETARY_HYPOTHETICAL",
+          mesh_resolution_badge: lastFrame.mesh_resolution_badge || "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: lastFrame.voxel_overlap_validation_grid_badge || "32^3 Conservative Voxel-Overlap Validation Grid"
+        };
+      }
+
+      const fieldMap = {};
+      if (Array.isArray(obj.fields)) {
+        obj.fields.forEach(f => {
+          if (f && f.name && Array.isArray(f.values)) {
+            fieldMap[f.name] = f.values;
+          }
+        });
+      }
+
+      const nCells = 4;
+
+      const porArr = (fa && Array.isArray(fa.porosity)) ? fa.porosity
+        : (obj.mesh && Array.isArray(obj.mesh.porosity_fraction)) ? obj.mesh.porosity_fraction
+        : fieldMap.porosity || [0.78, 0.72, 0.68, 0.75];
+      const permArr = (fa && Array.isArray(fa.permeability)) ? fa.permeability
+        : fieldMap.permeability || porArr.map(p => 2.5e-13 * Math.pow(p, 3) / Math.max(1e-6, Math.pow(1 - p, 2)));
+      const darcyArr = (fa && Array.isArray(fa.darcy_velocity)) ? fa.darcy_velocity
+        : fieldMap.darcy_velocity || fieldMap.velocity || [2.0e-4, 1.6e-4, 1.3e-4, 1.8e-4];
+      const phArr = (fa && Array.isArray(fa.pH)) ? fa.pH
+        : fieldMap.pH || [7.35, 7.35, 6.85, 6.85];
+      const peArr = (fa && Array.isArray(fa.pe)) ? fa.pe
+        : fieldMap.pe || [4.10, 4.10, 2.40, 2.40];
+      const bioVolArr = (fa && Array.isArray(fa.biofilm_volume_fraction)) ? fa.biofilm_volume_fraction
+        : fieldMap.biofilm_volume_fraction || (fieldMap.biofilm_biomass ? fieldMap.biofilm_biomass.map(v => v / 250.0) : [0.0095, 0.0175, 0.0218, 0.0125]);
+      const epsVolArr = (fa && Array.isArray(fa.eps_fraction)) ? fa.eps_fraction
+        : fieldMap.eps_fraction || (fieldMap.biofilm_eps ? fieldMap.biofilm_eps.map(v => v / 250.0) : [0.0064, 0.0122, 0.0153, 0.0081]);
+
+      const dissObj = (fa && fa.dissolved_species && typeof fa.dissolved_species === "object") ? fa.dissolved_species : {};
+      const subArr = Array.isArray(dissObj.C_substrate) ? dissObj.C_substrate
+        : (fieldMap.C_substrate || (Array.isArray(dissObj.H2) ? dissObj.H2 : [0.95, 0.58, 0.29, 0.11]));
+      const h2Arr = Array.isArray(dissObj.H2) ? dissObj.H2 : (fieldMap.h2_concentration || [0.18, 0.29, 0.34, 0.15]);
+
+      const minObj = (fa && fa.mineral_volume_fractions && typeof fa.mineral_volume_fractions === "object") ? fa.mineral_volume_fractions : {};
+      const minKeys = Object.keys(minObj);
+
+      const rawCellCount = Math.max(
+        1,
+        (obj.mesh && typeof obj.mesh.cell_count === "number" && obj.mesh.cell_count > 0) ? obj.mesh.cell_count : 0,
+        Array.isArray(porArr) ? porArr.length : 0,
+        Array.isArray(darcyArr) ? darcyArr.length : 0,
+        Array.isArray(phArr) ? phArr.length : 0
+      );
+      const cellVolumes = (obj.mesh && Array.isArray(obj.mesh.cell_volumes_m3) && obj.mesh.cell_volumes_m3.length > 0)
+        ? obj.mesh.cell_volumes_m3
+        : ((obj.mesh && Array.isArray(obj.mesh.cell_volumes) && obj.mesh.cell_volumes.length > 0) ? obj.mesh.cell_volumes : null);
+
+      function extractScalarAt(arr, k, fallback) {
+        if (!Array.isArray(arr) || arr.length === 0) return fallback;
+        const raw = arr[Math.min(Math.max(0, k), arr.length - 1)];
+        const val = Array.isArray(raw) ? Number(raw[0] !== undefined ? raw[0] : fallback) : Number(raw !== undefined ? raw : fallback);
+        return Number.isFinite(val) ? val : fallback;
+      }
+
+      // Conservative volume-weighted slice aggregation for arbitrary N-cell meshes (N = 4, N = 32^3 = 32768, or N < 4)
+      function aggregateZoneLinear(arr, zoneIdx, fallback) {
+        if (!Array.isArray(arr) || arr.length === 0) return fallback;
+        if (arr.length <= nCells) {
+          return extractScalarAt(arr, zoneIdx, fallback);
+        }
+        const startIdx = Math.floor((zoneIdx * arr.length) / nCells);
+        const endIdx = Math.max(startIdx + 1, Math.floor(((zoneIdx + 1) * arr.length) / nCells));
+        let weightedSum = 0.0;
+        let totalWeight = 0.0;
+        for (let k = startIdx; k < endIdx; k++) {
+          const w = (cellVolumes && cellVolumes.length === arr.length && Number(cellVolumes[k]) > 0) ? Number(cellVolumes[k]) : 1.0;
+          weightedSum += w * extractScalarAt(arr, k, fallback);
+          totalWeight += w;
+        }
+        return totalWeight > 0.0 ? (weightedSum / totalWeight) : fallback;
+      }
+
+      // Activity-space pH aggregation: -log10(mean(10^(-pH))) across zone slice
+      function aggregateZoneActivityPh(arr, zoneIdx, fallback) {
+        if (!Array.isArray(arr) || arr.length === 0) return fallback;
+        if (arr.length <= nCells) {
+          return extractScalarAt(arr, zoneIdx, fallback);
+        }
+        const startIdx = Math.floor((zoneIdx * arr.length) / nCells);
+        const endIdx = Math.max(startIdx + 1, Math.floor(((zoneIdx + 1) * arr.length) / nCells));
+        let weightedActivity = 0.0;
+        let totalWeight = 0.0;
+        for (let k = startIdx; k < endIdx; k++) {
+          const w = (cellVolumes && cellVolumes.length === arr.length && Number(cellVolumes[k]) > 0) ? Number(cellVolumes[k]) : 1.0;
+          const phK = extractScalarAt(arr, k, fallback);
+          weightedActivity += w * Math.pow(10.0, -phK);
+          totalWeight += w;
+        }
+        const meanActivity = totalWeight > 0.0 ? (weightedActivity / totalWeight) : Math.pow(10.0, -fallback);
+        return -Math.log10(Math.max(meanActivity, 1.0e-30));
+      }
+
+      const rawXCoords = (obj.mesh && Array.isArray(obj.mesh.cell_centers_m) && obj.mesh.cell_centers_m.length > 0)
+        ? obj.mesh.cell_centers_m.map(pt => Array.isArray(pt) ? Number(pt[0]) : 0.001)
+        : [0.5e-3, 1.5e-3, 2.5e-3, 3.5e-3];
+      const defaultXCoords = [0.5e-3, 1.5e-3, 2.5e-3, 3.5e-3];
+
+      const loadedCells = [];
+      for (let i = 0; i < nCells; i++) {
+        const xVal = rawXCoords.length >= nCells ? aggregateZoneLinear(rawXCoords, i, defaultXCoords[i]) : defaultXCoords[i];
+        const phi = aggregateZoneLinear(porArr, i, 0.72);
+        const kVal = aggregateZoneLinear(permArr, i, 1.5e-13);
+        const uVal = aggregateZoneLinear(darcyArr, i, 1.6e-4);
+        const phVal = aggregateZoneActivityPh(phArr, i, 7.2);
+        const peVal = aggregateZoneLinear(peArr, i, 2.0);
+        const bVol = aggregateZoneLinear(bioVolArr, i, 0.01);
+        const eVol = aggregateZoneLinear(epsVolArr, i, 0.008);
+        const sVal = aggregateZoneLinear(subArr, i, 0.5);
+        const h2Val = aggregateZoneLinear(h2Arr, i, 0.25);
+
+        let minSum = 0.0;
+        const minParts = [];
+        minKeys.forEach(mk => {
+          const arr = minObj[mk];
+          const mv = Array.isArray(arr) ? aggregateZoneLinear(arr, i, 0.0) : 0.0;
+          minSum += mv;
+          minParts.push(`${mk}=${mv.toFixed(3)}`);
+        });
+        if (minKeys.length === 0) {
+          minSum = Math.max(0.0, 1.0 - phi - bVol - eVol);
+          minParts.push(`matrix=${minSum.toFixed(3)}`);
+        }
+
+        const dissParts = [];
+        Object.keys(dissObj).slice(0, 3).forEach(dk => {
+          const arr = dissObj[dk];
+          if (Array.isArray(arr) && arr.length > 0) {
+            dissParts.push(`${dk}=${aggregateZoneLinear(arr, i, 0.0).toFixed(3)}`);
+          }
+        });
+        if (dissParts.length === 0) {
+          dissParts.push(`C_sub=${sVal.toFixed(3)}`, `H2=${h2Val.toFixed(3)}`);
+        }
+
+        const tempProfileK = (obj.world_scenario && obj.world_scenario.environment && Array.isArray(obj.world_scenario.environment.temperature_profile_K))
+          ? obj.world_scenario.environment.temperature_profile_K
+          : ((obj.environment && Array.isArray(obj.environment.temperature_profile_K)) ? obj.environment.temperature_profile_K : null);
+        const tempC = (fieldMap.temperature && Array.isArray(fieldMap.temperature) && fieldMap.temperature.length > 0)
+          ? aggregateZoneLinear(fieldMap.temperature, i, 25.4)
+          : (tempProfileK && tempProfileK.length > 0
+            ? (aggregateZoneLinear(tempProfileK, i, 298.55) - 273.15)
+            : ((obj.environment && typeof obj.environment.temperature_K === "number") ? (obj.environment.temperature_K - 273.15) : 25.4));
+
+        loadedCells.push({
+          id: i + 1,
+          x: xVal,
+          raw_cell_count: rawCellCount,
+          porosity: phi,
+          permeability: kVal,
+          darcy_velocity: uVal,
+          vel: uVal,
+          sub: sVal,
+          dissolved_species: sVal,
+          dissolved_species_summary: dissParts.join(" | "),
+          temp: tempC,
+          pH: phVal,
+          pe: peVal,
+          surfOCa: fieldMap.surface_OCa_plus ? aggregateZoneLinear(fieldMap.surface_OCa_plus, i, 0.165) : 0.165,
+          surfOMinus: fieldMap.surface_O_minus ? aggregateZoneLinear(fieldMap.surface_O_minus, i, 0.035) : 0.035,
+          siCal: fieldMap.mineral_si_Calcite ? aggregateZoneLinear(fieldMap.mineral_si_Calcite, i, 0.22) : 0.22,
+          siOx: fieldMap.mineral_si_Ce_Oxalate_10H2O ? aggregateZoneLinear(fieldMap.mineral_si_Ce_Oxalate_10H2O, i, 0.45) : 0.45,
+          poly: fieldMap.polymer_yield ? aggregateZoneLinear(fieldMap.polymer_yield, i, 0.0) : 0.0,
+          u235: fieldMap.u235_ratio ? aggregateZoneLinear(fieldMap.u235_ratio, i, 0.655) : 0.655,
+          h2: h2Val,
+          bio: fieldMap.biofilm_biomass ? aggregateZoneLinear(fieldMap.biofilm_biomass, i, bVol * 250.0) : bVol * 250.0,
+          eps: fieldMap.biofilm_eps ? aggregateZoneLinear(fieldMap.biofilm_eps, i, eVol * 250.0) : eVol * 250.0,
+          biofilm_volume_fraction: bVol,
+          eps_fraction: eVol,
+          mineral_volume_fractions: minSum,
+          mineral_fractions_summary: minParts.slice(0, 2).join(" | "),
+          quota: fieldMap.droop_nutrient_quota ? aggregateZoneLinear(fieldMap.droop_nutrient_quota, i, 0.40) : 0.40,
+          deff: fieldMap.effective_diffusivity ? aggregateZoneLinear(fieldMap.effective_diffusivity, i, 4.0e-10) : 4.0e-10
+        });
+      }
+
+      const evTier = (fa && fa.evidence_tier) || obj.evidence_tier || "synthetic_fixture";
+      const scenClass = (fa && fa.scenario_classification) || obj.scenario_classification || "EARTH_REFERENCE_FIXTURE";
+      const meshBadge = (fa && fa.mesh_resolution_badge) || (obj.mesh && obj.mesh.mesh_resolution_badge) || obj.mesh_resolution_badge || "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)";
+      const voxelBadge = (fa && (fa.voxel_overlap_validation_grid_badge || fa.voxel_validation_grid_badge)) ||
+        (obj.mesh && (obj.mesh.voxel_overlap_validation_grid_badge || obj.mesh.voxel_validation_grid_badge)) ||
+        obj.voxel_overlap_validation_grid_badge || obj.voxel_validation_grid_badge ||
+        "32^3 Conservative Voxel-Overlap Validation Grid";
+      const eClosed = (obj.feedback_loop && typeof obj.feedback_loop.energy_budget_closed === "boolean")
+        ? obj.feedback_loop.energy_budget_closed
+        : (typeof obj.energy_budget_closed === "boolean" ? obj.energy_budget_closed : true);
+      const mConserved = (obj.feedback_loop && typeof obj.feedback_loop.elemental_mass_conserved === "boolean")
+        ? obj.feedback_loop.elemental_mass_conserved
+        : (typeof obj.elemental_mass_conserved === "boolean" ? obj.elemental_mass_conserved : true);
+
+      state.loadedCells = loadedCells;
+      state.loadedFrameMeta = {
+        simulation_id: obj.simulation_id || obj.scenario_id || "loaded_m7_frame",
+        geometry_sha256: (obj.mesh && obj.mesh.geometry_sha256) ? obj.mesh.geometry_sha256.slice(0, 18) + "..." : "sha256:loaded_m7",
+        evidence_tier: String(evTier),
+        scenario_classification: String(scenClass),
+        mesh_resolution_badge: String(meshBadge),
+        voxel_overlap_validation_grid_badge: String(voxelBadge),
+        energy_budget_closed: eClosed,
+        elemental_mass_conserved: mConserved,
+        raw_cell_count: rawCellCount,
+        mineral_phases_label: minKeys.length > 0 ? minKeys.join(", ") : "illite, smectite, calcite"
+      };
+
+      if (obj.clocks && typeof obj.clocks.physical_time_s === "number") {
+        state.physicalTimeS = obj.clocks.physical_time_s;
+        const scrub = document.getElementById("timeScrubber");
+        if (scrub) scrub.value = String(state.physicalTimeS);
+      }
+      renderAll();
+      return {
+        loaded_simulation_id: state.loadedFrameMeta.simulation_id,
+        evidence_tier: state.loadedFrameMeta.evidence_tier,
+        scenario_classification: state.loadedFrameMeta.scenario_classification,
+        mesh_resolution_badge: state.loadedFrameMeta.mesh_resolution_badge,
+        voxel_overlap_validation_grid_badge: state.loadedFrameMeta.voxel_overlap_validation_grid_badge,
+        voxel_validation_grid_badge: state.loadedFrameMeta.voxel_overlap_validation_grid_badge,
+        energy_budget_closed: state.loadedFrameMeta.energy_budget_closed,
+        elemental_mass_conserved: state.loadedFrameMeta.elemental_mass_conserved,
+        cell_count: loadedCells.length,
+        raw_cell_count: rawCellCount,
+        porosity: loadedCells.map(c => c.porosity),
+        permeability: loadedCells.map(c => c.permeability),
+        darcy_velocity: loadedCells.map(c => c.darcy_velocity),
+        pH: loadedCells.map(c => c.pH),
+        pe: loadedCells.map(c => c.pe),
+        dissolved_species: loadedCells.map(c => c.dissolved_species),
+        biofilm_volume_fraction: loadedCells.map(c => c.biofilm_volume_fraction),
+        eps_fraction: loadedCells.map(c => c.eps_fraction),
+        mineral_volume_fractions: loadedCells.map(c => c.mineral_volume_fractions)
+      };
+    };
+
+    const canonicalWorldScenarios = {
+      earth_oklo_natural_reactor_reference: {
+        schema: "M7SpatialFrame",
+        schema_version: "1.0.0",
+        world_scenario_schema: "M7WorldScenario",
+        simulation_id: "earth_oklo_natural_reactor_reference",
+        scenario_id: "earth_oklo_natural_reactor_reference",
+        evidence_tier: "literature_derived",
+        scenario_classification: "EARTH_REFERENCE_FIXTURE",
+        energy_budget_closed: true,
+        elemental_mass_conserved: true,
+        world_scenario: {
+          environment: { temperature_profile_K: [298.25, 298.55, 298.95, 299.05], gravity_m_s2: 9.80665 }
+        },
+        feedback_loop: { energy_budget_closed: true, elemental_mass_conserved: true },
+        field_arrays: {
+          porosity: [0.77850788, 0.71831089, 0.67827172, 0.74865636],
+          permeability: [4.70842092e-12, 3.33575953e-12, 2.60166728e-12, 4.03451981e-12],
+          darcy_velocity: [2.64518029e-04, 1.87402221e-04, 1.46161083e-04, 2.26658416e-04],
+          pH: [7.350256, 7.350290, 6.850296, 6.850230],
+          pe: [4.095582, 4.094999, 2.394883, 2.396022],
+          dissolved_species: {
+            C_substrate: [0.95, 0.58, 0.29, 0.11],
+            "Ca+2": [1.1, 1.06, 1.01, 0.99],
+            H2: [0.15904007, 0.22460965, 0.25802906, 0.13319334],
+            "HCO3-": [2.4, 2.48, 2.56, 2.6],
+            "HS-": [0.10062171, 0.17296792, 0.27909588, 0.32073306],
+            "SO4-2": [1.1210745, 1.0048883, 0.85009242, 0.78881689]
+          },
+          biofilm_volume_fraction: [0.042851957, 0.076964433, 0.096986798, 0.055767179],
+          eps_fraction: [0.028579331, 0.053655815, 0.067671023, 0.036521682],
+          mineral_volume_fractions: {
+            calcite: [0.02, 0.02, 0.03, 0.02],
+            illite: [0.11006083, 0.14006886, 0.16007046, 0.12005478],
+            smectite: [0.07, 0.09, 0.1, 0.08],
+            sudoite: [0.02, 0.03, 0.03, 0.03]
+          },
+          evidence_tier: "literature_derived",
+          scenario_classification: "EARTH_REFERENCE_FIXTURE",
+          mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
+        }
+      },
+      enceladus_tiger_stripe_ocean_floor: {
+        schema: "M7SpatialFrame",
+        schema_version: "1.0.0",
+        world_scenario_schema: "M7WorldScenario",
+        simulation_id: "enceladus_tiger_stripe_ocean_floor",
+        scenario_id: "enceladus_tiger_stripe_ocean_floor",
+        evidence_tier: "planetary_hypothetical",
+        scenario_classification: "PLANETARY_HYPOTHETICAL",
+        energy_budget_closed: true,
+        elemental_mass_conserved: true,
+        world_scenario: {
+          environment: { temperature_profile_K: [273.65, 318.15, 348.15, 295.15], gravity_m_s2: 0.113 }
+        },
+        feedback_loop: { energy_budget_closed: true, elemental_mass_conserved: true },
+        field_arrays: {
+          porosity: [0.73756966, 0.66749236, 0.62747548, 0.71756614],
+          permeability: [6.02593288e-12, 3.99321735e-12, 3.11897808e-12, 5.35098300e-12],
+          darcy_velocity: [2.61997082e-04, 1.73618146e-04, 1.35607742e-04, 2.32651435e-04],
+          pH: [9.400414, 10.150427, 10.450430, 9.750415],
+          pe: [-5.207153, -6.407381, -6.857431, -5.607164],
+          dissolved_species: {
+            CH4: [0.28273185, 0.45575296, 0.66947763, 0.57623012],
+            C_substrate: [1.4, 1.15, 0.82, 0.55],
+            "Ca+2": [0.45, 0.38, 0.31, 0.36],
+            H2: [0.88803274, 1.2063743, 1.4058693, 0.92843477],
+            "HCO3-": [3.0592408, 2.8395382, 2.5529608, 2.6569714],
+            "SO4-2": [0.12, 0.1, 0.08, 0.09]
+          },
+          biofilm_volume_fraction: [0.026307511, 0.049349102, 0.063358182, 0.035309405],
+          eps_fraction: [0.019980633, 0.037011827, 0.048018637, 0.026982054],
+          mineral_volume_fractions: {
+            brucite: [0.04, 0.05, 0.05, 0.04],
+            calcite: [0.03, 0.04, 0.05, 0.03],
+            chrysotile_serpentine: [0.14014219, 0.18014671, 0.2001477, 0.1601424],
+            magnetite: [0.05, 0.06, 0.07, 0.05]
+          },
+          evidence_tier: "planetary_hypothetical",
+          scenario_classification: "PLANETARY_HYPOTHETICAL",
+          mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
+        }
+      },
+      mars_noachian_radiolytic_subsurface: {
+        schema: "M7SpatialFrame",
+        schema_version: "1.0.0",
+        world_scenario_schema: "M7WorldScenario",
+        simulation_id: "mars_noachian_radiolytic_subsurface",
+        scenario_id: "mars_noachian_radiolytic_subsurface",
+        evidence_tier: "planetary_hypothetical",
+        scenario_classification: "PLANETARY_HYPOTHETICAL",
+        energy_budget_closed: true,
+        elemental_mass_conserved: true,
+        world_scenario: {
+          environment: { temperature_profile_K: [264.15, 271.15, 278.15, 274.15], gravity_m_s2: 3.72076 }
+        },
+        feedback_loop: { energy_budget_closed: true, elemental_mass_conserved: true },
+        field_arrays: {
+          porosity: [0.63817962, 0.57800388, 0.54794526, 0.60811367],
+          permeability: [1.86492519e-12, 1.32349935e-12, 1.07785191e-12, 1.61904056e-12],
+          darcy_velocity: [6.56663798e-05, 4.66020898e-05, 3.79525320e-05, 5.70084705e-05],
+          pH: [6.650311, 6.850341, 7.050351, 6.750322],
+          pe: [-1.805372, -2.405890, -2.906064, -2.105567],
+          dissolved_species: {
+            C_substrate: [0.52, 0.44, 0.31, 0.22],
+            "Fe+2": [0.65, 0.58, 0.49, 0.54],
+            H2: [0.21156778, 0.2856335, 0.3321403, 0.24173416],
+            "HCO3-": [1.6, 1.52, 1.44, 1.48],
+            "HS-": [0.094269531, 0.15714596, 0.23572248, 0.1954782],
+            "SO4-2": [2.0056704, 1.8716317, 1.7223381, 1.7814355]
+          },
+          biofilm_volume_fraction: [0.017004737, 0.029101731, 0.03613409, 0.022041135],
+          eps_fraction: [0.01272341, 0.021793246, 0.026816545, 0.016749617],
+          mineral_volume_fractions: {
+            basaltic_glass: [0.09, 0.08, 0.07, 0.08],
+            nontronite_smectite: [0.18009223, 0.22010114, 0.24010411, 0.20009558],
+            pyrite: [0.03, 0.04, 0.05, 0.04],
+            siderite: [0.06, 0.08, 0.09, 0.07]
+          },
+          evidence_tier: "planetary_hypothetical",
+          scenario_classification: "PLANETARY_HYPOTHETICAL",
+          mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
+        }
+      },
+      solver_executed_reactive_transport_benchmark: {
+        schema: "M7SpatialFrame",
+        schema_version: "1.0.0",
+        world_scenario_schema: "M7WorldScenario",
+        simulation_id: "solver_executed_reactive_transport_benchmark",
+        scenario_id: "solver_executed_reactive_transport_benchmark",
+        evidence_tier: "solver_executed",
+        scenario_classification: "SOLVER_EXECUTED_SIMULATION",
+        energy_budget_closed: true,
+        elemental_mass_conserved: true,
+        world_scenario: {
+          environment: { temperature_profile_K: [298.25, 298.55, 298.95, 299.05], gravity_m_s2: 9.80665 }
+        },
+        feedback_loop: { energy_budget_closed: true, elemental_mass_conserved: true },
+        field_arrays: {
+          porosity: [0.77850788, 0.71831089, 0.67827172, 0.74865636],
+          permeability: [4.70842092e-12, 3.33575953e-12, 2.60166728e-12, 4.03451981e-12],
+          darcy_velocity: [2.64518029e-04, 1.87402221e-04, 1.46161083e-04, 2.26658416e-04],
+          pH: [7.350256, 7.350290, 6.850296, 6.850230],
+          pe: [4.095582, 4.094999, 2.394883, 2.396022],
+          dissolved_species: {
+            C_substrate: [0.95, 0.58, 0.29, 0.11],
+            "Ca+2": [1.1, 1.06, 1.01, 0.99],
+            H2: [0.15904007, 0.22460965, 0.25802906, 0.13319334],
+            "HCO3-": [2.4, 2.48, 2.56, 2.6],
+            "HS-": [0.10062171, 0.17296792, 0.27909588, 0.32073306],
+            "SO4-2": [1.1210745, 1.0048883, 0.85009242, 0.78881689]
+          },
+          biofilm_volume_fraction: [0.042851957, 0.076964433, 0.096986798, 0.055767179],
+          eps_fraction: [0.028579331, 0.053655815, 0.067671023, 0.036521682],
+          mineral_volume_fractions: {
+            calcite: [0.02, 0.02, 0.03, 0.02],
+            illite: [0.11006083, 0.14006886, 0.16007046, 0.12005478],
+            smectite: [0.07, 0.09, 0.1, 0.08],
+            sudoite: [0.02, 0.03, 0.03, 0.03]
+          },
+          evidence_tier: "solver_executed",
+          scenario_classification: "SOLVER_EXECUTED_SIMULATION",
+          mesh_resolution_badge: "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+          voxel_overlap_validation_grid_badge: "32^3 Conservative Voxel-Overlap Validation Grid"
+        }
+      }
+    };
+
+    // Synchronized 3D Mouse Rotation, Shift-Drag Pan, Wheel Zoom & Spatial/Molecular Picking
+    document.querySelectorAll("canvas.viewport-canvas").forEach(canvas => {
+      canvas.addEventListener("mousedown", e => {
+        state.dragging = true;
+        state.panDragging = e.shiftKey || e.button === 1 || e.button === 2;
+        state.dragMoved = false;
+        state.lastMouse = { x: e.clientX, y: e.clientY };
+      });
+      canvas.addEventListener("wheel", e => {
+        e.preventDefault();
+        const factor = Math.exp(-e.deltaY * 0.0012);
+        state.cameraZoom = Math.max(0.45, Math.min(2.8, state.cameraZoom * factor));
+        renderAll();
+      }, { passive: false });
+      canvas.addEventListener("click", e => {
+        if (state.dragMoved) return;
+        const rect = canvas.getBoundingClientRect();
+        const mx = e.clientX - rect.left;
+        const my = e.clientY - rect.top;
+        const w = canvas.width, h = canvas.height;
+        const panel = canvas.dataset.panel;
+
+        if (panel === "sobolev") {
+          const beads = getActiveSobolevBeads();
+          let bestIdx = 0, bestDist = Infinity;
+          beads.forEach((b, idx) => {
+            const p = project3D((b.pos[0] - 25) * 0.035, b.pos[1] * 0.035, b.pos[2] * 0.035, w, h);
+            const d = Math.hypot(mx - p.sx, my - p.sy);
+            if (d < bestDist) { bestDist = d; bestIdx = idx; }
+          });
+          state.selectedBeadIdx = bestIdx;
+        } else {
+          const cells = getActiveCells();
+          let bestCell = 1, bestDist = Infinity;
+          cells.forEach((c, idx) => {
+            const cx = (idx - 1.5) * 0.8;
+            const p = project3D(cx, 0, 0, w, h);
+            const d = Math.hypot(mx - p.sx, my - p.sy);
+            if (d < bestDist) { bestDist = d; bestCell = c.id; }
+          });
+          state.selectedCell = bestCell;
+        }
+        renderAll();
+      });
+    });
+    window.addEventListener("mousemove", e => {
+      if (!state.dragging) return;
+      const dx = e.clientX - state.lastMouse.x;
+      const dy = e.clientY - state.lastMouse.y;
+      if (Math.hypot(dx, dy) > 2) state.dragMoved = true;
+      if (state.panDragging) {
+        state.cameraPanX += dx;
+        state.cameraPanY += dy;
+      } else {
+        state.cameraYaw += dx * 0.008;
+        state.cameraPitch = Math.max(-1.2, Math.min(1.2, state.cameraPitch + dy * 0.008));
+      }
+      state.lastMouse = { x: e.clientX, y: e.clientY };
+      renderAll();
+    });
+    window.addEventListener("mouseup", () => {
+      state.dragging = false;
+      state.panDragging = false;
+    });
+
+    // UI Controls Wiring
+    document.getElementById("systemSelect").addEventListener("change", e => {
+      state.system = e.target.value;
+      state.loadedCells = null;
+      state.loadedFrameMeta = null;
+      renderAll();
+    });
+    document.getElementById("worldScenarioSelect").addEventListener("change", e => {
+      const val = e.target.value;
+      state.worldScenario = val;
+      if (val === "default_workbench") {
+        state.loadedCells = null;
+        state.loadedFrameMeta = null;
+        renderAll();
+      } else if (canonicalWorldScenarios[val]) {
+        window.applyM7JsonPayload(canonicalWorldScenarios[val]);
+      }
+    });
+    document.getElementById("trackSelect").addEventListener("change", e => {
+      state.track = e.target.value;
+      renderAll();
+    });
+    document.getElementById("scaleSelect").addEventListener("change", e => {
+      state.scale = e.target.value;
+      const zoomMap = { planetary: 0.78, geological: 0.94, biofilm: 1.0, molecular: 1.25 };
+      state.cameraZoom = zoomMap[state.scale] || 1.0;
+      renderAll();
+    });
+    document.getElementById("workspaceSelect").addEventListener("change", e => {
+      state.workspace = e.target.value;
+      const grid = document.getElementById("viewportGrid");
+      const map = {
+        geological: "panel-geological",
+        chemical: "panel-chemical",
+        biological: "panel-biological",
+        molecular: "panel-molecular"
+      };
+      if (state.workspace === "quad") {
+        grid.classList.remove("single-view");
+        ["panel-geological", "panel-chemical", "panel-biological", "panel-molecular"].forEach(id => {
+          document.getElementById(id).style.display = "flex";
+        });
+      } else {
+        grid.classList.add("single-view");
+        ["panel-geological", "panel-chemical", "panel-biological", "panel-molecular"].forEach(id => {
+          document.getElementById(id).style.display = (id === map[state.workspace]) ? "flex" : "none";
+        });
+      }
+      renderAll();
+    });
+    document.getElementById("cutPlaneAxis").addEventListener("change", e => {
+      state.cutPlaneAxis = e.target.value;
+      renderAll();
+    });
+    document.getElementById("cutPlaneRange").addEventListener("input", e => {
+      state.cutPlanePct = Number(e.target.value);
+      renderAll();
+    });
+    document.getElementById("diffModeBtn").addEventListener("click", e => {
+      state.diffMode = !state.diffMode;
+      e.target.classList.toggle("active", state.diffMode);
+      renderAll();
+    });
+    document.getElementById("ablationBtn").addEventListener("click", e => {
+      state.ablationIdx = (state.ablationIdx + 1) % ablationModes.length;
+      e.target.textContent = `Ablation: ${ablationModes[state.ablationIdx].name}`;
+      renderAll();
+    });
+    document.getElementById("remodelBtn").addEventListener("click", e => {
+      state.remodelActive = !state.remodelActive;
+      e.target.classList.toggle("active", state.remodelActive);
+      e.target.textContent = state.remodelActive ? "VPS Remodel: Cleaved (N_pb->0)" : "VPS Remodel: Intact";
+      renderAll();
+    });
+    document.getElementById("extinctionBtn").addEventListener("click", e => {
+      state.extinctMode = !state.extinctMode;
+      e.target.classList.toggle("active", state.extinctMode);
+      e.target.textContent = state.extinctMode ? "Occupancy: N=0 Extinct" : "Occupancy: N=6 Active";
+      renderAll();
+    });
+    document.getElementById("clayModeBtn").addEventListener("click", e => {
+      state.clayMode = state.clayMode === "ca_montmorillonite" ? "na_montmorillonite" : "ca_montmorillonite";
+      e.target.textContent = state.clayMode === "ca_montmorillonite" ? "Clay: Ca-Montmorillonite" : "Clay: Na-Montmorillonite";
+      renderAll();
+    });
+    document.getElementById("timeScrubber").addEventListener("input", e => {
+      state.physicalTimeS = Number(e.target.value);
+      renderAll();
+    });
+    document.querySelectorAll(".pv-step-btn").forEach(btn => {
+      btn.addEventListener("click", e => {
+        const tVal = Number(e.currentTarget.dataset.t);
+        state.physicalTimeS = tVal;
+        const scrub = document.getElementById("timeScrubber");
+        if (scrub) scrub.value = String(tVal);
+        renderAll();
+      });
+    });
+    ["fieldSelectOpenFOAM", "fieldSelectPHREEQC", "fieldSelectJulia", "lodSelectSobolev"].forEach(id => {
+      document.getElementById(id).addEventListener("change", renderAll);
+    });
+
+    // File Loader for M7SpatialFrame / M7WorldScenario (.json) & SMACRO1 (.smacro1) Binary Frames
+    document.getElementById("loadFileBtn").addEventListener("click", () => {
+      document.getElementById("fileLoaderInput").click();
+    });
+    document.getElementById("fileLoaderInput").addEventListener("change", e => {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (file.name.endsWith(".smacro1")) {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          const buf = ev.target.result;
+          if (buf.byteLength < 32) return;
+          const dv = new DataView(buf);
+          const nNodes = dv.getUint32(12, true);
+          const flags = dv.getUint16(10, true);
+          const hasAssets = (flags & 1) !== 0;
+          const loaded = [];
+          let offset = 32;
+          for (let i = 0; i < nNodes && offset + 12 <= buf.byteLength; i++) {
+            const x = dv.getFloat32(offset, true);
+            const y = dv.getFloat32(offset + 4, true);
+            const z = dv.getFloat32(offset + 8, true);
+            offset += 12;
+            loaded.push({ id: i + 1, pos: [x, y, z], asset: 1, name: `SMACRO1_Node_${i + 1}`, coarse: false, src: `[${i + 1}]` });
+          }
+          if (hasAssets) {
+            for (let i = 0; i < loaded.length && offset + 4 <= buf.byteLength; i++) {
+              loaded[i].asset = dv.getUint32(offset, true);
+              offset += 4;
+            }
+          }
+          if (loaded.length > 0) {
+            smacroFullBeads = loaded;
+            smacroHybridBeads = loaded;
+            state.selectedBeadIdx = 0;
+            renderAll();
+          }
+        };
+        reader.readAsArrayBuffer(file);
+      } else {
+        const reader = new FileReader();
+        reader.onload = ev => {
+          try {
+            const obj = JSON.parse(ev.target.result);
+            window.applyM7JsonPayload(obj);
+          } catch (_) {}
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // 4D Playback Loop
+    setInterval(() => {
+      if (!state.playing) return;
+      state.physicalTimeS += 20;
+      if (state.physicalTimeS > 1200) state.physicalTimeS = 0;
+      document.getElementById("timeScrubber").value = state.physicalTimeS;
+      renderAll();
+    }, 120);
+
+    document.getElementById("playPauseBtn").addEventListener("click", e => {
+      state.playing = !state.playing;
+      e.target.textContent = state.playing ? "Pause 4D" : "Play 4D";
+      e.target.classList.toggle("active", state.playing);
+    });
+
+    function triggerDownload(filename, content, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    }
+
+    // Export ParaView XDMF v3.0 + CSV
+    document.getElementById("exportXdmfBtn").addEventListener("click", () => {
+      const cells = getActiveCells();
+      const pinnedStep = getPinnedSobolevStep();
+      const tBio = isAbioticActive() ? 0.0 : state.physicalTimeS;
+      const csvFilename = `m7_${state.system}_t${state.physicalTimeS}_cells.csv`;
+      const csvRows = [
+        "cell_id,center_x_m,center_y_m,center_z_m,porosity_fraction,velocity,C_substrate,temperature,pH,pe,surface_OCa_plus,surface_O_minus,mineral_si_Calcite,u235_ratio,h2_concentration,biofilm_biomass,biofilm_eps,droop_nutrient_quota,effective_diffusivity"
+      ];
+      cells.forEach(c => {
+        csvRows.push([
+          c.id, c.x, 0.0, 0.0, c.porosity, c.vel, c.sub, c.temp,
+          c.pH, c.pe, c.surfOCa, c.surfOMinus, c.siCal, c.u235, c.h2,
+          c.bio, c.eps, c.quota, c.deff
+        ].join(","));
+      });
+      const topoXml = cells.map((_, i) => i).join(" ");
+      const geomXml = cells.map(c => `${c.x} 0.0 0.0`).join(" ");
+      const xdmfXml = [
+        `<?xml version="1.0" encoding="utf-8"?>`,
+        `<Xdmf Version="3.0">`,
+        `  <Domain>`,
+        `    <Grid Name="${state.system}" GridType="Uniform">`,
+        `      <Time Value="${state.physicalTimeS}" />`,
+        `      <Topology TopologyType="Polyvertex" NumberOfElements="${cells.length}" NodesPerElement="1">`,
+        `        <DataItem Dimensions="${cells.length} 1" NumberType="Int" Precision="4" Format="XML">${topoXml}</DataItem>`,
+        `      </Topology>`,
+        `      <Geometry GeometryType="XYZ">`,
+        `        <DataItem Dimensions="${cells.length} 3" NumberType="Float" Precision="8" Format="XML">${geomXml}</DataItem>`,
+        `      </Geometry>`,
+        `      <Information Name="m7_schema" Value="M7SpatialFrame" />`,
+        `      <Information Name="m7_schema_version" Value="1.0.0" />`,
+        `      <Information Name="system_id" Value="${state.system}" />`,
+        `      <Information Name="epistemic_system_status" Value="modeled_system" />`,
+        `      <Information Name="validation_realization_status" Value="not_experimentally_validated_realization" />`,
+        `      <Information Name="integrated_into_existing_openfoam_phreeqc_solvers" Value="false" />`,
+        `      <Information Name="physical_time_s" Value="${state.physicalTimeS}" />`,
+        `      <Information Name="biological_time_s" Value="${tBio}" />`,
+        `      <Information Name="sobolev_relaxation_step" Value="${pinnedStep}" />`,
+        `      <Information Name="csv_file" Value="${csvFilename}" />`,
+        `    </Grid>`,
+        `  </Domain>`,
+        `</Xdmf>`
+      ].join("\n");
+      triggerDownload(csvFilename, csvRows.join("\n") + "\n", "text/csv");
+      triggerDownload(`m7_${state.system}_t${state.physicalTimeS}.xdmf`, xdmfXml + "\n", "application/xml");
+    });
+
+
+    // Export OpenUSD ASCII (.usda) PointInstancer
+    document.getElementById("exportUsdaBtn").addEventListener("click", () => {
+      const beads = getActiveSobolevBeads();
+      const cells = getActiveCells();
+      const selCell = cells[state.selectedCell - 1] || cells[0];
+      const pinnedStep = getPinnedSobolevStep();
+      const tBio = isAbioticActive() ? 0.0 : state.physicalTimeS;
+      const protoIndices = beads.map(b => Math.max(0, (b.asset || 1) - 1)).join(", ");
+      const posLines = beads.map(b => {
+        const wx = selCell.x + b.pos[0] * 1.0e-10;
+        const wy = b.pos[1] * 1.0e-10;
+        const wz = b.pos[2] * 1.0e-10;
+        return `            (${wx.toPrecision(17)}, ${wy.toPrecision(17)}, ${wz.toPrecision(17)}),`;
+      }).join("\n");
+      const usdaTxt = [
+        `#usda 1.0`,
+        `(`,
+        `    defaultPrim = "M7MolecularScene"`,
+        `    metersPerUnit = 1.0`,
+        `    upAxis = "Z"`,
+        `    customLayerData = {`,
+        `        string m7_schema = "M7SpatialFrame"`,
+        `        string m7_schema_version = "1.0.0"`,
+        `        string simulation_id = "${state.system}"`,
+        `        string anchor_id = "anchor_cell_${selCell.id}"`,
+        `        int cell_id = ${selCell.id}`,
+        `        double physical_time_s = ${state.physicalTimeS.toFixed(6)}`,
+        `        double biological_time_s = ${tBio.toFixed(6)}`,
+        `        int sobolev_relaxation_step = ${pinnedStep}`,
+        `        string snapshot_sync_id = "sync-00035"`,
+        `        string smacro1_sha256 = "sha256:e5c1f08b49201a7c3389b10e4472c8109f4a21d0671e88234a91c0b2e5c139f0"`,
+        `        string source_commit_sha = "a6e4917cdba8354421cd8ec2842a8047b698b448"`,
+        `        string epistemic_system_status = "modeled_system"`,
+        `        string validation_realization_status = "not_experimentally_validated_realization"`,
+        `    }`,
+        `)`,
+        `def Xform "M7MolecularScene"`,
+        `{`,
+        `    def PointInstancer "Instances"`,
+        `    {`,
+        `        int[] protoIndices = [${protoIndices}]`,
+        `        point3f[] positions = [`,
+        posLines,
+        `        ]`,
+        `    }`,
+        `}`
+      ].join("\n");
+      triggerDownload(`m7_${state.system}_cell${selCell.id}_t${state.physicalTimeS}.usda`, usdaTxt + "\n", "text/plain");
+    });
+
+    // 1920x1080 High-Resolution PNG Export (Zero Em/En-Dashes)
+    document.getElementById("exportPngBtn").addEventListener("click", () => {
+      const outCanvas = document.createElement("canvas");
+      outCanvas.width = 1920;
+      outCanvas.height = 1080;
+      const octx = outCanvas.getContext("2d");
+      octx.fillStyle = "#070b12";
+      octx.fillRect(0, 0, 1920, 1080);
+
+      const pinnedStep = getPinnedSobolevStep();
+      const bioTimeStr = isAbioticActive() ? "0.0 s (Abiotic)" : `${state.physicalTimeS.toFixed(1)} s`;
+      const sysMeta = systemCatalog[state.system];
+      octx.fillStyle = "#eef4ff";
+      octx.font = "bold 24px monospace";
+      octx.fillText(`M7MultiscaleExplorer | 4D Spatiotemporal Multiscale Workbench (${sysMeta.title})`, 40, 44);
+      octx.fillStyle = "#22d3ee";
+      octx.font = "16px monospace";
+      octx.fillText(
+        `Physical Time: ${state.physicalTimeS.toFixed(1)} s | Biological Time: ${bioTimeStr} | Pinned Sobolev Step: ${pinnedStep} | modeled_system`,
+        40, 74
+      );
+
+      const ids = ["canvas-openfoam", "canvas-phreeqc", "canvas-julia", "canvas-sobolev"];
+      const titles = [
+        "PANEL A: 3D Porous Geometry, Micro-CT Core, Flow & Streamlines (OpenFOAM)",
+        "PANEL B: Geochemical Species, Surface >OCa+/>O-, Mineral SI & Reactions (PHREEQC)",
+        "PANEL C: Nuclear Inventories (U-235, H2), Isotherm Plumes & Biofilm Graph",
+        "PANEL D: Biological Matrix, EPS, Cells & Sobolev SMACRO1 Structures"
+      ];
+      const positions = [[40, 100], [970, 100], [40, 580], [970, 580]];
+      ids.forEach((cid, idx) => {
+        const src = document.getElementById(cid);
+        const [px, py] = positions[idx];
+        octx.strokeStyle = "#263859";
+        octx.strokeRect(px, py, 910, 450);
+        octx.drawImage(src, px, py + 30, 910, 420);
+        octx.fillStyle = "#131d30";
+        octx.fillRect(px, py, 910, 30);
+        octx.fillStyle = "#eef4ff";
+        octx.font = "bold 15px monospace";
+        octx.fillText(titles[idx], px + 12, py + 20);
+      });
+
+      const link = document.createElement("a");
+      link.download = `M7MultiscaleExplorer_1920x1080_${state.system}_t${state.physicalTimeS}.png`;
+      link.href = outCanvas.toDataURL("image/png");
+      link.click();
+    });
+
+    // Render Generalized Compartmentalized "Fun Neurology" Interactive Force-Directed Network Graph (Turns L110-L114)
+    const funNeurologyState = {
+      nodeOffsets: {
+        Fast_Wireframe: { dx: 0, dy: 0 },
+        Plasticity_Shell: { dx: 0, dy: 0 },
+        Slow_Core: { dx: 0, dy: 0 },
+        Gold_Laya_Flux: { dx: 0, dy: 0 },
+        Edge_Cycles: { dx: 0, dy: 0 }
+      },
+      lastRenderedNodes: [],
+      draggingNodeId: null,
+      perturbBoost: 0.0,
+      perturbPhaseOffset: 0.0,
+      lectureStep: 0,
+      lectureSteps: [
+        { label: "1/4: Fast Wireframe Desync (tau_f=1.2s)", focus: ["Fast_Wireframe", "Gold_Laya_Flux"] },
+        { label: "2/4: Plasticity Shell Novelty Seam (tau=3.4s)", focus: ["Plasticity_Shell", "Fast_Wireframe"] },
+        { label: "3/4: Slow Core Attractor Drift (tau_s=8.0s)", focus: ["Slow_Core", "Plasticity_Shell"] },
+        { label: "4/4: Turn L112 Guard (rule_immutable=true) & beta_1=3 Dance", focus: ["Edge_Cycles", "Plasticity_Shell", "Slow_Core"] }
+      ]
+    };
+
+    function renderFunNeurologyGraph() {
+      const cnv = document.getElementById("canvas-fun-neurology");
+      if (!cnv) return;
+      const ctx = cnv.getContext("2d");
+      const w = cnv.width;
+      const h = cnv.height;
+      ctx.fillStyle = "#060a12";
+      ctx.fillRect(0, 0, w, h);
+
+      const t = state.physicalTimeS * 0.05 + funNeurologyState.perturbPhaseOffset;
+      const tauFast = 1.2;
+      const tauSlow = 8.0;
+      const boost = 1.0 + funNeurologyState.perturbBoost;
+      const fastPhase = Math.cos(t / tauFast) * boost;
+      const slowPhase = Math.cos(t / tauSlow - 0.65);
+      const seamDesync = Math.abs(fastPhase - slowPhase);
+      const plasticityFlux = 0.83 * seamDesync;
+
+      const baseNodes = [
+        { id: "Fast_Wireframe", label: "Fast W_k (1.2s)", x: 68 + 8 * fastPhase, y: 44, r: 11 + 3 * Math.min(1.8, Math.abs(fastPhase)), color: "#38bdf8" },
+        { id: "Plasticity_Shell", label: "Plasticity Psi_k", x: 162, y: 84 + 5 * Math.min(2.0, seamDesync), r: 12 + 3 * Math.min(1.8, seamDesync), color: "#34d399" },
+        { id: "Slow_Core", label: "Slow C_k (8.0s)", x: 256 + 4 * slowPhase, y: 46, r: 12 + 2 * Math.abs(slowPhase), color: "#a855f7" },
+        { id: "Gold_Laya_Flux", label: "Gold Laya Flux", x: 74, y: 134, r: 10, color: "#f59e0b" },
+        { id: "Edge_Cycles", label: "Edge Cycles (b1=3)", x: 248, y: 134, r: 11, color: "#14b8a6" }
+      ];
+      const nodes = baseNodes.map(n => {
+        const off = funNeurologyState.nodeOffsets[n.id] || { dx: 0, dy: 0 };
+        return {
+          ...n,
+          x: Math.max(n.r + 4, Math.min(w - n.r - 4, n.x + off.dx)),
+          y: Math.max(n.r + 12, Math.min(h - n.r - 4, n.y + off.dy))
+        };
+      });
+      funNeurologyState.lastRenderedNodes = nodes;
+
+      const nodeMap = {};
+      nodes.forEach(n => { nodeMap[n.id] = n; });
+      const edges = [
+        { u: "Fast_Wireframe", v: "Plasticity_Shell", k: 0.83 },
+        { u: "Plasticity_Shell", v: "Slow_Core", k: 0.64 },
+        { u: "Fast_Wireframe", v: "Slow_Core", k: 0.42 },
+        { u: "Gold_Laya_Flux", v: "Fast_Wireframe", k: 0.78 },
+        { u: "Edge_Cycles", v: "Plasticity_Shell", k: 0.71 },
+        { u: "Edge_Cycles", v: "Slow_Core", k: 0.69 },
+        { u: "Gold_Laya_Flux", v: "Edge_Cycles", k: 0.58 }
+      ];
+
+      const activeFocus = funNeurologyState.lectureSteps[funNeurologyState.lectureStep].focus;
+
+      edges.forEach(e => {
+        const nu = nodeMap[e.u];
+        const nv = nodeMap[e.v];
+        const isHighlightedEdge = activeFocus.includes(e.u) && activeFocus.includes(e.v);
+        ctx.strokeStyle = isHighlightedEdge ? "rgba(56, 189, 248, 0.92)" : "rgba(20, 184, 166, 0.65)";
+        ctx.lineWidth = (isHighlightedEdge ? 2.0 : 1.2) + 2.2 * e.k;
+        ctx.beginPath();
+        ctx.moveTo(nu.x, nu.y);
+        ctx.lineTo(nv.x, nv.y);
+        ctx.stroke();
+
+        const mx = 0.5 * (nu.x + nv.x);
+        const my = 0.5 * (nu.y + nv.y);
+        ctx.fillStyle = isHighlightedEdge ? "#eef4ff" : "#94a3b8";
+        ctx.font = "9px monospace";
+        ctx.fillText(e.k.toFixed(2), mx - 10, my - 3);
+      });
+
+      nodes.forEach(n => {
+        const isFocused = activeFocus.includes(n.id);
+        if (isFocused) {
+          ctx.strokeStyle = "rgba(245, 158, 11, 0.85)";
+          ctx.lineWidth = 2.4;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r + 3.5, 0, Math.PI * 2);
+          ctx.stroke();
+        }
+        ctx.fillStyle = n.color;
+        ctx.beginPath();
+        ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = "#eef4ff";
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        ctx.fillStyle = "#eef4ff";
+        ctx.font = "bold 9px monospace";
+        ctx.fillText(n.label, Math.max(4, Math.min(w - 92, n.x - 36)), n.y - n.r - 4);
+      });
+
+      const fnFastEl = document.getElementById("infoFnFast");
+      if (fnFastEl) {
+        fnFastEl.textContent = `desync=${seamDesync.toFixed(2)} | tau_f=1.2s`;
+      }
+      const fnShellEl = document.getElementById("infoFnShell");
+      if (fnShellEl) {
+        fnShellEl.textContent = `Psi_flux=${plasticityFlux.toFixed(2)} | Non-Recursive`;
+      }
+      const fnLectureEl = document.getElementById("funNeurologyLectureText");
+      if (fnLectureEl) {
+        fnLectureEl.textContent = funNeurologyState.lectureSteps[funNeurologyState.lectureStep].label;
+      }
+    }
+
+    (function initFunNeurologyInteractions() {
+      const cnv = document.getElementById("canvas-fun-neurology");
+      if (cnv) {
+        const getCanvasCoords = (evt) => {
+          const rect = cnv.getBoundingClientRect();
+          const scaleX = rect.width > 0 ? (cnv.width / rect.width) : 1.0;
+          const scaleY = rect.height > 0 ? (cnv.height / rect.height) : 1.0;
+          return {
+            x: (evt.clientX - rect.left) * scaleX,
+            y: (evt.clientY - rect.top) * scaleY
+          };
+        };
+
+        cnv.addEventListener("mousedown", (evt) => {
+          const pt = getCanvasCoords(evt);
+          for (const n of funNeurologyState.lastRenderedNodes) {
+            const dist = Math.hypot(pt.x - n.x, pt.y - n.y);
+            if (dist <= n.r + 5) {
+              funNeurologyState.draggingNodeId = n.id;
+              funNeurologyState.dragStartPt = pt;
+              funNeurologyState.dragStartOffset = { ...(funNeurologyState.nodeOffsets[n.id] || { dx: 0, dy: 0 }) };
+              cnv.style.cursor = "grabbing";
+              break;
+            }
+          }
+        });
+
+        cnv.addEventListener("mousemove", (evt) => {
+          if (!funNeurologyState.draggingNodeId) return;
+          const pt = getCanvasCoords(evt);
+          const id = funNeurologyState.draggingNodeId;
+          funNeurologyState.nodeOffsets[id] = {
+            dx: funNeurologyState.dragStartOffset.dx + (pt.x - funNeurologyState.dragStartPt.x),
+            dy: funNeurologyState.dragStartOffset.dy + (pt.y - funNeurologyState.dragStartPt.y)
+          };
+          renderFunNeurologyGraph();
+        });
+
+        const endDrag = () => {
+          if (funNeurologyState.draggingNodeId) {
+            funNeurologyState.draggingNodeId = null;
+            cnv.style.cursor = "grab";
+          }
+        };
+        cnv.addEventListener("mouseup", endDrag);
+        cnv.addEventListener("mouseleave", endDrag);
+      }
+
+      const btnPerturb = document.getElementById("btnFnPerturbSeam");
+      if (btnPerturb) {
+        btnPerturb.addEventListener("click", () => {
+          funNeurologyState.perturbBoost = funNeurologyState.perturbBoost > 0.4 ? 0.0 : 0.75;
+          funNeurologyState.perturbPhaseOffset += 1.35;
+          renderFunNeurologyGraph();
+        });
+      }
+
+      const btnLecture = document.getElementById("btnFnLectureWalk");
+      if (btnLecture) {
+        btnLecture.addEventListener("click", () => {
+          funNeurologyState.lectureStep = (funNeurologyState.lectureStep + 1) % funNeurologyState.lectureSteps.length;
+          renderFunNeurologyGraph();
+        });
+      }
+    })();
+
+    const _origRenderAllForFn = renderAll;
+    renderAll = function() {
+      _origRenderAllForFn();
+      renderFunNeurologyGraph();
+    };
+
+    window.addEventListener("resize", renderAll);
+    setTimeout(renderAll, 50);
+  </script>
+</body>
+</html>

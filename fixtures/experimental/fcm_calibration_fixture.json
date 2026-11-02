@@ -1,0 +1,7 @@
+{
+  "fixture_id": "fcm_calibration_fixture_v1",
+  "sample_origin": "detached_biofilm",
+  "spatial_sensor_disclosure": "compartment_integrated_non_in_situ",
+  "detection_efficiency": 0.85,
+  "gate_names": ["live_intact", "membrane_compromised", "dead_permeabilized"]
+}

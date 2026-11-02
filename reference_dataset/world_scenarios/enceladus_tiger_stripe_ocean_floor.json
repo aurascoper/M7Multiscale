@@ -1,0 +1,246 @@
+{
+  "schema": "M7SpatialFrame",
+  "schema_version": "1.0.0",
+  "world_scenario_schema": "M7WorldScenario",
+  "simulation_id": "enceladus_tiger_stripe_ocean_floor",
+  "world_name": "Enceladus: South Polar Terrain Tiger-Stripe Serpentinizing Hydrothermal Vent",
+  "scenario_classification": "PLANETARY_HYPOTHETICAL",
+  "evidence_tier": "planetary_hypothetical",
+  "mesh_resolution_badge": "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+  "voxel_validation_grid_badge": "32^3 Conservative Voxel-Overlap Validation Grid",
+  "energy_budget_closed": true,
+  "elemental_mass_conserved": true,
+  "thermodynamically_sustainable": true,
+  "max_elemental_mass_rel_error": 1.372401e-16,
+  "max_energy_balance_rel_error": 1.652118e-16,
+  "frame_index": 5,
+  "time": { "value": 1500.0, "unit": "s" },
+  "clocks": {
+    "physical_time_s": 1500.0,
+    "biological_time_s": 1500.0,
+    "sobolev_relaxation_step": 400,
+    "snapshot_sync_id": "sync-enceladus_tiger_stripe_ocean_floor",
+    "interpolation_valid": true,
+    "parent_snapshot_id": null
+  },
+  "coordinate_frame": {
+    "name": "cartesian_right_handed",
+    "unit": "m",
+    "origin": [0.0, 0.0, 0.0]
+  },
+  "mesh": {
+    "topology": "anisotropic_hexahedral",
+    "geometry_asset": "mesh_enceladus_tiger_stripe_ocean_floor",
+    "geometry_sha256": "sha256:46cb10b2d42c5c724e0af2dfedda47fbaca1f3b5d6e5435a14692a14ce1c8dc4",
+    "cell_count": 4,
+    "cell_ordering": "explicit_id_ascending",
+    "explicit_cell_ids": [1, 2, 3, 4],
+    "porosity_fraction": [0.73756966, 0.66749236, 0.62747548, 0.71756614],
+    "mesh_resolution_badge": "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+    "voxel_validation_grid_badge": "32^3 Conservative Voxel-Overlap Validation Grid"
+  },
+  "world_scenario": {
+    "scenario_id": "enceladus_tiger_stripe_ocean_floor",
+    "scenario_sha256": "sha256:e8535a6b337a6aaa304def1c06aafcd00a4eed31a85b5e825031afae9cf26bc6",
+    "scenario_classification": "PLANETARY_HYPOTHETICAL",
+    "evidence_tier": "planetary_hypothetical",
+    "environment": {
+      "body_name": "Enceladus (Sub-Ice Ocean Floor / Chondritic Core Interface)",
+      "is_terrestrial": false,
+      "gravity_m_s2": 0.113,
+      "pressure_profile_Pa": [4.500000e+06, 4.800000e+06, 5.100000e+06, 5.400000e+06],
+      "temperature_profile_K": [273.6500, 318.1500, 348.1500, 295.1500],
+      "depth_profile_m": [38000.00, 38100.00, 38200.00, 38300.00]
+    },
+    "energy_sources": {
+      "thermal_gradient_K_m": 0.25,
+      "radiolytic_power_W_m3": 0.004,
+      "geochemical_free_energy_flux_W_m3": 0.038,
+      "total_available_power_W_m3": 0.042,
+      "maintenance_energy_demand_W_kg_biomass": 0.00085
+    },
+    "redox_chemistry": {
+      "electron_donors": ["H2"],
+      "electron_acceptors": ["HCO3-", "CO2"],
+      "reaction_gibbs_free_energy_J_mol": -135600.0
+    }
+  },
+  "field_arrays": {
+    "porosity": [0.73756966, 0.66749236, 0.62747548, 0.71756614],
+    "permeability": [6.02593288e-12, 3.99321735e-12, 3.11897808e-12, 5.35098300e-12],
+    "darcy_velocity": [2.61997082e-04, 1.73618146e-04, 1.35607742e-04, 2.32651435e-04],
+    "pH": [9.400414, 10.150427, 10.450430, 9.750415],
+    "pe": [-5.207153, -6.407381, -6.857431, -5.607164],
+    "dissolved_species": {
+      "CH4": [0.28273185, 0.45575296, 0.66947763, 0.57623012],
+      "C_substrate": [1.4, 1.15, 0.82, 0.55],
+      "Ca+2": [0.45, 0.38, 0.31, 0.36],
+      "H2": [0.88803274, 1.2063743, 1.4058693, 0.92843477],
+      "HCO3-": [3.0592408, 2.8395382, 2.5529608, 2.6569714],
+      "SO4-2": [0.12, 0.1, 0.08, 0.09]
+    },
+    "biofilm_volume_fraction": [0.026307511, 0.049349102, 0.063358182, 0.035309405],
+    "eps_fraction": [0.019980633, 0.037011827, 0.048018637, 0.026982054],
+    "mineral_volume_fractions": {
+      "brucite": [0.04, 0.05, 0.05, 0.04],
+      "calcite": [0.03, 0.04, 0.05, 0.03],
+      "chrysotile_serpentine": [0.14014219, 0.18014671, 0.2001477, 0.1601424],
+      "magnetite": [0.05, 0.06, 0.07, 0.05]
+    },
+    "evidence_tier": "planetary_hypothetical",
+    "scenario_classification": "PLANETARY_HYPOTHETICAL",
+    "mesh_resolution_badge": "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+    "voxel_validation_grid_badge": "32^3 Conservative Voxel-Overlap Validation Grid",
+    "active_niche_count": 4,
+    "niche_habitability_index": 0.536848
+  },
+  "fields": [
+    {
+      "name": "velocity",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 3,
+      "unit": "m/s",
+      "sha256": "sha256:d88732518145e965331aa6b504608b8e63f715568e5e262025d53871b44d64b7",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [[0.0002619970819, 0, 0], [0.0001736181458, 0, 0], [0.0001356077425, 0, 0], [0.0002326514347, 0, 0]]
+    },
+    {
+      "name": "darcy_velocity",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "m/s",
+      "sha256": "sha256:4bdd678da05220edc45bba649c3db7e519ee0656bc2460fb5c5d1faf7c830418",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [0.0002619970819, 0.0001736181458, 0.0001356077425, 0.0002326514347]
+    },
+    {
+      "name": "permeability",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "m^2",
+      "sha256": "sha256:3c2a1f8ff7ea8f106d2f57dbcc935c0142a1419d629e319f9c21d54f8d472c3e",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [6.025932884e-12, 3.993217354e-12, 3.118978077e-12, 5.350982998e-12]
+    },
+    {
+      "name": "porosity",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:988df976ebeffe531d7ca059724b82fca0878325a88b04e02fa99b0f58e8a26c",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [0.7375696638, 0.6674923558, 0.6274754785, 0.7175661439]
+    },
+    {
+      "name": "C_substrate",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "mol/m^3",
+      "sha256": "sha256:163fd93bc74991105fb5f40089477ccb9c3bcaaf4c94b3da0d1d91fa4da09531",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [1.4, 1.15, 0.82, 0.55]
+    },
+    {
+      "name": "temperature",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "degC",
+      "sha256": "sha256:39d0ec9fdf220d769de87cbc5ca405f5a0b48d74b4ab02f7bbd011702d57ccd2",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [0.5, 45, 75, 22]
+    },
+    {
+      "name": "pH",
+      "producer": "PHREEQC",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:1d8d06d2e3453d66f8fc19074640d9928ebd8ba0896ceedbcaa0978d5506e9fc",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [9.400414226, 10.1504274, 10.45043028, 9.750414826]
+    },
+    {
+      "name": "pe",
+      "producer": "PHREEQC",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:ecb3ecce076d9626f9e4a353dc425b75df47450c34ca36b3d7317a3cc857f91f",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [-5.207153438, -6.407380986, -6.857430663, -5.607163798]
+    },
+    {
+      "name": "h2_concentration",
+      "producer": "PHREEQC",
+      "association": "cell",
+      "components": 1,
+      "unit": "mol/m^3",
+      "sha256": "sha256:4cffb3836dddbf5d8feff7a6c08b317ab937c91c5519a1b180893078dc8453e0",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [0.888032743, 1.206374292, 1.405869348, 0.9284347681]
+    },
+    {
+      "name": "biofilm_biomass",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "kg/m^3",
+      "sha256": "sha256:ac32f1558589a8c902daa4711ba8fa5ca6bb0a59f097dc8239ba901b299c0177",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [6.57687777, 12.33727562, 15.8395456, 8.827351186]
+    },
+    {
+      "name": "biofilm_eps",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "kg/m^3",
+      "sha256": "sha256:1ec24b04ca5347e123ff491b578ea4abce9848c02e98d33a4c070d7ac68d4734",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [4.995158327, 9.252956711, 12.0046592, 6.74551339]
+    },
+    {
+      "name": "biofilm_volume_fraction",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:2f68448c8126d6b95e2dea9f54f97a2f8b4171828065eccf4c95f0467bd66cbb",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [0.02630751108, 0.04934910246, 0.06335818239, 0.03530940474]
+    },
+    {
+      "name": "eps_fraction",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:0c01b6a9ba968797b082e0be02ca4c87237d45ee004d6ea4984fb149ce5a7ed2",
+      "epistemic_class": "synthetic",
+      "disclosure_class": "conceptual_or_synthetic",
+      "values": [0.01998063331, 0.03701182685, 0.04801863679, 0.02698205356]
+    }
+  ],
+  "provenance": {
+    "evidence_class": "synthetic",
+    "frame_sha256": "sha256:9e8cf5c8597e8d24bbafa53da4a30b4198dd4813ab4aab98d272c8376059c62a"
+  }
+}

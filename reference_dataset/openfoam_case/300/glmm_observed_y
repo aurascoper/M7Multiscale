@@ -1,0 +1,35 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "300";
+    object      glmm_observed_y;
+}
+dimensions      [0 0 0 0 0 0 0];
+internalField   nonuniform List<scalar>
+4
+(
+1.5614
+1.788
+2.0576
+2.283
+);
+boundaryField
+{
+    inlet
+    {
+        type            zeroGradient;
+        flux_mol_s      0;
+    }
+    outlet
+    {
+        type            zeroGradient;
+        flux_mol_s      0;
+    }
+    walls
+    {
+        type            zeroGradient;
+        flux_mol_s      0;
+    }
+}

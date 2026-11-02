@@ -1,0 +1,12 @@
+{
+  "fixture_id": "oklo_r0_r1_analytical_spec_v1",
+  "schema": "M7SpatialFrame",
+  "schema_version": "1.0.0",
+  "track": "trackA_hydrothermal_prebiotic",
+  "evidence_class": "synthetic",
+  "grid_n": 32,
+  "box_size_m": 16.0,
+  "voxel_step_m": 0.5,
+  "fields": ["temperature", "hydration", "h2_concentration", "u235_ratio", "polymer_yield", "compartments"],
+  "r0_findings": ["R0-1_pulse_cutoff", "R0-3_rms_is_sd", "R0-4_16m_box", "R0-5_h2_dimensionless_index"]
+}

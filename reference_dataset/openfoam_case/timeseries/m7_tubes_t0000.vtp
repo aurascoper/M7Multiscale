@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VTKFile type="PolyData" version="0.1" byte_order="LittleEndian">
+  <PolyData>
+    <Piece NumberOfPoints="36" NumberOfVerts="0" NumberOfLines="4" NumberOfStrips="0" NumberOfPolys="0">
+      <PointData Scalars="tube_radius_m">
+        <DataArray type="Float64" Name="tube_radius_m" NumberOfComponents="1" format="ascii">
+          4.5e-05 4.5e-05 4.5e-05 4.5e-05 4.5e-05 4.5e-05 4.5e-05 4.5e-05 4.5e-05 4.2e-05 4.2e-05 4.2e-05 4.2e-05 4.2e-05 4.2e-05 4.2e-05 4.2e-05 4.2e-05 4e-05 4e-05 4e-05 4e-05 4e-05 4e-05 4e-05 4e-05 4e-05 2.5e-05 2.5e-05 2.5e-05 2.5e-05 2.5e-05 2.5e-05 2.5e-05 2.5e-05 2.5e-05
+        </DataArray>
+        <DataArray type="Float64" Name="cytoplasmic_flow_um_s" NumberOfComponents="1" format="ascii">
+          4.2 4.2 4.2 4.2 4.2 4.2 4.2 4.2 4.2 3.8 3.8 3.8 3.8 3.8 3.8 3.8 3.8 3.8 5.1 5.1 5.1 5.1 5.1 5.1 5.1 5.1 5.1 1.2 1.2 1.2 1.2 1.2 1.2 1.2 1.2 1.2
+        </DataArray>
+        <DataArray type="Float64" Name="beta_1_cycle_rank" NumberOfComponents="1" format="ascii">
+          0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+        </DataArray>
+        <DataArray type="Float64" Name="exploratory_particle_radius_m" NumberOfComponents="1" format="ascii">
+          0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 5.25e-05 0 5.25e-05 0 5.25e-05 0 5.25e-05
+        </DataArray>
+      </PointData>
+      <CellData Scalars="criterial_status_code">
+        <DataArray type="Float64" Name="criterial_status_code" NumberOfComponents="1" format="ascii">
+          1 1 1 0
+        </DataArray>
+        <DataArray type="Float64" Name="is_anastomosis_bridge" NumberOfComponents="1" format="ascii">
+          0 0 0 0
+        </DataArray>
+      </CellData>
+      <Points>
+        <DataArray type="Float64" NumberOfComponents="3" format="ascii">
+          0.00045 0 0
+          0.000575 5.2961006e-05 2.6480503e-05
+          0.0007 0.00010242641 5.1213203e-05
+          0.000825 0.00014543277 7.2716386e-05
+          0.00095 0.00018 9e-05
+          0.001075 0.00020543277 0.00010271639
+          0.0012 0.00022242641 0.0001112132
+          0.001325 0.00023296101 0.0001164805
+          0.00145 0.00024 0.00012
+          0.00045 0 0
+          0.000575 -5.2961006e-05 -2.6480503e-05
+          0.0007 -0.00010242641 -5.1213203e-05
+          0.000825 -0.00014543277 -7.2716386e-05
+          0.00095 -0.00018 -9e-05
+          0.001075 -0.00020543277 -0.00010271639
+          0.0012 -0.00022242641 -0.0001112132
+          0.001325 -0.00023296101 -0.0001164805
+          0.00145 -0.00024 -0.00012
+          0.00255 0 0
+          0.002675 2.2961006e-05 1.1480503e-05
+          0.0028 4.2426407e-05 2.1213203e-05
+          0.002925 5.5432772e-05 2.7716386e-05
+          0.00305 6e-05 3e-05
+          0.003175 5.5432772e-05 2.7716386e-05
+          0.0033 4.2426407e-05 2.1213203e-05
+          0.003425 2.2961006e-05 1.1480503e-05
+          0.00355 7.3478808e-21 3.6739404e-21
+          0.00145 0.00024 0.00012
+          0.0015375 0.00022703899 6.8519497e-05
+          0.001625 0.00021757359 1.8786797e-05
+          0.0017125 0.00021456723 -2.7716386e-05
+          0.0018 0.00022 -7e-05
+          0.0018875 0.00023456723 -0.00010771639
+          0.001975 0.00025757359 -0.0001412132
+          0.0020625 0.00028703899 -0.0001714805
+          0.00215 0.00032 -0.0002
+        </DataArray>
+      </Points>
+      <Lines>
+        <DataArray type="Int32" Name="connectivity" format="ascii">
+          0 1 2 3 4 5 6 7 8
+          9 10 11 12 13 14 15 16 17
+          18 19 20 21 22 23 24 25 26
+          27 28 29 30 31 32 33 34 35
+        </DataArray>
+        <DataArray type="Int32" Name="offsets" format="ascii">
+          9 18 27 36
+        </DataArray>
+      </Lines>
+    </Piece>
+  </PolyData>
+</VTKFile>

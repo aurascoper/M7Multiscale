@@ -1,0 +1,6 @@
+{
+  "fixture_id": "menke_2026_retardation_reference_v1",
+  "citation": "Menke, Doster, and Maes (2026) arXiv:2610.19057",
+  "max_retardation_relative_error_tolerance": 0.006,
+  "evidence_class": "source_reported"
+}

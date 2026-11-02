@@ -1,0 +1,98 @@
+HEADER    OXIDOREDUCTASE/HYDROLASE/LYASE          01-NOV-26   2V4J
+TITLE     M7 COMPOSITE ACTIVE-SITE EXCERPT: DSRB (2V4J), OAHA (3M0J), OXDC (1J58)
+EXPDTA    X-RAY DIFFRACTION
+REMARK   2
+REMARK   2 RESOLUTION.    2.10 ANGSTROMS.
+REMARK 300 EPISTEMIC PROVENANCE: COMPOSITE ACTIVE-SITE EXCERPT OF SOLVED CRYSTAL STRUCTURES
+REMARK 300  This file is a composite active-site excerpt of selected chain fragments from
+REMARK 300  three separate source structures (2V4J, 3M0J, 1J58); it is NOT one single
+REMARK 300  crystallographic co-assembly of all three proteins.
+REMARK 300  To inspect the complete original crystallographic assemblies independently:
+REMARK 300    PyMOL    : fetch 2v4j 3m0j 1j58, async=0
+REMARK 300    ChimeraX : open 2v4j 3m0j 1j58
+REMARK 300 CHAIN A: DsrB dissimilatory sulfite reductase (PDB 2V4J, UniProt P45575)
+REMARK 300          Motif C-X(2)-C-X(3)-C (Cys261-Gly262-Asn263-Cys264-Tyr265-Thr266-Met267-Cys268 = CGNCYTMC)
+REMARK 300          Coordinating [Fe4S4] cluster (FS4 501) and siroheme Fe (SRM 502)
+REMARK 300 CHAIN B: OahA oxaloacetate acetylhydrolase (PDB 3M0J, 1.55 A, An10g00820)
+REMARK 300          Motif M-G-F-R-I-M-I-F-S-F-A (Met18..Ala28) with Mg2+ (MG 301) and oxalate (OXA 302)
+REMARK 300 CHAIN C: OxdC bicupin oxalate decarboxylase (PDB 1J58, 1.75 A, BSU_33240)
+REMARK 300          Motif H-X-H-X(3)-E (His95, His97, Glu101) coordinating Mn2+ (MN 401) and oxalate (OXL 402)
+REMARK 300 LIMITATION: Visual inspection in PyMOL/ChimeraX verifies active-site geometry and
+REMARK 300             contacts; it is NOT a standalone certificate of catalytic kinetics.
+DBREF  2V4J A  261   268  UNP    P45575   DSRB_DESVH     261    268
+DBREF  3M0J B   18    28  UNP    A2QSW8   OAHA_ASPNC      18     28
+DBREF  1J58 C   95   101  UNP    O34714   OXDC_BACSU      95    101
+SEQRES   1 A    8  CYS GLY ASN CYS TYR THR MET CYS
+SEQRES   1 B   11  MET GLY PHE ARG ILE MET ILE PHE SER PHE ALA
+SEQRES   1 C    7  HIS TRP HIS GLN ALA ASN GLU
+ATOM      1  N   CYS A 261      10.210  14.120   8.340  1.00 18.20           N
+ATOM      2  CA  CYS A 261      11.140  15.080   8.910  1.00 17.90           C
+ATOM      3  CB  CYS A 261      12.480  14.420   9.240  1.00 18.50           C
+ATOM      4  SG  CYS A 261      13.620  15.510  10.120  1.00 16.80           S
+ATOM      5  N   GLY A 262      10.620  16.210   9.540  1.00 19.10           N
+ATOM      6  CA  GLY A 262      11.380  17.340  10.020  1.00 19.40           C
+ATOM      7  N   ASN A 263      12.510  17.680   9.240  1.00 18.80           N
+ATOM      8  CA  ASN A 263      13.340  18.810   9.580  1.00 18.60           C
+ATOM      9  N   CYS A 264      14.520  18.420  10.310  1.00 17.50           N
+ATOM     10  CA  CYS A 264      15.410  17.380   9.820  1.00 17.20           C
+ATOM     11  CB  CYS A 264      15.980  16.540  10.960  1.00 17.60           C
+ATOM     12  SG  CYS A 264      15.020  15.080  11.420  1.00 16.40           S
+ATOM     13  N   TYR A 265      16.480  17.940   9.020  1.00 18.90           N
+ATOM     14  CA  TYR A 265      17.420  17.120   8.260  1.00 19.20           C
+ATOM     15  N   THR A 266      16.840  15.860   7.820  1.00 18.70           N
+ATOM     16  CA  THR A 266      17.560  14.920   6.980  1.00 18.40           C
+ATOM     17  N   MET A 267      16.720  13.780   6.640  1.00 18.10           N
+ATOM     18  CA  MET A 267      15.840  13.240   7.680  1.00 17.80           C
+ATOM     19  N   CYS A 268      14.920  12.240   7.180  1.00 17.40           N
+ATOM     20  CA  CYS A 268      14.120  11.520   8.160  1.00 17.10           C
+ATOM     21  CB  CYS A 268      13.680  12.440   9.290  1.00 17.30           C
+ATOM     22  SG  CYS A 268      14.840  13.720   9.680  1.00 16.20           S
+HETATM   23 FE1  FS4 A 501      14.480  14.760  10.420  1.00 15.40          FE
+HETATM   24  S1  FS4 A 501      13.820  13.940  12.310  1.00 15.80           S
+HETATM   25 FE   SRM A 502      12.940  16.120  11.840  1.00 15.10          FE
+TER      26      SRM A 502
+ATOM     27  N   MET B  18      24.100  10.200   5.100  1.00 14.20           N
+ATOM     28  CA  MET B  18      24.920  11.140   5.860  1.00 14.10           C
+ATOM     29  CA  GLY B  19      26.120  11.680   5.120  1.00 14.30           C
+ATOM     30  CA  PHE B  20      27.240  12.340   5.880  1.00 14.00           C
+ATOM     31  N   ARG B  21      28.120  11.420   6.560  1.00 13.80           N
+ATOM     32  CA  ARG B  21      29.180  11.880   7.440  1.00 13.60           C
+ATOM     33  CZ  ARG B  21      30.420  12.640   6.820  1.00 13.90           C
+ATOM     34  NH1 ARG B  21      30.980  13.520   7.640  1.00 13.70           N
+ATOM     35  CA  ILE B  22      29.840  10.740   8.200  1.00 14.10           C
+ATOM     36  CA  MET B  23      30.960  11.180   9.120  1.00 14.20           C
+ATOM     37  CA  ILE B  24      31.820  12.320   8.580  1.00 14.00           C
+ATOM     38  CA  PHE B  25      32.640  13.120   9.580  1.00 13.90           C
+ATOM     39  N   SER B  26      31.920  14.240  10.160  1.00 13.50           N
+ATOM     40  CA  SER B  26      31.180  15.120   9.260  1.00 13.40           C
+ATOM     41  OG  SER B  26      30.420  14.420   8.280  1.00 13.20           O
+ATOM     42  CA  PHE B  27      30.280  16.120   9.960  1.00 13.80           C
+ATOM     43  CA  ALA B  28      29.140  16.740   9.180  1.00 14.10           C
+HETATM   44 MG   MG  B 301      30.120  13.980   6.420  1.00 12.80          MG
+HETATM   45  C1  OXA B 302      30.580  13.840   8.480  1.00 14.50           C
+HETATM   46  O1  OXA B 302      30.720  13.680   7.260  1.00 14.20           O
+TER      47      OXA B 302
+ATOM     48  N   HIS C  95      40.120  12.100  10.240  1.00 15.20           N
+ATOM     49  CA  HIS C  95      41.040  13.080  10.780  1.00 15.00           C
+ATOM     50  NE2 HIS C  95      42.180  13.520   9.960  1.00 14.60           N
+ATOM     51  CA  TRP C  96      41.680  12.640  12.080  1.00 15.40           C
+ATOM     52  CA  HIS C  97      42.840  13.480  12.560  1.00 14.90           C
+ATOM     53  NE2 HIS C  97      43.420  14.240  11.440  1.00 14.50           N
+ATOM     54  CA  GLN C  98      43.920  12.720  13.320  1.00 15.60           C
+ATOM     55  CA  ALA C  99      44.840  11.960  12.380  1.00 15.80           C
+ATOM     56  CA  ASN C 100      44.180  11.120  11.300  1.00 15.50           C
+ATOM     57  CA  GLU C 101      43.120  11.880  10.520  1.00 15.10           C
+ATOM     58  OE1 GLU C 101      42.760  12.980   9.980  1.00 14.40           O
+HETATM   59 MN   MN  C 401      42.780  13.580  10.420  1.00 13.90          MN
+HETATM   60  C1  OXL C 402      43.120  14.840   9.560  1.00 15.20           C
+HETATM   61  O1  OXL C 402      42.960  14.420  10.720  1.00 14.80           O
+TER      62      OXL C 402
+CONECT    4   23   25
+CONECT   12   23
+CONECT   22   23
+CONECT   34   46
+CONECT   41   44
+CONECT   50   59
+CONECT   53   59
+CONECT   58   59
+END

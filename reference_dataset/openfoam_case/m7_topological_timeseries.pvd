@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<VTKFile type="Collection" version="0.1" byte_order="LittleEndian">
+  <Collection>
+    <DataSet timestep="0.0" group="" part="0" file="timeseries/m7_channel_t0000.vtu"/>
+    <DataSet timestep="300.0" group="" part="0" file="timeseries/m7_channel_t0300.vtu"/>
+    <DataSet timestep="600.0" group="" part="0" file="timeseries/m7_channel_t0600.vtu"/>
+    <DataSet timestep="900.0" group="" part="0" file="timeseries/m7_channel_t0900.vtu"/>
+    <DataSet timestep="1200.0" group="" part="0" file="timeseries/m7_channel_t1200.vtu"/>
+  </Collection>
+</VTKFile>

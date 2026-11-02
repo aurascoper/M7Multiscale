@@ -1,0 +1,15 @@
+name: m7-analysis
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - numpy
+  - scipy
+  - pandas
+  - meshio
+  - pyvista
+  - vtk
+  - h5py
+  - netcdf4
+  - matplotlib
+  - jupyterlab

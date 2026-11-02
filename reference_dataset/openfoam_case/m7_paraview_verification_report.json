@@ -1,0 +1,170 @@
+{
+  "suite": "M7_Interactive_Topological_TimeSeries_OpenFOAM_GLMM_ParaView_Suite",
+  "case_dir": ".",
+  "timesteps_s": [
+    0.0,
+    300.0,
+    600.0,
+    900.0,
+    1200.0
+  ],
+  "openfoam_time_directories": [
+    "0",
+    "300",
+    "600",
+    "900",
+    "1200"
+  ],
+  "pvd_mesh_file": "m7_topological_timeseries.pvd",
+  "pvd_tubes_file": "m7_topology_tubes.pvd",
+  "xdmf_temporal_file": "m7_topological_timeseries.xdmf",
+  "paraview_state_file": "m7_topological_glmm_timeseries.pvsm",
+  "zero_em_en_dashes_enforced": true,
+  "paraview_verified": true,
+  "foam_timesteps": [
+    0.0,
+    300.0,
+    600.0,
+    900.0,
+    1200.0
+  ],
+  "foam_cell_arrays": [
+    "U",
+    "beta0",
+    "beta_1",
+    "empowerment_bits",
+    "glmm_fixed_effect_beta0_plus_beta1_x",
+    "glmm_observed_y",
+    "glmm_random_intercept_b_i",
+    "glmm_residual_eps_ij",
+    "p",
+    "pH",
+    "porosity",
+    "tracer"
+  ],
+  "xdmf_timesteps": [
+    0.0,
+    300.0,
+    600.0,
+    900.0,
+    1200.0
+  ],
+  "pvd_timesteps": [
+    0.0,
+    300.0,
+    600.0,
+    900.0,
+    1200.0
+  ],
+  "tube_timesteps": [
+    0.0,
+    300.0,
+    600.0,
+    900.0,
+    1200.0
+  ],
+  "pvsm_sha256": "sha256:073dd453ab5d63803f6d9acc51055ad749e9e4afbe2ce69318070dd97a0e32f2",
+  "png_dimensions": {
+    "m7_paraview_t0000s.png": [
+      1920,
+      1080
+    ],
+    "m7_paraview_t0300s.png": [
+      1920,
+      1080
+    ],
+    "m7_paraview_t0600s.png": [
+      1920,
+      1080
+    ],
+    "m7_paraview_t0900s.png": [
+      1920,
+      1080
+    ],
+    "m7_paraview_t1200s.png": [
+      1920,
+      1080
+    ],
+    "m7_paraview_topological_glmm_comparison_1920x1080.png": [
+      1920,
+      1080
+    ]
+  },
+  "png_sha256": {
+    "m7_paraview_t0000s.png": "sha256:93c1515a8950b614d12d49aed7be5bbdcfb3556082910440f24d306f5162b139",
+    "m7_paraview_t0300s.png": "sha256:48c426d628c75dedf20f20a859b9e6420209b232b60b5078d564fa6d0100d6ed",
+    "m7_paraview_t0600s.png": "sha256:85ff2c5b4ac16789bff00e418ff8ad83be511d974e95239127f47aef97396f55",
+    "m7_paraview_t0900s.png": "sha256:d414de42208e7d8b67140ff681a2991fee8c82e27838b60a605c79d5891ecfe8",
+    "m7_paraview_t1200s.png": "sha256:150a14f3c0b9a2e4cdf266f70b4b080999e61efa7f0c1cc56a3cb580f21e7b72",
+    "m7_paraview_topological_glmm_comparison_1920x1080.png": "sha256:85c3ab53f8a1ad264d7f2b234a7e1a833b198e724da5e3ab869217fac8ab9866"
+  },
+  "step_summaries": [
+    {
+      "time_s": 0.0,
+      "sobolev_relaxation_step": 0,
+      "global_beta_0": 2,
+      "global_beta_1": 0,
+      "topology_stage": "Unclosed Cantor Tree (beta_0=2, beta_1=0)",
+      "pH_activity_avg": 7.21344603,
+      "mean_velocity_x_m_s": 0.0002175,
+      "mean_tracer_mol_m3": 0.73,
+      "mean_glmm_observed_y": 1.8545,
+      "mean_empowerment_bits": 1.4375,
+      "screenshot_path": "renders/m7_paraview_t0000s.png"
+    },
+    {
+      "time_s": 300.0,
+      "sobolev_relaxation_step": 100,
+      "global_beta_0": 1,
+      "global_beta_1": 1,
+      "topology_stage": "Primary so/Prm1 Loop Closure (beta_0=1, beta_1=1)",
+      "pH_activity_avg": 7.12448921,
+      "mean_velocity_x_m_s": 0.000205,
+      "mean_tracer_mol_m3": 0.65,
+      "mean_glmm_observed_y": 1.9225,
+      "mean_empowerment_bits": 1.545,
+      "screenshot_path": "renders/m7_paraview_t0300s.png"
+    },
+    {
+      "time_s": 600.0,
+      "sobolev_relaxation_step": 200,
+      "global_beta_0": 1,
+      "global_beta_1": 2,
+      "topology_stage": "Pair-of-Pants Sigma_0,3 Bifurcation (beta_0=1, beta_1=2)",
+      "pH_activity_avg": 7.03169895,
+      "mean_velocity_x_m_s": 0.0001925,
+      "mean_tracer_mol_m3": 0.5775,
+      "mean_glmm_observed_y": 1.984125,
+      "mean_empowerment_bits": 1.65,
+      "screenshot_path": "renders/m7_paraview_t0600s.png"
+    },
+    {
+      "time_s": 900.0,
+      "sobolev_relaxation_step": 300,
+      "global_beta_0": 1,
+      "global_beta_1": 3,
+      "topology_stage": "Hollow Shell Psi Excursion (beta_0=1, beta_1=3)",
+      "pH_activity_avg": 7.03169895,
+      "mean_velocity_x_m_s": 0.00018,
+      "mean_tracer_mol_m3": 0.53,
+      "mean_glmm_observed_y": 2.0245,
+      "mean_empowerment_bits": 1.6925,
+      "screenshot_path": "renders/m7_paraview_t0900s.png"
+    },
+    {
+      "time_s": 1200.0,
+      "sobolev_relaxation_step": 400,
+      "global_beta_0": 1,
+      "global_beta_1": 2,
+      "topology_stage": "Pareto Trap-Space Anastomosis Attractor (beta_0=1, beta_1=2)",
+      "pH_activity_avg": 7.03169895,
+      "mean_velocity_x_m_s": 0.0001675,
+      "mean_tracer_mol_m3": 0.4825,
+      "mean_glmm_observed_y": 2.064875,
+      "mean_empowerment_bits": 1.73,
+      "screenshot_path": "renders/m7_paraview_t1200s.png"
+    }
+  ],
+  "composite_comparison_png": "m7_paraview_topological_glmm_comparison_1920x1080.png",
+  "pvsm_portable_relative_paths": true
+}

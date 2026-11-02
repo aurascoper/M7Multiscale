@@ -1,0 +1,42 @@
+# M7 Independent Layer 5 Molecular Verification Script for UCSF ChimeraX
+# Usage: chimerax inspect_active_sites.cxc
+#
+# Epistemic & Structural Provenance Notes:
+# 1. #1 (dsrB_2V4J_catalytic_cluster.pdb) is a COMPOSITE ACTIVE-SITE EXCERPT of selected
+#    chain fragments from three separate source crystal structures:
+#      - Chain A: DsrB (PDB 2V4J, UniProt P45575, Cys261/264/268 + [Fe4S4]/siroheme)
+#      - Chain B: OahA (PDB 3M0J, UniProt A2QSW8, Arg21/Ser26 + Mg2+/oxalate)
+#      - Chain C: OxDC (PDB 1J58, UniProt O34714, His95/His97/Glu101 + Mn2+/oxalate)
+#    It is NOT one single crystallographic assembly of all three proteins.
+# 2. For independent verification of the complete original crystallographic assemblies
+#    directly from the PDB archive in ChimeraX:
+#      open 2v4j 3m0j 1j58
+# 3. #2 (csgA_curli_repeat_model.pdb) is badged as [THEORETICAL_MODEL_FRAGMENT]: an
+#    18-residue (Ser43..Gln60) theoretical repeat fragment of E. coli CsgA (UniProt P28307),
+#    contrasted with full-length experimental cryo-EM curli assemblies PDB 8ENQ / 8ENR:
+#      open 8enq 8enr
+
+open dsrB_2V4J_catalytic_cluster.pdb
+open csgA_curli_repeat_model.pdb
+
+# Optional online full-assembly retrieval (uncomment when connected to RCSB PDB):
+# open 2v4j 3m0j 1j58
+# open 8enq 8enr
+
+hide atoms
+cartoon
+color #1/A cornflower blue
+color #1/B light sea green
+color #1/C medium purple
+color #2 gold
+
+# Display catalytic residues and metal/ligand cofactors as sticks
+select #1/A:261,264,268 #1/A:501,502 #1/B:21,26,301,302 #1/C:95,97,101,401,402 #2/A:49,52,54,60
+style sel stick
+show sel atoms
+~select
+
+# Compute non-covalent contacts around DsrB, OahA, and OxdC metal cofactors
+contacts #1/A:501,502 #1/B:301,302 #1/C:401,402 reveal true
+surface #1/B enclose #1/B:18-28 transparency 65
+view #1/A:261-268

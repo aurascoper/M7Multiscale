@@ -1,0 +1,13 @@
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      transportProperties;
+}
+transportModel  Newtonian;
+nu              [0 2 -1 0 0 0 0] 1e-06;
+DT              [0 2 -1 0 0 0 0] 7.2e-10;
+darcyPermeability_m2 [0 2 0 0 0 0 0] 2.5e-12;
+coordinateConvention cartesian_right_handed_m;

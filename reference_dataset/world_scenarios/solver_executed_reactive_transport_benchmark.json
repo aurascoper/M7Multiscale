@@ -1,0 +1,246 @@
+{
+  "schema": "M7SpatialFrame",
+  "schema_version": "1.0.0",
+  "world_scenario_schema": "M7WorldScenario",
+  "simulation_id": "solver_executed_reactive_transport_benchmark",
+  "world_name": "Solver-Executed 1D/3D Conservative Darcy-Kozeny-Carman-Monod Benchmark",
+  "scenario_classification": "SOLVER_EXECUTED_SIMULATION",
+  "evidence_tier": "solver_executed",
+  "mesh_resolution_badge": "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+  "voxel_validation_grid_badge": "32^3 Conservative Voxel-Overlap Validation Grid",
+  "energy_budget_closed": true,
+  "elemental_mass_conserved": true,
+  "thermodynamically_sustainable": true,
+  "max_elemental_mass_rel_error": 1.734904e-16,
+  "max_energy_balance_rel_error": 1.632681e-16,
+  "frame_index": 5,
+  "time": { "value": 1500.0, "unit": "s" },
+  "clocks": {
+    "physical_time_s": 1500.0,
+    "biological_time_s": 1500.0,
+    "sobolev_relaxation_step": 400,
+    "snapshot_sync_id": "sync-solver_executed_reactive_transport_benchmark",
+    "interpolation_valid": true,
+    "parent_snapshot_id": null
+  },
+  "coordinate_frame": {
+    "name": "cartesian_right_handed",
+    "unit": "m",
+    "origin": [0.0, 0.0, 0.0]
+  },
+  "mesh": {
+    "topology": "anisotropic_hexahedral",
+    "geometry_asset": "mesh_solver_executed_reactive_transport_benchmark",
+    "geometry_sha256": "sha256:97de99e626cbafce89ded1c2954b21104c06f406f8b56d299d77ae23f40f9c80",
+    "cell_count": 4,
+    "cell_ordering": "explicit_id_ascending",
+    "explicit_cell_ids": [1, 2, 3, 4],
+    "porosity_fraction": [0.77850788, 0.71831089, 0.67827172, 0.74865636],
+    "mesh_resolution_badge": "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+    "voxel_validation_grid_badge": "32^3 Conservative Voxel-Overlap Validation Grid"
+  },
+  "world_scenario": {
+    "scenario_id": "solver_executed_reactive_transport_benchmark",
+    "scenario_sha256": "sha256:0e11fb8866f9249ba1a011940aad7809700d7a453eca30f8d56d9b6416430203",
+    "scenario_classification": "SOLVER_EXECUTED_SIMULATION",
+    "evidence_tier": "solver_executed",
+    "environment": {
+      "body_name": "Earth (Oklo RZ2/RZ10 Clay Halo)",
+      "is_terrestrial": true,
+      "gravity_m_s2": 9.80665,
+      "pressure_profile_Pa": [1.500000e+07, 1.520000e+07, 1.540000e+07, 1.550000e+07],
+      "temperature_profile_K": [298.2500, 298.5500, 298.9500, 299.0500],
+      "depth_profile_m": [1500.00, 1500.50, 1501.00, 1501.50]
+    },
+    "energy_sources": {
+      "thermal_gradient_K_m": 0.55,
+      "radiolytic_power_W_m3": 0.052,
+      "geochemical_free_energy_flux_W_m3": 0.033,
+      "total_available_power_W_m3": 0.085,
+      "maintenance_energy_demand_W_kg_biomass": 0.0012
+    },
+    "redox_chemistry": {
+      "electron_donors": ["H2", "C_substrate"],
+      "electron_acceptors": ["SO4-2", "UO2+2"],
+      "reaction_gibbs_free_energy_J_mol": -142500.0
+    }
+  },
+  "field_arrays": {
+    "porosity": [0.77850788, 0.71831089, 0.67827172, 0.74865636],
+    "permeability": [4.70842092e-12, 3.33575953e-12, 2.60166728e-12, 4.03451981e-12],
+    "darcy_velocity": [2.64518029e-04, 1.87402221e-04, 1.46161083e-04, 2.26658416e-04],
+    "pH": [7.350256, 7.350290, 6.850296, 6.850230],
+    "pe": [4.095582, 4.094999, 2.394883, 2.396022],
+    "dissolved_species": {
+      "C_substrate": [0.95, 0.58, 0.29, 0.11],
+      "Ca+2": [1.1, 1.06, 1.01, 0.99],
+      "H2": [0.15904007, 0.22460965, 0.25802906, 0.13319334],
+      "HCO3-": [2.4, 2.48, 2.56, 2.6],
+      "HS-": [0.10062171, 0.17296792, 0.27909588, 0.32073306],
+      "SO4-2": [1.1210745, 1.0048883, 0.85009242, 0.78881689]
+    },
+    "biofilm_volume_fraction": [0.042851957, 0.076964433, 0.096986798, 0.055767179],
+    "eps_fraction": [0.028579331, 0.053655815, 0.067671023, 0.036521682],
+    "mineral_volume_fractions": {
+      "calcite": [0.02, 0.02, 0.03, 0.02],
+      "illite": [0.11006083, 0.14006886, 0.16007046, 0.12005478],
+      "smectite": [0.07, 0.09, 0.1, 0.08],
+      "sudoite": [0.02, 0.03, 0.03, 0.03]
+    },
+    "evidence_tier": "solver_executed",
+    "scenario_classification": "SOLVER_EXECUTED_SIMULATION",
+    "mesh_resolution_badge": "4-Cell Hexahedral OpenFOAM Fixture (20 vertices)",
+    "voxel_validation_grid_badge": "32^3 Conservative Voxel-Overlap Validation Grid",
+    "active_niche_count": 4,
+    "niche_habitability_index": 0.555592
+  },
+  "fields": [
+    {
+      "name": "velocity",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 3,
+      "unit": "m/s",
+      "sha256": "sha256:eb3d3bdf522451d41aa71c5840bb3f83152972df7a7749278dd1889d106bc35c",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [[0.000264518029, 0, 0], [0.000187402221, 0, 0], [0.000146161083, 0, 0], [0.0002266584164, 0, 0]]
+    },
+    {
+      "name": "darcy_velocity",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "m/s",
+      "sha256": "sha256:e84dc7e93dcfa6a9523b79d6d12604381a1e8fb74e622b2208fb30344258d7bd",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [0.000264518029, 0.000187402221, 0.000146161083, 0.0002266584164]
+    },
+    {
+      "name": "permeability",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "m^2",
+      "sha256": "sha256:4d72e838cdc9e8882d6274e4f994af94834e0fab5ee17f9b6877fdcbc8cbb51d",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [4.708420916e-12, 3.335759533e-12, 2.601667278e-12, 4.034519811e-12]
+    },
+    {
+      "name": "porosity",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:3ee2785492441cfa0c7f923fbd90a81c3bb0304561b6df982a59e1b097aee64f",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [0.7785078819, 0.7183108918, 0.6782717215, 0.7486563627]
+    },
+    {
+      "name": "C_substrate",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "mol/m^3",
+      "sha256": "sha256:3ae361849d28b05b8baf725795f98a415351ec236f59198a7ac178fb945b2be8",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [0.95, 0.58, 0.29, 0.11]
+    },
+    {
+      "name": "temperature",
+      "producer": "OpenFOAM",
+      "association": "cell",
+      "components": 1,
+      "unit": "degC",
+      "sha256": "sha256:16e7ef912f23e85b292573d54c0cf52fb5ee14e6acb6c77dbcd2062dd4a7fbe0",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [25.1, 25.4, 25.8, 25.9]
+    },
+    {
+      "name": "pH",
+      "producer": "PHREEQC",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:c50507132aa802aa74c84fcd85fd74c0d785fd9697c844738c88a216f2ae6caf",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [7.3502558, 7.35028957, 6.850296285, 6.850230345]
+    },
+    {
+      "name": "pe",
+      "producer": "PHREEQC",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:03292a65908ba92215fdb2859848953e603da513bb35499eb14485685b947467",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [4.095582499, 4.094999298, 2.394883332, 2.396022084]
+    },
+    {
+      "name": "h2_concentration",
+      "producer": "PHREEQC",
+      "association": "cell",
+      "components": 1,
+      "unit": "mol/m^3",
+      "sha256": "sha256:32b4a51040aa23cfd43874e9b2f6e3e4c1ef250450f7eba5983c9e41215f5000",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [0.1590400735, 0.2246096529, 0.2580290643, 0.1331933397]
+    },
+    {
+      "name": "biofilm_biomass",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "kg/m^3",
+      "sha256": "sha256:49de690efe13e6b4ab62f5a2d619ac736c437d52e99bd5f56bf0b0d777219092",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [10.71298933, 19.24110828, 24.24669957, 13.94179475]
+    },
+    {
+      "name": "biofilm_eps",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "kg/m^3",
+      "sha256": "sha256:11fbd683de18b97ef04842a1334d50364056e0e911a24cf6072adda33ffefa7e",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [7.144832745, 13.41395363, 16.91775571, 9.13042043]
+    },
+    {
+      "name": "biofilm_volume_fraction",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:22c4c30c0db0f20c9db662d1304f9386d4e6a7d9686553399ab4e0ad8ec38ae5",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [0.04285195732, 0.07696443314, 0.09698679828, 0.055767179]
+    },
+    {
+      "name": "eps_fraction",
+      "producer": "Julia",
+      "association": "cell",
+      "components": 1,
+      "unit": "dimensionless",
+      "sha256": "sha256:84dfd39105b1fcdd5457a84a0a41078d4af1fbe1327c251162959304df9f20a9",
+      "epistemic_class": "calculated",
+      "disclosure_class": "direct_numerical_solver",
+      "values": [0.02857933098, 0.05365581453, 0.06767102283, 0.03652168172]
+    }
+  ],
+  "provenance": {
+    "evidence_class": "calculated",
+    "frame_sha256": "sha256:c6bd5d14f775f46197dac9f5693c7fcab292db7e9205aca1ef89f414f4364fc9"
+  }
+}
