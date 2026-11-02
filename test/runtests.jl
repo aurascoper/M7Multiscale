@@ -425,7 +425,23 @@ using .M7Multiscale.M7VisualizationBridge
     @test memo_cold_res.below_280K_underconstrained
     @test_throws ArgumentError evaluate_verified_basilisk_spice_memo_and_smbr_bridge(atp_yield_interval_mol_per_mol_co2 = (1.0, 1.0))
     @test_throws ArgumentError evaluate_verified_basilisk_spice_memo_and_smbr_bridge(atp_per_ch4_mol = 2.0)
+
+    matlab_alara_aud = audit_m7_matlab_simulink_3d_eda_and_alara_hippocratism()
+    @test matlab_alara_aud.all_passed
+    @test matlab_alara_aud.fixtures_present
+    @test matlab_alara_aud.zero_dashes_fixtures
+    @test matlab_alara_aud.receipt_checks_passed
+    @test matlab_alara_aud.png_dimensions_valid
+    @test matlab_alara_aud.png_dimensions.width >= 1920
+    @test matlab_alara_aud.png_dimensions.height >= 1080
+    @test matlab_alara_aud.plugin_and_workspace_skills_verified
+    @test matlab_alara_aud.health_physics_alara.alara_satisfied
+    @test matlab_alara_aud.health_physics_alara.primum_non_nocere_enforced
+    @test matlab_alara_aud.m7_schema_validation.schema_valid
+    @test matlab_alara_aud.selfish_gene_comfort_asr.reticulated_asr_verified
+    @test matlab_alara_aud.tarjan_bridge_dag.is_acyclic_tarjan_bridge_chain
 end
+
 
 
 

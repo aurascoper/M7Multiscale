@@ -112,7 +112,8 @@ export M7VisualizationBridge,
        VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC,
        convert_spice_state_to_basilisk_si,
        evaluate_verified_basilisk_spice_memo_and_smbr_bridge,
-       audit_m7_v2_non_recursive_poller_and_fun_neurology_graph
+       audit_m7_v2_non_recursive_poller_and_fun_neurology_graph,
+       audit_m7_matlab_simulink_3d_eda_and_alara_hippocratism
 
 end # module M7Multiscale
 
