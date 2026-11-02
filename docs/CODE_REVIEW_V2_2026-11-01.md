@@ -11,13 +11,14 @@ This code review documents the engineering integration, verification, and releas
    - Dedicated Python unit test suite (`Tests/eval/test_non_recursive_self_improvement_poller.py`, `Tests/eval/test_corpus_governance_manifest.py`, `Tests/eval/test_memory_gate_autobank_autoforget.py`, `10/10` passing test functions) and Swift unit test suites (`DialecticalMemoryTests` `9/9` passed, `TelemetryLoggerTests` `6/6` passed; `15/15` total).
 
 2. **`flow-cytometry-model-bridge`** (branch `feat/m7-planetary-process-engineering-v2`):
-   - Upgraded `src/M7VisualizationBridge.jl` to `M7_BRIDGE_VERSION = "1.0.0"` (`606/606` passing assertions; `2,741/2,741` combined passing assertions across all four Julia bridge test suites).
+   - Upgraded `src/M7VisualizationBridge.jl` to `M7_BRIDGE_VERSION = "1.0.0"` (`633/633` passing assertions; `2,768/2,768` combined passing assertions across all four Julia bridge test suites).
    - Added `M7GeometryTopologyGate` and `validate_m7_geometry_import_topology` to enforce watertight manifold and closed face-flux invariants (`beta_0, beta_1, beta_2`, Euler characteristic `chi`) before allowing conservative finite-volume PDE solves, while isolating Gaussian splats and unstructured point clouds as `:visualization_only_non_conservative`.
    - Added `SPICE_LOCK = ReentrantLock()`, `evaluate_dual_path_spice_ephemeris_contract`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge` to serialize non-thread-safe NAIF `CSPICE` calls (verified via pre/inside/post `islocked(SPICE_LOCK)` checks and 8-way `Threads.@threads` concurrency stress testing), verify the `1000.0` (`km` to `m`) SI scaling between Path A (`Basilisk.simulation.spiceInterface` + ZeroMQ `Vizard` on `tcp://*:5556` / `5570`) and Path B (`SPICE.jl` / `SpiceyPy`) across both heliocentric (`1 AU`) and low-planetary (`500 km`) orbits, and evaluate the Jin & Bethke (2003, 2005) thermodynamic potential factor `F_T`, fluid-shear biofilm detachment `r_det(tau_w)`, and `SmallModularBioReactors.jl` calibration rig acceptance.
    - Restored bidirectional entry-point forwarding shims (`code/M7VisualizationBridge.jl` and `src/test_M7VisualizationBridge.jl`) and synchronized `README_DELIVERY.md`, `DELIVERY_MANIFEST.json`, and `SHA256SUMS.txt`.
 
-3. **`M7Multiscale`** (branch `feat/m7-planetary-process-engineering-v2`):
-   - Exported `M7GeometryTopologyGate`, `validate_m7_geometry_import_topology`, `SPICE_LOCK`, `evaluate_dual_path_spice_ephemeris_contract`, `VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge` from `M7Multiscale.jl` (`240/240` passing assertions in `test/runtests.jl`).
+3. **`M7Multiscale` & `SmallModularBioReactors.jl`**:
+   - Exported `M7GeometryTopologyGate`, `validate_m7_geometry_import_topology`, `SPICE_LOCK`, `evaluate_dual_path_spice_ephemeris_contract`, `VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge` from `M7Multiscale.jl` (`267/267` passing assertions in `test/runtests.jl`).
+   - Built and verified the bounded, read-only, test-first `SmallModularBioReactors.jl` Julia package (`276/276` passing assertions across `test/contracts`, `test/transport`, `test/biological`, `test/inference`, and `test/integration`, including `NeurosporaCrassaCircadianHyphalPreset` and `:Arc` capsid provenance).
 
 ---
 
@@ -44,9 +45,9 @@ This code review documents the engineering integration, verification, and releas
 
 | File | Change Summary | Review Disposition |
 | :--- | :--- | :--- |
-| `src/M7VisualizationBridge.jl` | Upgraded `M7_BRIDGE_VERSION = "1.0.0"`; added `M7GeometryTopologyGate`, `validate_m7_geometry_import_topology`, `SPICE_LOCK = ReentrantLock()`, `evaluate_dual_path_spice_ephemeris_contract`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge`; wired into `audit_m7_v2_non_recursive_poller_and_fun_neurology_graph()`. | **Approved**: `606/606` assertions pass in `code/test_M7VisualizationBridge.jl`. |
+| `src/M7VisualizationBridge.jl` | Upgraded `M7_BRIDGE_VERSION = "1.0.0"`; added `M7GeometryTopologyGate`, `validate_m7_geometry_import_topology`, `SPICE_LOCK = ReentrantLock()`, `evaluate_dual_path_spice_ephemeris_contract`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge`; wired into `audit_m7_v2_non_recursive_poller_and_fun_neurology_graph()`. | **Approved**: `633/633` assertions pass in `code/test_M7VisualizationBridge.jl`. |
 | `code/M7VisualizationBridge.jl` & `src/test_M7VisualizationBridge.jl` | Restored `69 B` and `75 B` forwarding shims (`include(joinpath(@__DIR__, "..", ...))`). | **Approved**: Eliminates duplicate module maintenance while preserving both `src/` and `code/` invocation conventions. |
-| `README_DELIVERY.md`, `DELIVERY_MANIFEST.json`, `SHA256SUMS.txt` | Updated version (`1.0.0`), assertion counts (`606/606` M7 visualization; `2,741/2,741` total Julia assertions), and cryptographic SHA-256 digests. | **Approved**: Full self-consistency verified via `shasum -a 256 -c SHA256SUMS.txt`. |
+| `README_DELIVERY.md`, `DELIVERY_MANIFEST.json`, `SHA256SUMS.txt` | Updated version (`1.0.0`), assertion counts (`633/633` M7 visualization; `2,768/2,768` total Julia assertions), and cryptographic SHA-256 digests. | **Approved**: Full self-consistency verified via `shasum -a 256 -c SHA256SUMS.txt`. |
 
 **Mathematical & Physical Review (`flow-cytometry-model-bridge`)**:
 - **Topological Gate (`M7GeometryTopologyGate`)**: Strictly separates conservative finite-volume meshes (`:watertight_hexahedral_mesh`, `:conservative_voxel_grid` with `is_watertight_manifold && closed_face_fluxes && beta_0 >= 1`) from non-conservative visual representations (`:gaussian_splat`, `:unstructured_point_cloud`), throwing an `ArgumentError` if a finite-volume PDE flux solve is requested on non-manifold geometry.
@@ -57,11 +58,12 @@ This code review documents the engineering integration, verification, and releas
 
 ---
 
-### 2.3 `M7Multiscale`
+### 2.3 `M7Multiscale` & `SmallModularBioReactors.jl`
 
 | File | Change Summary | Review Disposition |
 | :--- | :--- | :--- |
-| `M7Multiscale.jl` | Exported `M7GeometryTopologyGate`, `validate_m7_geometry_import_topology`, `SPICE_LOCK`, `evaluate_dual_path_spice_ephemeris_contract`, `VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge`. | **Approved**: `240/240` assertions pass in `test/runtests.jl`. |
+| `M7Multiscale.jl` | Exported `M7GeometryTopologyGate`, `validate_m7_geometry_import_topology`, `SPICE_LOCK`, `evaluate_dual_path_spice_ephemeris_contract`, `VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC`, `convert_spice_state_to_basilisk_si`, and `evaluate_verified_basilisk_spice_memo_and_smbr_bridge`. | **Approved**: `267/267` assertions pass in `test/runtests.jl`. |
+| `SmallModularBioReactors.jl` | Implemented 9 modular subsystems (`contracts`, `environment`, `spacecraft`, `transport`, `biology`, `molecular`, `inference`, `visualization`, `verification`), including `NeurosporaCrassaCircadianHyphalPreset` and `:Arc` capsid registration, and 5 test suites (`S0..S6`, Demonstrations 1, 2, 3). | **Approved**: `276/276` assertions pass in `test/runtests.jl`. |
 
 ---
 
@@ -69,11 +71,13 @@ This code review documents the engineering integration, verification, and releas
 
 | Suite / Check | Command | Result |
 | :--- | :--- | :--- |
-| `M7Multiscale` Package Suite | `julia --startup-file=no /Users/aurascoper/Developer/M7Multiscale/test/runtests.jl` | `240 / 240 PASSED` |
-| `M7VisualizationBridge` Suite | `julia --startup-file=no /Users/aurascoper/Developer/flow-cytometry-model-bridge/code/test_M7VisualizationBridge.jl` | `606 / 606 PASSED` |
-| Combined 4-Module Julia Suite | `FlowCytometryObservationModel` (`293`) + `MicrofluidicClassificationEngine` (`1510`) + `NuclearReactiveTransportBridge` (`332`) + `M7VisualizationBridge` (`606`) | `2,741 / 2,741 PASSED` |
+| `SmallModularBioReactors.jl` Package Suite | `julia --startup-file=no --project=/Users/aurascoper/Developer/SmallModularBioReactors.jl /Users/aurascoper/Developer/SmallModularBioReactors.jl/test/runtests.jl` | `276 / 276 PASSED` |
+| `M7Multiscale` Package Suite | `julia --startup-file=no /Users/aurascoper/Developer/M7Multiscale/test/runtests.jl` | `267 / 267 PASSED` |
+| `M7VisualizationBridge` Suite | `julia --startup-file=no /Users/aurascoper/Developer/flow-cytometry-model-bridge/code/test_M7VisualizationBridge.jl` | `633 / 633 PASSED` |
+| Combined 4-Module Julia Suite | `FlowCytometryObservationModel` (`293`) + `MicrofluidicClassificationEngine` (`1510`) + `NuclearReactiveTransportBridge` (`332`) + `M7VisualizationBridge` (`633`) | `2,768 / 2,768 PASSED` |
 | Python Sobolev Scene Adapter | `PYTHONPATH=src python3 -m unittest discover -s code -p test_m7_sobolev_scene_adapter.py -v` | `6 / 6 PASSED` |
 | `NeuralCompose` Python Eval Suite | `test_non_recursive_self_improvement_poller.py` + `test_corpus_governance_manifest.py` + `test_memory_gate_autobank_autoforget.py` | `10 / 10 PASSED` |
 | `NeuralCompose` Swift Tests | `swift test --filter "DialecticalMemoryTests\|TelemetryLoggerTests"` | `15 / 15 PASSED` |
 | Typographic Hygiene Gate | Zero em-dashes (`\u2014`) and zero en-dashes (`\u2013`) across all modified source, test, and review files | `0 VIOLATIONS` |
+
 

@@ -387,7 +387,46 @@ using .M7Multiscale.M7VisualizationBridge
     @test v2_audit.recursive_rewrite_blocked
     @test v2_audit.doc_valid
     @test v2_audit.html_v2_valid
+
+    # Verified Claims Memo (2026-11-01), Single Boundary Converter convert_spice_state_to_basilisk_si, and SMBR Bridge
+    @test VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.memo_date == "2026-11-01"
+    @test VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.section_2_spice_planet_state_msg_payload.outputs ==
+          (:spiceTimeOutMsg, :planetStateOutMsgs, :scStateOutMsgs, :attRefStateOutMsgs, :transRefStateOutMsgs)
+    @test VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.section_4_vizard_live_modes.handshake_tokens ==
+          ("PING", "SIM_UPDATE", "OK", "REQUEST_INPUT", "VIZARD_INPUT", "REQUEST_IMAGE_")
+    @test VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.section_4_vizard_live_modes.clock_synch.c_header_field_status == :Incomplete
+    @test VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.section_5_traceable_seven_budget_criteria.c5_atp_yield_uncertainty_interval_mol_per_mol_co2 == (0.5, 1.5)
+    @test VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.section_5_traceable_seven_budget_criteria.c7_planetprofile_and_europa_status.europa_nutmeg_module_status == :Incomplete
+    @test length(VERIFIED_BASILISK_SPICE_M7_MEMO_2026_11_01_SPEC.section_9_downloads_images_2026_11_01) == 5
+
+    dcm_test = [cos(0.1) sin(0.1) 0.0; -sin(0.1) cos(0.1) 0.0; 0.0 0.0 1.0]
+    c_un = convert_spice_state_to_basilisk_si([2.279392e8, 0.0, 0.0], [0.0, 24.07, 0.0], dcm_test; j2000_current_s = 600.0, planet_name = "MARS")
+    @test c_un.spice_jl_unit_verdict == :Incomplete
+    @test !c_un.units_verified_si
+    @test c_un.planet_frame == "IAU_MARS"
+    @test isapprox(c_un.PositionVector[1], 2.279392e11; rtol = 1.0e-12)
+    @test isapprox(c_un.VelocityVector[2], 24070.0; rtol = 1.0e-12)
+    @test isapprox(c_un.J20002Pfix, dcm_test; atol = 1.0e-12)
+    c_chk = convert_spice_state_to_basilisk_si([2.279392e8, 0.0, 0.0], [0.0, 24.07, 0.0], dcm_test; j2000_current_s = 600.0, planet_name = "MARS", expected_distance_m_bounds = (2.0e11, 2.6e11))
+    @test c_chk.spice_jl_unit_verdict == :Accepted
+    @test c_chk.units_verified_si
+    @test_throws ArgumentError convert_spice_state_to_basilisk_si([1.0, 2.0], [0.0, 1.0, 0.0])
+
+    memo_res = evaluate_verified_basilisk_spice_memo_and_smbr_bridge(temperature_K = 298.15, atp_per_ch4_mol = 1.0)
+    @test memo_res.all_verified
+    @test memo_res.memos_identical
+    @test memo_res.memos_zero_dashes
+    @test memo_res.converter_valid
+    @test memo_res.downloads_images_verified
+    @test memo_res.smbr_acceptance_passed
+    @test !memo_res.below_280K_underconstrained
+    @test memo_res.within_calibrated_288_371K
+    memo_cold_res = evaluate_verified_basilisk_spice_memo_and_smbr_bridge(temperature_K = 273.15, atp_per_ch4_mol = 0.5)
+    @test memo_cold_res.below_280K_underconstrained
+    @test_throws ArgumentError evaluate_verified_basilisk_spice_memo_and_smbr_bridge(atp_yield_interval_mol_per_mol_co2 = (1.0, 1.0))
+    @test_throws ArgumentError evaluate_verified_basilisk_spice_memo_and_smbr_bridge(atp_per_ch4_mol = 2.0)
 end
+
 
 
 
