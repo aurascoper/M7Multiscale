@@ -465,7 +465,14 @@ using .M7Multiscale.M7VisualizationBridge
     @test length(matlab_alara_aud.section_6_scientific_and_engineering_flags.flags) == 9
     @test matlab_alara_aud.section_6_scientific_and_engineering_flags.fission_power_and_biological_reactor_separated
     @test matlab_alara_aud.neurospora_four_block_and_metal_calibration.calibration_verified
+
+    m7_pkg_root = normpath(joinpath(@__DIR__, ".."))
+    m7_rc_txt = read(joinpath(m7_pkg_root, "matlab_fixtures", "m7_matlab_r2026b_verification_receipt.json"), String)
+    m7_fx_txt = read(joinpath(m7_pkg_root, "matlab_fixtures", "m7_multiscale_3d_eda_fixture.json"), String)
+    @test occursin("five_graph_topology_distinction", m7_rc_txt) && occursin("section_6_scientific_and_engineering_flags", m7_rc_txt)
+    @test occursin("five_graph_topology_distinction", m7_fx_txt) && occursin("section_6_scientific_and_engineering_flags", m7_fx_txt)
 end
+
 
 
 
