@@ -121,7 +121,23 @@ export M7VisualizationBridge,
        export_m7_field_bundle_v1,
        validate_m7_field_bundle_v1,
        verify_oklo_pool_mobile_cross_language_parity,
-       evaluate_layer_down_solver_clearinghouse_ab
+       evaluate_layer_down_solver_clearinghouse_ab,
+       VALID_MECHANISTIC_COMPETITOR_LEVELS,
+       VALID_FIVE_LINK_CENSUS_NODES,
+       VALID_FIVE_LINK_ASSAY_STATUSES,
+       VALID_SENSING_ASSAY_STAGES,
+       MilestoneFixtureInheritanceReport,
+       evaluate_m2_to_m5_milestone_fixture_inheritance,
+       MechanisticCompetitorSpec,
+       PC12EndocyticRouteEnsemble,
+       evaluate_pc12_mechanistic_competitors_and_endocytic_ensemble,
+       FiveLinkAssayEdge,
+       TerminalReadoutSpecificityGate,
+       FiveLinkConceptualCensusChain,
+       evaluate_five_link_conceptual_census_chain,
+       SensingModalityAssaySpec,
+       evaluate_sensing_modality_assay_transferability,
+       evaluate_l89_to_l103_dialectic_actionable_insights
 
 end # module M7Multiscale
 

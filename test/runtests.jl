@@ -480,6 +480,16 @@ using .M7Multiscale.M7VisualizationBridge
     @test !matlab_alara_aud.oklo_pool_mobile_parity.android_build_present
     @test matlab_alara_aud.layer_down_solver_clearinghouse_ab.clearinghouse_ab_valid
     @test matlab_alara_aud.layer_down_solver_clearinghouse_ab.fast_wireframe_mode.self_confidence_calibrated
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.all_l89_to_l103_invariants_verified
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.turn_range == "L89..L103"
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.m2_to_m5_fixture_inheritance.inheritance_valid
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.m2_to_m5_fixture_inheritance.empirical_validation == :Incomplete
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.pc12_mechanistic_competitors_and_ensemble.none_independently_proves_pc12_internalization
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.pc12_mechanistic_competitors_and_ensemble.pericellular_ngf_paracrine_bypass_flagged
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.five_link_conceptual_census.betti_1 == 1
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.five_link_conceptual_census.overall_chain_status == :narrative_hypothesis
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.sensing_modality_assay_transferability.coupled_receptor_template_transferable
+    @test matlab_alara_aud.l89_to_l103_actionable_insights.sensing_modality_assay_transferability.multi_modality_co_occurrence_supported
 
     fd_mob = M7FieldDescriptor(
         name = "theta_mobile",
