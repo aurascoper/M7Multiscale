@@ -113,7 +113,15 @@ export M7VisualizationBridge,
        convert_spice_state_to_basilisk_si,
        evaluate_verified_basilisk_spice_memo_and_smbr_bridge,
        audit_m7_v2_non_recursive_poller_and_fun_neurology_graph,
-       audit_m7_matlab_simulink_3d_eda_and_alara_hippocratism
+       audit_m7_matlab_simulink_3d_eda_and_alara_hippocratism,
+       VALID_M7_FIELD_BASES,
+       VALID_M7_GRAPH_TYPES,
+       M7_FIELD_BUNDLE_SCHEMA_VERSION,
+       M7FieldBundleV1,
+       export_m7_field_bundle_v1,
+       validate_m7_field_bundle_v1,
+       verify_oklo_pool_mobile_cross_language_parity,
+       evaluate_layer_down_solver_clearinghouse_ab
 
 end # module M7Multiscale
 

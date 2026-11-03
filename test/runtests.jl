@@ -465,6 +465,41 @@ using .M7Multiscale.M7VisualizationBridge
     @test length(matlab_alara_aud.section_6_scientific_and_engineering_flags.flags) == 9
     @test matlab_alara_aud.section_6_scientific_and_engineering_flags.fission_power_and_biological_reactor_separated
     @test matlab_alara_aud.neurospora_four_block_and_metal_calibration.calibration_verified
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.all_bundle_tests_passed
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.openfoam_phreeqc_fixture_ingestion_verified
+    @test !matlab_alara_aud.m7_field_bundle_v1_suite.openfoam_phreeqc_live_solver_handoff_verified
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.positive_bundles.biofilms_cpm_uncalibrated.evidence_status == :Incomplete
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.positive_bundles.biofilms_cpm_uncalibrated.radiodialysis_coupled_gate == "RADIODIALYSIS: BLOCKED"
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.positive_bundles.rna_biofilm_toy_ledger.mass_ledger_closed
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.negative_bundles.missing_field.error_code == :ERR_MISSING_REQUIRED_FIELD
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.negative_bundles.bad_unit.error_code == :ERR_INVALID_UNIT_CONTRACT
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.negative_bundles.corrupted_hash.error_code == :ERR_SHA256_MISMATCH
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.negative_bundles.nan_payload.error_code == :ERR_NAN_IN_NUMERIC_PAYLOAD
+    @test matlab_alara_aud.m7_field_bundle_v1_suite.negative_bundles.biofilms_occupancy_basis_refused.error_code == :ERR_BIOMASS_BASIS_OCCUPANCY_MEAN_REFUSED
+    @test matlab_alara_aud.oklo_pool_mobile_parity.parity_verified
+    @test !matlab_alara_aud.oklo_pool_mobile_parity.android_build_present
+    @test matlab_alara_aud.layer_down_solver_clearinghouse_ab.clearinghouse_ab_valid
+    @test matlab_alara_aud.layer_down_solver_clearinghouse_ab.fast_wireframe_mode.self_confidence_calibrated
+
+    fd_mob = M7FieldDescriptor(
+        name = "theta_mobile",
+        producer = :OpenFOAM,
+        unit = "1",
+        values = [0.34, 0.35],
+        basis = :mobile_water
+    )
+    @test fd_mob.basis == :mobile_water
+    @test_throws ArgumentError M7FieldDescriptor(
+        name = "bad_basis",
+        producer = :OpenFOAM,
+        unit = "1",
+        values = [0.34],
+        basis = :nonexistent_basis
+    )
+    exp_b1 = export_m7_field_bundle_v1(refs.frame_1)
+    @test exp_b1.schema == "m7-field-bundle"
+    @test exp_b1.schema_version == "1.0.0"
+    @test exp_b1.test_a_fixture_ingestion_verified && !exp_b1.test_b_live_solver_handoff_verified
 
     m7_pkg_root = normpath(joinpath(@__DIR__, ".."))
     m7_rc_txt = read(joinpath(m7_pkg_root, "matlab_fixtures", "m7_matlab_r2026b_verification_receipt.json"), String)
