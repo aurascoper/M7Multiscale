@@ -2823,7 +2823,7 @@
       };
     };
 
-    window.ingestImputeAndFitGhoshTableM7 = function(rawText, fileName) {
+    window.ingestImputeAndFitSyntheticTableM7 = function(rawText, fileName) {
       const lines = String(rawText || "").split(/\r?\n/).map(s => s.trim()).filter(s => s && !s.startsWith("#"));
       if (lines.length < 2) return null;
       const delim = (fileName.toLowerCase().endsWith(".tsv") || (lines[0].includes("\t") && !lines[0].includes(","))) ? "\t" : ",";
@@ -2872,7 +2872,7 @@
       }
       const payload = {
         schema_version: "1.0.0",
-        fixture_id: "ghosh_multiformat_imputed_fit_" + fileName.replace(/[^a-zA-Z0-9_.-]/g, "_"),
+        fixture_id: "synthetic_multiformat_imputed_fit_" + fileName.replace(/[^a-zA-Z0-9_.-]/g, "_"),
         matlab_release: "R2026b",
         source_file: fileName,
         imputed_cells: imputedCount,
@@ -2941,7 +2941,7 @@
         reader.readAsArrayBuffer(file);
       } else if (lower.endsWith(".csv") || lower.endsWith(".tsv")) {
         const txt = await file.text();
-        window.ingestImputeAndFitGhoshTableM7(txt, file.name);
+        window.ingestImputeAndFitSyntheticTableM7(txt, file.name);
       } else if (lower.endsWith(".zip") || lower.endsWith(".tar.gz") || lower.endsWith(".tgz")) {
         const ab = await file.arrayBuffer();
         const bytes = new Uint8Array(ab);
@@ -2967,7 +2967,7 @@
             }
             const lowE = nameStr.toLowerCase();
             if (lowE.endsWith(".csv") || lowE.endsWith(".tsv")) {
-              window.ingestImputeAndFitGhoshTableM7(new TextDecoder("utf-8", { fatal: false }).decode(entryBytes), file.name);
+              window.ingestImputeAndFitSyntheticTableM7(new TextDecoder("utf-8", { fatal: false }).decode(entryBytes), file.name);
               handled = true;
               break;
             } else if (lowE.endsWith(".mat")) {
@@ -2996,7 +2996,7 @@
               const dataEnd = Math.min(tarBytes.length, dataStart + entrySize);
               const lowE = entryName.toLowerCase();
               if (entrySize > 0 && (lowE.endsWith(".csv") || lowE.endsWith(".tsv"))) {
-                window.ingestImputeAndFitGhoshTableM7(new TextDecoder("utf-8", { fatal: false }).decode(tarBytes.subarray(dataStart, dataEnd)), file.name);
+                window.ingestImputeAndFitSyntheticTableM7(new TextDecoder("utf-8", { fatal: false }).decode(tarBytes.subarray(dataStart, dataEnd)), file.name);
                 handled = true;
                 break;
               } else if (entrySize > 0 && lowE.endsWith(".mat")) {
@@ -3013,7 +3013,7 @@
           const rawAscii = new TextDecoder("utf-8", { fatal: false }).decode(bytes);
           const csvLines = rawAscii.split(/\r?\n/).filter(l => (l.includes(",") || l.includes("\t")) && /[0-9]/.test(l));
           if (csvLines.length >= 2) {
-            window.ingestImputeAndFitGhoshTableM7("time_min,release_fraction\n" + csvLines.slice(0, 64).join("\n"), file.name);
+            window.ingestImputeAndFitSyntheticTableM7("time_min,release_fraction\n" + csvLines.slice(0, 64).join("\n"), file.name);
           }
         }
       } else {
